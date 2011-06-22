@@ -20,6 +20,7 @@ signature PARSING =
       val andthen : 'a parser -> 'b parser -> ('a * 'b) parser
       val or : 'a parser -> 'a parser -> 'a parser
       val alt : 'a parser list -> 'a parser
+      val andthencons : 'a parser -> 'a list parser -> 'a list parser
       val many : 'a parser -> 'a list parser
       val manyplus : 'a parser -> 'a list parser
       val option : 'a parser -> 'a option parser

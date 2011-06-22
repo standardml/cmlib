@@ -68,11 +68,13 @@ functor ParsingFun (type token)
       fun alt pl =
          List.foldr (fn (p1, p2) => or p1 p2) fail pl
 
+      fun andthencons p1 p2 = wrap (op ::) (andthen p1 p2)
+
       fun many p s =
-         or (wrap (op ::) (andthen p (many p))) (return nil) s
+         or (andthencons p (many p)) (return nil) s
 
       fun manyplus p =
-         wrap (op ::) (andthen p (many p))
+         andthencons p (many p)
 
       fun option p = or (wrap SOME p) (return NONE)
 
