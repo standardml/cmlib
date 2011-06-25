@@ -97,6 +97,8 @@ functor ListDict (structure Key : ORDERED)
 
       fun foldl f base l = List.foldl (fn ((key, x), y) => f (key, x, y)) base l
 
+      fun foldr f base l = List.foldr (fn ((key, x), y) => f (key, x, y)) base l
+
       val app = List.app
 
    end

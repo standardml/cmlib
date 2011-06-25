@@ -20,6 +20,7 @@ signature DICT =
       val toList : 'a dict -> (key * 'a) list
       val map : ('a -> 'b) -> 'a dict -> 'b dict
       val foldl : (key * 'a * 'b -> 'b) -> 'b -> 'a dict -> 'b
+      val foldr : (key * 'a * 'b -> 'b) -> 'b -> 'a dict -> 'b
       val app : (key * 'a -> unit) -> 'a dict -> unit
 
    end
