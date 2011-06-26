@@ -138,14 +138,8 @@ functor LexEngineFun (type symbol
                           loop candidate candLen candChars candStream (next state (ord ch)) (len+1) (ch :: chars) s')
                             
              val (acceptingState, len, chars, s') = 
-                (* By construction, initial is an accepting state.  It generally shouldn't be a
-                   accepting-sink state (since it means the lexer is uninteresting), but that's
-                   allowed, so we check for it.
-                *)
-                if initial <= lastAcceptSink then
-                   (initial, 0, [], s)
-                else
-                   loop initial 0 [] s initial 0 [] s
+                (* By construction, initial is an accepting state. *)
+                loop initial 0 [] s initial 0 [] s
 
              val f = Vector.sub (acceptTable, acceptingState-1)
           in
