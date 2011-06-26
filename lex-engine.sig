@@ -2,6 +2,8 @@
 signature LEX_ENGINE =
    sig
 
+      structure Streamable : STREAMABLE
+
       type symbol
 
       val next7x1 : int -> string -> int -> int -> int
@@ -19,13 +21,13 @@ signature LEX_ENGINE =
       type ('a, 'b) action =
          { str : symbol list,
            len : int,
-           start : symbol Stream.stream,
-           follow : symbol Stream.stream,
+           start : symbol Streamable.t,
+           follow : symbol Streamable.t,
            self : 'b } -> 'a
 
       type ('a, 'b) table =
          int * int * int * ('a, 'b) action vector * (int -> int -> int) * (int -> int)
 
-      val lex : 'b -> ('a, 'b) table -> symbol Stream.stream -> 'a
+      val lex : 'b -> ('a, 'b) table -> symbol Streamable.t -> 'a
 
    end

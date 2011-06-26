@@ -1,11 +1,14 @@
 
-functor LexEngineFun (type symbol
+functor LexEngineFun (structure Streamable : STREAMABLE
+                      type symbol
                       val ord : symbol -> int)
    :> LEX_ENGINE 
-      where type symbol = symbol
+      where type 'a Streamable.t = 'a Streamable.t
+      and type symbol = symbol
    =
    struct
 
+      structure Streamable = Streamable
       type symbol = symbol
 
       (* Next state function for an 7-bit lexer, with 1-byte state numbers. *)
@@ -109,8 +112,8 @@ functor LexEngineFun (type symbol
 
       type ('a, 'b) action = { str : symbol list,
                                len : int,
-                               start : symbol Stream.stream,
-                               follow : symbol Stream.stream,
+                               start : symbol Streamable.t,
+                               follow : symbol Streamable.t,
                                self : 'b } -> 'a
 
       type ('a, 'b) table =
@@ -125,16 +128,16 @@ functor LexEngineFun (type symbol
                    if state <= lastAcceptSink then
                       (state, len, chars, s)
                    else
-                      (case Stream.front s of
-                          Stream.Nil =>
+                      (case Streamable.front s of
+                          Streamable.Nil =>
                              loop state len chars s (nextEos state) len chars s
-                        | Stream.Cons (ch, s') =>
+                        | Streamable.Cons (ch, s') =>
                              loop state len chars s (next state (ord ch)) (len+1) (ch :: chars) s')
                 else
-                   (case Stream.front s of
-                       Stream.Nil =>
+                   (case Streamable.front s of
+                       Streamable.Nil =>
                           loop candidate candLen candChars candStream (nextEos state) len chars s
-                     | Stream.Cons (ch, s') =>
+                     | Streamable.Cons (ch, s') =>
                           loop candidate candLen candChars candStream (next state (ord ch)) (len+1) (ch :: chars) s')
                             
              val (acceptingState, len, chars, s') = 

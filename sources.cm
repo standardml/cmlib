@@ -30,6 +30,8 @@ Group is
 	sort.sig
 	stream.sig
 	stream.sml
+	streamable.sig
+	streamable-list.sml
 	susp.sig
 	susp.sml
 
