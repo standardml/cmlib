@@ -1,6 +1,7 @@
 
 signature PARSING =
    sig
+
       type token
       type 'a parser = token Stream.stream -> 'a * token Stream.stream
 

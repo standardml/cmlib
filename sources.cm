@@ -21,6 +21,8 @@ Group is
 	ordered.sml
 	parsing.sig
 	parsing.sml
+	partition.sig
+	partition.sml
 	quasilist.sig
 	quasilist.sml
 	queue.sig
@@ -34,6 +36,8 @@ Group is
 	streamable-list.sml
 	susp.sig
 	susp.sml
+	union-find.sig
+	union-find.sml
 
 	basis.cm
 	$/smlnj-lib.cm
