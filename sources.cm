@@ -36,6 +36,8 @@ Group is
 	streamable-list.sml
 	susp.sig
 	susp.sml
+	symbol-table.sig
+	symbol-table.sml
 	union-find.sig
 	union-find.sml
 
