@@ -48,7 +48,7 @@ structure UnionFind :> UNION_FIND
                )
          end
 
-      fun sameSet set1 set2 = root set1 = root set2
+      fun sameSet (set1, set2) = root set1 = root set2
 
       fun find set =
          (case ! (root set) of

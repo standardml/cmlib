@@ -1,7 +1,7 @@
 
 (* XX Reimplement this *)
 
-functor HashTable (structure Key : HASHABLE)
+functor HashTableFun (structure Key : HASHABLE)
    :> HASH_TABLE where type key = Key.t
    =
    struct
@@ -26,15 +26,17 @@ functor HashTable (structure Key : HASHABLE)
       val lookup = T.lookup
       val find = T.find
 
-      fun lookupOrInsert table key x =
+      fun lookupOrInsert table key f =
           (case T.find table key of
               NONE =>
-                 (
-                 T.insert table (key, x);
-                 NONE
-                 )
-            | r as SOME _ =>
-                 r)
+                 let
+                    val x = f ()
+                 in
+                    T.insert table (key, x);
+                    x
+                 end
+            | SOME x =>
+                 x)
 
       val fold = T.foldi
 

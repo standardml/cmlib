@@ -12,7 +12,7 @@ signature HASH_TABLE =
       val insert : 'a table -> key -> 'a -> unit
       val find : 'a table -> key -> 'a option
       val lookup : 'a table -> key -> 'a
-      val lookupOrInsert : 'a table -> key -> 'a -> 'a option
+      val lookupOrInsert : 'a table -> key -> (unit -> 'a) -> 'a
 
       val fold : (key * 'a * 'b -> 'b) -> 'b -> 'a table -> 'b
 

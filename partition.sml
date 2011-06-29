@@ -17,7 +17,9 @@ structure Partition =
                          val () =
                             app
                             (fn (x, set') =>
-                                if f (h, x) then
+                                if sameSet (set, set') then
+                                   ()
+                                else if f (h, x) then
                                    union Quasilist.Append set set'
                                 else
                                    ())
