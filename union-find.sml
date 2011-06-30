@@ -11,6 +11,8 @@ structure UnionFind :> UNION_FIND
 
       fun new label = ref (Root (label, 0))
 
+      val eq : 'a set * 'a set -> bool = op =
+
       fun root set =
          (case !set of
              Root _ =>

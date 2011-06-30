@@ -1,5 +1,5 @@
 
-structure Partition =
+structure Partition :> PARTITION =
    struct
 
       open UnionFind
