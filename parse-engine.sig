@@ -20,15 +20,17 @@ signature PARSE_ENGINE =
 
       type action = value list -> value list
 
-      type table =
+      type 'a table =
          (int -> int -> int)             (* action table *)
          *
          (int -> int -> int)             (* goto table *)
          *
-         (int * int * action) vector     (* reduction information: lhs, size of rhs, functions to call *)
+         (int * int * action) vector     (* reduction information: lhs ordinal, rhs size, function *)
+         *
+         (value -> 'a)                   (* result destructor *)
          *
          (terminal Streamable.t -> exn)  (* error function *)
 
-      val parse : table -> terminal Streamable.t -> value * terminal Streamable.t
+      val parse : 'a table -> terminal Streamable.t -> 'a * terminal Streamable.t
 
    end

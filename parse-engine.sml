@@ -2,9 +2,10 @@
 functor ParseEngineFun (structure Streamable : STREAMABLE
                         type terminal
                         type value
-                        val read : terminal -> int * value
-                        val dummyValue : value)
-   :> PARSE_ENGINE where type terminal = terminal
+                        val dummy : value
+                        val read : terminal -> int * value)
+   :> PARSE_ENGINE where type 'a Streamable.t = 'a Streamable.t
+                     and type terminal = terminal
                      and type value = value
    =
    struct
@@ -98,21 +99,23 @@ functor ParseEngineFun (structure Streamable : STREAMABLE
 
       type action = value list -> value list
 
-      type table =
+      type 'a table =
          (int -> int -> int)             (* action table *)
          *
          (int -> int -> int)             (* goto table *)
          *
          (int * int * action) vector     (* reduction information: lhs, size of rhs, functions to call *)
          *
+         (value -> 'a)                   (* result destructor *)
+         *
          (terminal Streamable.t -> exn)  (* error function *)
 
-      fun parse (action, goto, reduce, error) s =
+      fun parse (action, goto, reduce, destruct, error) s =
          let
             fun loop ststack valstack s =
                (case Streamable.front s of
                    Streamable.Nil =>
-                      loopRead ststack valstack 0 dummyValue s s
+                      loopRead ststack valstack 0 dummy s s
                  | Streamable.Cons (term, s') =>
                       let
                          val (ordinal, value) = read term
@@ -148,7 +151,7 @@ functor ParseEngineFun (structure Streamable : STREAMABLE
 
          in
             (case loop [0] [] s of
-                ([value], s') => (value, s')
+                ([value], s') => (destruct value, s')
               | _ =>
                    raise (Fail "bad parsing table"))
          end
