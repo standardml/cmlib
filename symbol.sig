@@ -1,5 +1,5 @@
 
-signature SYMBOL_TABLE =
+signature SYMBOL =
    sig
 
       type symbol

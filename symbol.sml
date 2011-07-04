@@ -1,9 +1,11 @@
 
-structure SymbolTable :> SYMBOL_TABLE =
+structure Symbol
+   :> SYMBOL
+   =
    struct
 
       structure H =
-         HashTableFun
+         HashTable
          (structure Key = StringHashable)
 
       val nextIndex = ref 0
@@ -33,11 +35,22 @@ structure SymbolTable :> SYMBOL_TABLE =
 
 
 structure SymbolOrdered
-   :> ORDERED where type t = SymbolTable.symbol
+   :> ORDERED where type t = Symbol.symbol
    =
    struct
-      type t = SymbolTable.symbol
+      type t = Symbol.symbol
 
-      val eq = SymbolTable.eq
-      val compare = SymbolTable.compare
+      val eq = Symbol.eq
+      val compare = Symbol.compare
+   end
+
+
+structure SymbolHashable
+   :> HASHABLE where type t = Symbol.symbol
+   =
+   struct
+      type t = Symbol.symbol
+
+      val eq = Symbol.eq
+      val hash = Symbol.hash
    end

@@ -1,7 +1,7 @@
 
 (* XX Reimplement this *)
 
-functor HashTableFun (structure Key : HASHABLE)
+functor HashTable (structure Key : HASHABLE)
    :> HASH_TABLE where type key = Key.t
    =
    struct
@@ -39,5 +39,6 @@ functor HashTableFun (structure Key : HASHABLE)
                  x)
 
       val fold = T.foldi
+      val app = T.appi
 
    end

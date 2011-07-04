@@ -11,7 +11,7 @@ functor LexEngineFun (structure Streamable : STREAMABLE
       structure Streamable = Streamable
       type symbol = symbol
 
-      (* Next state function for an 7-bit lexer, with 1-byte state numbers. *)
+      (* Next state function for 7-bit symbols, with 1-byte results. *)
       fun next7x1 symbolLimit table state symbol =
           if symbol >= symbolLimit then
              0
@@ -97,7 +97,7 @@ functor LexEngineFun (structure Streamable : STREAMABLE
              end
 
 
-      (* Next state function for end-of-stream, with 1-byte state numbers. *)
+      (* Next state function for end-of-stream, with 1-byte results. *)
       fun next0x1 table state =
           Char.ord (String.sub (table, state))
 

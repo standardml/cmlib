@@ -15,5 +15,6 @@ signature HASH_TABLE =
       val lookupOrInsert : 'a table -> key -> (unit -> 'a) -> 'a
 
       val fold : (key * 'a * 'b -> 'b) -> 'b -> 'a table -> 'b
+      val app : (key * 'a -> unit) -> 'a table -> unit
 
    end

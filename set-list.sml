@@ -11,6 +11,8 @@ functor ListSetTransparent (structure Elem : ORDERED)
 
       val isEmpty = List.null
 
+      fun singleton elem = [elem]
+
       fun insert l elem =
           (case l of
               [] => [elem]
@@ -81,15 +83,32 @@ functor ListSetTransparent (structure Elem : ORDERED)
                          difference l1 rest2))
 
       fun eq (l1, l2) =
-          (case (l1, l2) of
-              ([], []) => 
-                 true
-            | (elem1 :: rest1, elem2 :: rest2) =>
-                 Elem.eq (elem1, elem2)
-                 andalso
-                 eq (rest1, rest2)
-            | _ =>
-                 false)
+         (case (l1, l2) of
+             ([], []) => 
+                true
+           | (elem1 :: rest1, elem2 :: rest2) =>
+                Elem.eq (elem1, elem2)
+                andalso
+                eq (rest1, rest2)
+           | _ =>
+                false)
+
+      fun subset (l1, l2) =
+         (case (l1, l2) of
+             ([], _) => 
+                true
+           | (elem1 :: rest1, elem2 :: rest2) =>
+                (case Elem.compare (elem1, elem2) of
+                    LESS =>
+                       false
+                  | EQUAL =>
+                       subset (rest1, rest2)
+                  | GREATER =>
+                       subset (l1, rest2))
+           | (_ :: _, [])  =>
+                false)
+
+      val size = length
 
       fun toList l = l
       val foldl = List.foldl
