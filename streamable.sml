@@ -14,3 +14,16 @@ structure ListStreamable
            | h :: t => Cons (h, t))
 
    end
+
+
+structure StreamStreamable
+   :> STREAMABLE
+      where type 'a t = 'a Stream.stream
+   =
+   struct
+
+      type 'a t = 'a Stream.stream
+      datatype front = datatype Stream.front
+      val front = Stream.front
+
+   end

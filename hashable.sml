@@ -9,6 +9,7 @@ structure IntHashable
       val hash = Word.fromInt
    end
 
+
 structure StringHashable
    :> HASHABLE where type t = string
    =
@@ -30,6 +31,7 @@ structure StringHashable
              loop 0 0w0
           end
    end
+
 
 functor ListHashable (structure Elem : HASHABLE)
    :> HASHABLE where type t = Elem.t list
@@ -56,5 +58,25 @@ functor ListHashable (structure Elem : HASHABLE)
                 hashLoop t (JenkinsHash.hashInc acc (Elem.hash h)))
 
       fun hash l = hashLoop l 0w0
+
+   end
+
+
+functor SetHashable (structure Set : SET
+                     structure Elem : HASHABLE
+                     sharing type Set.elem = Elem.t)
+   :> HASHABLE where type t = Set.set
+   =
+   struct
+
+      type t = Set.set
+
+      val eq = Set.eq
+
+      fun hash set =
+         Set.foldl
+         (fn (elem, acc) => JenkinsHash.hashInc acc (Elem.hash elem))
+         0w0
+         set
 
    end

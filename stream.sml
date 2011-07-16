@@ -108,17 +108,3 @@ structure Stream
                    | Cons (x, s') =>
                         Cons (f x, map f s')))
    end
-
-
-
-structure StreamStreamable
-   :> STREAMABLE
-      where type 'a t = 'a Stream.stream
-   =
-   struct
-
-      type 'a t = 'a Stream.stream
-      datatype front = datatype Stream.front
-      val front = Stream.front
-
-   end

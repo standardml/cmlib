@@ -1,6 +1,6 @@
 
-functor ListSetTransparent (structure Elem : ORDERED)
-   : SET
+functor ListSet (structure Elem : ORDERED)
+   :> SET where type elem = Elem.t
    =
    struct
 
@@ -113,42 +113,5 @@ functor ListSetTransparent (structure Elem : ORDERED)
       fun toList l = l
       val foldl = List.foldl
       val app = List.app
-
-   end
-
-
-functor ListSet (structure Elem : ORDERED)
-   :> SET where type elem = Elem.t
-   =
-   ListSetTransparent (structure Elem = Elem)
-
-
-functor ListHashableSet (structure ElemOrdered : ORDERED
-                         structure ElemHashable : HASHABLE
-                         sharing type ElemOrdered.t = ElemHashable.t)
-   :> HASHABLE_SET where type elem = ElemOrdered.t
-   =
-   struct
-
-      structure S = ListSetTransparent (structure Elem = ElemOrdered)
-
-      open S
-
-      structure Hashable =
-         struct
-
-            type t = S.set
-
-            fun hashMain l acc =
-                (case l of
-                    nil =>
-                       acc
-                  | elem :: rest =>
-                       hashMain rest (JenkinsHash.hashInc acc (ElemHashable.hash elem)))
-                
-            val eq = S.eq
-            fun hash l = hashMain l 0w0
-
-         end
 
    end

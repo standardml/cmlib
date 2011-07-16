@@ -9,7 +9,6 @@ Group is
 	hash-inc.sml
 	hashable.sig
 	hashable.sml
-	set-hashable.sig
 	hash-table.sig
 	hash-table.sml
 	iqueue.sig
@@ -35,7 +34,7 @@ Group is
 	stream.sig
 	stream.sml
 	streamable.sig
-	streamable-list.sml
+	streamable.sml
 	susp.sig
 	susp.sml
 	symbol.sig
