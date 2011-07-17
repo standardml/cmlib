@@ -5,6 +5,7 @@ Group is
 	coroutine.sml
 	dict.sig
 	dict-list.sml
+	dict-splay.sml
 	hash-inc.sig
 	hash-inc.sml
 	hashable.sig
@@ -30,7 +31,9 @@ Group is
 	queue.sml
 	set.sig
 	set-list.sml
+	set-splay.sml
 	sort.sig
+	splaytree.sml
 	stream.sig
 	stream.sml
 	streamable.sig

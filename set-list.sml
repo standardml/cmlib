@@ -25,6 +25,18 @@ functor ListSet (structure Elem : ORDERED)
                    | GREATER =>
                         elem' :: insert rest elem))
 
+      fun remove l elem =
+          (case l of
+              [] => []
+            | elem' :: rest =>
+                 (case Elem.compare (elem, elem') of
+                     LESS =>
+                        l
+                   | EQUAL =>
+                        rest
+                   | GREATER =>
+                        elem' :: remove rest elem))
+
       fun member l elem =
           (case l of
               [] => false
@@ -112,6 +124,7 @@ functor ListSet (structure Elem : ORDERED)
 
       fun toList l = l
       val foldl = List.foldl
+      val foldr = List.foldl
       val app = List.app
 
    end
