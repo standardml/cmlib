@@ -10,6 +10,7 @@ signature HASH_TABLE =
       val table : int -> 'a table
       val member : 'a table -> key -> bool
       val insert : 'a table -> key -> 'a -> unit
+      val remove : 'a table -> key -> unit
       val find : 'a table -> key -> 'a option
       val lookup : 'a table -> key -> 'a
       val lookupOrInsert : 'a table -> key -> (unit -> 'a) -> 'a

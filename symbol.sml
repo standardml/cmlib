@@ -10,7 +10,7 @@ structure Symbol
 
       val nextIndex = ref 0
 
-      val table : (int * string) H.table = H.table 3001
+      val table : (int * string) H.table = H.table 1001
 
       type symbol = int * string
             
