@@ -198,7 +198,7 @@ functor HashTable (structure Key : HASHABLE)
                              )))
          end
 
-      fun lookupOrInsert (table as ref { residents, size, arr, ... } : 'a table) key datumf =
+      fun operate (table as ref { residents, size, arr, ... } : 'a table) key absentf presentf =
          let
             val hash = Key.hash key
             val n = Word.toInt (hash mod size)
@@ -207,37 +207,55 @@ functor HashTable (structure Key : HASHABLE)
             (case bucket of
                 Nil =>
                    let
-                      val datum = datumf ()
+                      val datum = absentf ()
                    in
                       Array.update (arr, n,
                                     Cons (hash, key, ref datum, ref Nil));
                       residents := !residents + 1;
                       resize table;
-                      datum
+                      (NONE, datum)
                    end
               | Cons (hash', key', datumref, next) =>
                    if hash = hash' andalso Key.eq (key, key') then
-                      !datumref
+                      let
+                         val datum = !datumref
+                         val datum' = presentf datum
+                      in
+                         datumref := datum';
+                         (SOME datum, datum')
+                      end
                    else
                       (case search hash key next of
                           Nil =>
                              let
-                                val datum = datumf ()
+                                val datum = absentf ()
                              in
                                 Array.update (arr, n,
                                               Cons (hash, key, ref datum, ref bucket));
                                 residents := !residents + 1;
                                 resize table;
-                                datum
+                                (NONE, datum)
                              end
                         | entry as Cons (_, _, datumref', next') =>
-                             (
-                             next' := bucket;
-                             Array.update (arr, n, entry);
-                             !datumref'
-                             )))
+                             let
+                                val datum = !datumref'
+                                val datum' = presentf datum
+                             in
+                                next' := bucket;
+                                Array.update (arr, n, entry);
+                                datumref' := datum';
+                                (SOME datum, datum')
+                             end))
          end
 
+      fun insertMerge table key x f =
+         (
+         operate table key (fn () => x) f;
+         ()
+         )
+
+      fun lookupOrInsert table key datumf =
+         #2 (operate table key datumf (fn x => x))
 
       fun foldEntry f x entry =
          (case entry of

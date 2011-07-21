@@ -13,6 +13,9 @@ signature HASH_TABLE =
       val remove : 'a table -> key -> unit
       val find : 'a table -> key -> 'a option
       val lookup : 'a table -> key -> 'a
+
+      val operate : 'a table -> key -> (unit -> 'a) -> ('a -> 'a) -> 'a option * 'a
+      val insertMerge : 'a table -> key -> 'a -> ('a -> 'a) -> unit
       val lookupOrInsert : 'a table -> key -> (unit -> 'a) -> 'a
 
       val fold : (key * 'a * 'b -> 'b) -> 'b -> 'a table -> 'b

@@ -37,10 +37,14 @@ functor SplayDict (structure Key : ORDERED)
                            Node (ref ((key, datum), Node (ref (label, left, Leaf)), right))))
                 end)
 
-      fun insertMerge (n, tree) key datum f =
+      fun operate (n, tree) key absentf presentf =
          (case tree of
              Leaf =>
-                singleton key datum
+                let
+                   val datum = absentf ()
+                in
+                   (NONE, datum, singleton key datum)
+                end
            | Node root =>
                 let
                    val (order, (label as (key', datum'), left, right)) =
@@ -48,14 +52,32 @@ functor SplayDict (structure Key : ORDERED)
                 in
                    (case order of
                        EQUAL =>
-                          (n, Node (ref ((key, f datum'), left, right)))
+                          let
+                             val datum = presentf datum'
+                          in
+                             (SOME datum', datum,
+                              (n, Node (ref ((key, datum), left, right))))
+                          end
                      | LESS =>
-                          (n+1,
-                           Node (ref ((key, datum), left, Node (ref (label, Leaf, right)))))
+                          let
+                             val datum = absentf ()
+                          in
+                             (NONE, datum,
+                              (n+1,
+                               Node (ref ((key, datum), left, Node (ref (label, Leaf, right))))))
+                          end
                      | GREATER =>
-                          (n+1,
-                           Node (ref ((key, datum), Node (ref (label, left, Leaf)), right))))
+                          let
+                             val datum = absentf ()
+                          in
+                             (NONE, datum,
+                              (n+1,
+                               Node (ref ((key, datum), Node (ref (label, left, Leaf)), right))))
+                          end)
                 end)
+
+      fun insertMerge dict key x f =
+         #3 (operate dict key (fn () => x) f)
 
       fun find (n, tree) key =
          (case tree of

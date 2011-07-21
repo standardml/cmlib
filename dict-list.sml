@@ -27,17 +27,37 @@ functor ListDict (structure Key : ORDERED)
                   | GREATER =>
                        (key', y) :: insert rest key x))
 
-      fun insertMerge l key x f =
+      fun operate l key absentf presentf =
          (case l of
-             [] => [(key, x)]
+             [] =>
+                let
+                   val x = absentf ()
+                in
+                   (NONE, x, [(key, x)])
+                end
            | (key', y) :: rest =>
                 (case Key.compare (key, key') of
                     LESS =>
-                       (key, x) :: l
+                       let
+                          val x = absentf ()
+                       in
+                          (NONE, x, (key, x) :: l)
+                       end
                   | EQUAL =>
-                       (key, f y) :: rest
+                       let
+                          val x = presentf y
+                       in
+                          (SOME y, x, (key, x) :: rest)
+                       end
                   | GREATER =>
-                       (key', y) :: insertMerge rest key x f))
+                       let
+                          val (ante, post, rest') = operate rest key absentf presentf
+                       in
+                          (ante, post, (key', y) :: rest')
+                       end))
+
+      fun insertMerge dict key x f =
+         #3 (operate dict key (fn () => x) f)
 
       fun find l key =
          (case l of
