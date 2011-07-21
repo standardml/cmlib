@@ -33,7 +33,7 @@ Group is
 	set-list.sml
 	set-splay.sml
 	sort.sig
-	splaytree.sml
+	splay-tree.sml
 	stream.sig
 	stream.sml
 	streamable.sig
