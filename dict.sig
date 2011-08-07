@@ -10,6 +10,7 @@ signature DICT =
       val empty : 'a dict
       val singleton : key -> 'a -> 'a dict
       val insert : 'a dict -> key -> 'a -> 'a dict
+      val remove : 'a dict -> key -> 'a dict
       val find : 'a dict -> key -> 'a option
       val lookup : 'a dict -> key -> 'a
       val union : 'a dict -> 'a dict -> (key * 'a * 'a -> 'a) -> 'a dict

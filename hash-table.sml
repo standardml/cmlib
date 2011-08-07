@@ -269,6 +269,9 @@ functor HashTable (structure Key : HASHABLE)
          x
          arr
 
+      fun toList table =
+         fold (fn (key, datum, l) => (key, datum) :: l) [] table
+
       fun appEntry f entry =
          (case entry of
              Nil => ()

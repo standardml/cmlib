@@ -42,7 +42,7 @@ functor SplaySet (structure Elem : ORDERED)
                 empty
            | Node root =>
                 let
-                   val (order, (elem', left, right)) =
+                   val (order, (_, left, right)) =
                       findAndSplay (fn elem' => Elem.compare (elem, elem')) root []
                 in
                    (case order of

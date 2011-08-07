@@ -37,6 +37,20 @@ functor SplayDict (structure Key : ORDERED)
                            Node (ref ((key, datum), Node (ref (label, left, Leaf)), right))))
                 end)
 
+      fun remove (dict as (n, tree)) key =
+         (case tree of
+             Leaf => empty
+           | Node root =>
+                let
+                   val (order, (_, left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       EQUAL =>
+                          (n-1, join left right)
+                     | _ => dict)
+                end)
+
       fun operate (n, tree) key absentf presentf =
          (case tree of
              Leaf =>

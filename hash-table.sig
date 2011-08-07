@@ -18,6 +18,7 @@ signature HASH_TABLE =
       val insertMerge : 'a table -> key -> 'a -> ('a -> 'a) -> unit
       val lookupOrInsert : 'a table -> key -> (unit -> 'a) -> 'a
 
+      val toList : 'a table -> (key * 'a) list
       val fold : (key * 'a * 'b -> 'b) -> 'b -> 'a table -> 'b
       val app : (key * 'a -> unit) -> 'a table -> unit
 

@@ -27,6 +27,16 @@ functor ListDict (structure Key : ORDERED)
                   | GREATER =>
                        (key', y) :: insert rest key x))
 
+      fun remove l key =
+         (case l of
+             [] => []
+           | (key', y) :: rest =>
+                (case Key.compare (key, key') of
+                    LESS => l
+                  | EQUAL => rest
+                  | GREATER =>
+                       (key', y) :: remove rest key))
+
       fun operate l key absentf presentf =
          (case l of
              [] =>

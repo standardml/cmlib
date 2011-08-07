@@ -5,6 +5,7 @@ Group is
 	coroutine.sml
 	dict.sig
 	dict-list.sml
+        dict-red-black.sml
 	dict-splay.sml
 	hash-inc.sig
 	hash-inc.sml
@@ -29,8 +30,10 @@ Group is
 	quasilist.sml
 	queue.sig
 	queue.sml
+	red-black-tree.sml
 	set.sig
 	set-list.sml
+	set-red-black.sml
 	set-splay.sml
 	sort.sig
 	splay-tree.sml
