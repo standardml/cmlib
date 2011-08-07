@@ -1,40 +1,40 @@
 
-structure Symbol
-   :> SYMBOL
+functor SymbolFun (structure Value : HASHABLE)
+   :> SYMBOL where type value = Value.t
    =
    struct
 
-      structure H =
-         HashTable
-         (structure Key = StringHashable)
+      type value = Value.t
+
+      structure H = HashTable (structure Key = Value)
 
       val nextIndex = ref 0
 
-      val table : (int * string) H.table = H.table 1001
+      val table : (int * value) H.table = H.table 1001
 
-      type symbol = int * string
+      type symbol = int * value
             
       fun eq ((n1:int, _), (n2, _)) = n1 = n2
              
       fun compare ((n1, _), (n2, _)) = Int.compare (n1, n2)
             
-      fun fromString str =
-         H.lookupOrInsert table str
+      fun fromValue v =
+         H.lookupOrInsert table v
          (fn () =>
              let val n = !nextIndex
              in
                 nextIndex := !nextIndex + 1;
-                (n, str)
+                (n, v)
              end)
              
-      fun toString (_ , str) = str
+      fun toValue (_ , v) = v
 
       fun hash (n, _) = Word.fromInt n
 
    end
 
 
-structure SymbolOrdered
+functor SymbolOrderedFun (structure Symbol : SYMBOL)
    :> ORDERED where type t = Symbol.symbol
    =
    struct
@@ -45,7 +45,7 @@ structure SymbolOrdered
    end
 
 
-structure SymbolHashable
+functor SymbolHashableFun (structure Symbol : SYMBOL)
    :> HASHABLE where type t = Symbol.symbol
    =
    struct

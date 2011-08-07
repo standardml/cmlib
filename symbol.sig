@@ -2,13 +2,14 @@
 signature SYMBOL =
    sig
 
+      type value
       type symbol
 
       val eq : symbol * symbol -> bool
       val compare : symbol * symbol -> order
 
-      val fromString : string -> symbol
-      val toString : symbol -> string
+      val fromValue : value -> symbol
+      val toValue : symbol -> value
 
       val hash : symbol -> word
 
