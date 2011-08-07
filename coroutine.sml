@@ -4,7 +4,7 @@ structure Coroutine
    =
    struct
 
-      open SMLofNJ.Cont
+      open Cont
 
       datatype ('a, 'b) corout = 
          C of ('a * ('b, 'a) corout) cont
