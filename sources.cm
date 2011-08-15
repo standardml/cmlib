@@ -12,8 +12,6 @@ Group is
 	hashable.sml
 	hash-table.sig
 	hash-table.sml
-        hash-table-weak.sig
-        hash-table-weak.sml
 	iqueue.sig
 	iqueue.sml
 	lex-engine.sig
