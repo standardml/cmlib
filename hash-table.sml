@@ -35,6 +35,16 @@ functor HashTable (structure Key : HASHABLE)
                   thresh = resizeLoad sz,
                   arr = Array.array (sz, Nil) }
 
+      fun reset table sz =
+         if sz <= 0 then
+            raise (Fail "illegal size")
+         else
+            table := { residents = ref 0,
+                       size = Word.fromInt sz,
+                       thresh = resizeLoad sz,
+                       arr = Array.array (sz, Nil) }
+
+
       fun search hash key curr =
          (case !curr of
              Nil =>

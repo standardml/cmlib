@@ -8,6 +8,8 @@ signature HASH_TABLE =
       exception Absent
 
       val table : int -> 'a table
+      val reset : 'a table -> int -> unit
+
       val member : 'a table -> key -> bool
       val insert : 'a table -> key -> 'a -> unit
       val remove : 'a table -> key -> unit

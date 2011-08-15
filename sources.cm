@@ -1,6 +1,5 @@
 Group is
 	cont.sig
-	cont.sml
 	coroutine.sig
 	coroutine.sml
 	dict.sig
@@ -13,6 +12,8 @@ Group is
 	hashable.sml
 	hash-table.sig
 	hash-table.sml
+        hash-table-weak.sig
+        hash-table-weak.sml
 	iqueue.sig
 	iqueue.sml
 	lex-engine.sig
@@ -42,10 +43,15 @@ Group is
 	streamable.sig
 	streamable.sml
 	susp.sig
-	susp.sml
 	symbol.sig
 	symbol.sml
 	union-find.sig
 	union-find.sml
+        weak.sig
 
 	basis.cm
+
+        (* SML/NJ implementations *)
+	cont.sml
+	susp.sml
+        weak.sml
