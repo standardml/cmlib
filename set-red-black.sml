@@ -1,8 +1,6 @@
 
 functor RedBlackSet (structure Elem : ORDERED)
-(*
    :> SET where type elem = Elem.t
-*)
    =
    struct
 

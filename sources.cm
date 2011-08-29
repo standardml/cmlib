@@ -1,4 +1,67 @@
-Group is
+library
+
+        signature CONT
+        signature COROUTINE
+        signature DICT
+        signature HASH_INCREMENT
+        signature HASH_TABLE
+        signature HASHABLE
+        signature IQUEUE
+        signature LEX_ENGINE
+        signature ORDERED
+        signature PARSE_ENGINE
+        signature PARSING
+        signature PARTITION
+        signature QUASILIST
+        signature QUEUE
+        signature SET
+        signature SORT
+        signature STREAM
+        signature STREAMABLE
+        signature SUSP
+        signature SYMBOL
+        signature UNION_FIND
+        signature WEAK
+
+        structure Coroutine
+        structure IntHashable
+        structure IntOrdered
+        structure IQueue
+        structure JenkinsHash
+        structure ListStreamable
+        structure Mergesort
+        structure MJHash
+        structure Partition
+        structure Quasilist
+        structure Queue
+        structure Stream
+        structure StreamStreamable
+        structure StringHashable
+        structure StringOrdered
+        structure Susp
+        structure UnionFind
+
+        functor HashTable
+        functor LexEngineFun
+        functor ListDict
+        functor ListHashable
+        functor ListSet
+        functor ParseEngineFun
+        functor ParsingFun
+        functor RedBlackDict
+        functor RedBlackSet
+        functor SetHashable
+        functor SplayDict
+        functor SplaySet
+        functor SymbolFun
+        functor SymbolHashableFun
+        functor SymbolOrderedFun
+
+        structure Cont
+        structure Weak
+
+is
+
 	cont.sig
 	coroutine.sig
 	coroutine.sml
