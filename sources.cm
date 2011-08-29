@@ -57,6 +57,8 @@ library
         functor SymbolHashableFun
         functor SymbolOrderedFun
 
+        library(basis.cm)
+
         structure Cont
         structure Weak
 
