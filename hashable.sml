@@ -1,4 +1,14 @@
 
+structure UnitHashable
+   :> HASHABLE where type t = unit
+   =
+   struct
+      type t = unit
+
+      fun eq _ = true
+      fun hash = 0w0
+   end
+
 structure IntHashable
    :> HASHABLE where type t = int
    =
