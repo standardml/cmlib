@@ -40,6 +40,7 @@ library
         structure StringOrdered
         structure Susp
         structure UnionFind
+        structure UnitHashable
 
         functor HashTable
         functor LexEngineFun
