@@ -6,7 +6,7 @@ structure UnitHashable
       type t = unit
 
       fun eq _ = true
-      fun hash = 0w0
+      fun hash _ = 0w0
    end
 
 structure IntHashable
