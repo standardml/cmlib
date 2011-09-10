@@ -63,7 +63,7 @@ functor HashTable (structure Key : HASHABLE)
             ()
          else
             let
-               val newsize = 2 * Word.toInt size
+               val newsize = 2 * Word.toInt size + 1
                val newsize' = Word.fromInt newsize
                val arr' = Array.array (newsize, Nil)
                
