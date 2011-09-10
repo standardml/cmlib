@@ -9,6 +9,7 @@ structure UnitHashable
       fun hash _ = 0w0
    end
 
+
 structure IntHashable
    :> HASHABLE where type t = int
    =
@@ -42,6 +43,18 @@ structure StringHashable
           end
    end
 
+
+structure CharHashable
+   :> HASHABLE where type t = char
+   =
+   struct
+      type t = char
+
+      val eq : char * char -> bool = op =
+
+      fun hash ch = Word.fromInt (Char.ord ch)
+   end
+         
 
 functor ListHashable (structure Elem : HASHABLE)
    :> HASHABLE where type t = Elem.t list
