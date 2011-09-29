@@ -1,0 +1,38 @@
+
+Naming conventions
+------------------
+* Signature names should be in all caps, with underscores separating
+  words.
+
+* Structure and functor names should be capitalized, with capitals
+  starting words.
+
+* Types and terms should begin with a lower-case letter, with capitals
+  starting following words.
+
+* Constructors should be capitalized, and may (optionally) be all
+  caps.
+
+* Type classes (signatures that indicate operations on existing types,
+  usually to serve as a functor argument) should name the principal
+  type field "t".
+
+* Multiple implementations of an interface should be named such as
+  "AdjectiveFoo" (or "AdjectiveFooFun").
+
+
+File conventions
+----------------
+* File names should be in all lower case, with hyphens separating
+  words.
+
+* Files containing only signatures should be named with a ".sig"
+  suffix.  Other files should be named with a ".sml" suffix.
+
+* Multiple implementations of an interface should be given names such
+  as "foo-adjective.sml".  (Note that this file name convention
+  differs from the structure/functor name convention.  This is to
+  allow multiple implementions to sort together.)
+
+* Type classes should generally be placed in their own files, rather
+  than in the same file as a functor that depends on them.
