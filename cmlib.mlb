@@ -33,13 +33,22 @@ local
 	hashable.sml
 	hash-table.sig
 	hash-table.sml
+	lex-engine.sig
+	lex-engine.sml
+	parsing.sig
+	parsing.sml
 
+	parse-engine.sig
+	parse-engine.sml
 	symbol.sig
 	symbol.sml
 in
 	signature HASH_INCREMENT
 	signature HASHABLE
         signature IQUEUE
+        signature LEX_ENGINE
+	signature PARSE_ENGINE
+	signature PARSING
         signature QUASILIST
         signature SORT
         signature STREAM
@@ -62,8 +71,10 @@ in
         structure UnitHashable
 
         functor HashTable
+        functor LexEngineFun
 	functor ListDict
 	functor ListHashable
+        functor ParseEngineFun
         functor RedBlackDict
         functor RedBlackSet
         functor SetHashable
