@@ -1,0 +1,75 @@
+$(SML_LIB)/basis/basis.mlb
+
+local	
+	hash-inc.sig
+	hash-inc.sml
+	iqueue.sig
+	iqueue.sml
+	ordered.sig
+	ordered.sml
+	quasilist.sig
+	quasilist.sml
+	red-black-tree.sml
+	sort.sig
+	splay-tree.sml
+        susp.sig
+        susp.sml
+
+	dict.sig
+	dict-list.sml
+	dict-red-black.sml
+	dict-splay.sml
+	mergesort.sml
+	set.sig
+	set-list.sml
+	set-red-black.sml
+	set-splay.sml
+        stream.sig
+        stream.sml
+        streamable.sig
+        streamable.sml
+
+	hashable.sig
+	hashable.sml
+	hash-table.sig
+	hash-table.sml
+
+	symbol.sig
+	symbol.sml
+in
+	signature HASH_INCREMENT
+	signature HASHABLE
+        signature IQUEUE
+        signature QUASILIST
+        signature SORT
+        signature STREAM
+        signature STREAMABLE
+        signature SUSP
+	signature SYMBOL
+
+	structure CharHashable
+        structure IntHashable
+        structure IntOrdered
+        structure IQueue
+        structure JenkinsHash
+        structure Mergesort
+        structure Quasilist
+        structure Stream
+        structure StreamStreamable
+        structure StringHashable
+        structure StringOrdered
+	structure Susp
+        structure UnitHashable
+
+        functor HashTable
+	functor ListDict
+	functor ListHashable
+        functor RedBlackDict
+        functor RedBlackSet
+        functor SetHashable
+        functor SplayDict
+        functor SplaySet
+	functor SymbolFun
+	functor SymbolHashableFun
+	functor SymbolOrderedFun
+end
