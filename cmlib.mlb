@@ -74,6 +74,7 @@ in
         functor LexEngineFun
 	functor ListDict
 	functor ListHashable
+	functor ListSet
         functor ParseEngineFun
         functor RedBlackDict
         functor RedBlackSet
