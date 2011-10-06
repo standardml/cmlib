@@ -117,5 +117,5 @@ is
 
         (* SML/NJ implementations *)
 	cont.sml
-	susp.sml
+	susp-nj.sml
         weak.sml

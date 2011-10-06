@@ -1,7 +1,3 @@
-
-structure Susp :> SUSP = SMLofNJ.Susp
-
-(*
 (* A valid Susp implementation for other platforms. *)
 structure Susp :> SUSP =
    struct
@@ -26,4 +22,3 @@ structure Susp :> SUSP =
       fun force r = !r ()
 
    end
-*)
