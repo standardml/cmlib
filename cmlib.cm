@@ -23,6 +23,7 @@ library
         signature UNION_FIND
         signature WEAK
 
+        structure Cont
         structure Coroutine
         structure IntHashable
         structure IntOrdered
@@ -41,6 +42,7 @@ library
         structure Susp
         structure UnionFind
         structure UnitHashable
+        structure Weak
 
         functor HashTable
         functor LexEngineFun
@@ -59,9 +61,6 @@ library
         functor SymbolOrderedFun
 
         library(basis.cm)
-
-        structure Cont
-        structure Weak
 
 is
 
@@ -116,6 +115,6 @@ is
 	basis.cm
 
         (* SML/NJ implementations *)
-	cont.sml
+	cont-nj.sml
 	susp-nj.sml
-        weak.sml
+        weak-nj.sml

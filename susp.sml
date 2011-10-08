@@ -1,4 +1,6 @@
-(* A valid Susp implementation for other platforms. *)
+
+(* A valid implementation of SUSP, for platforms that don't support suspensions primitively. *)
+
 structure Susp :> SUSP =
    struct
 
