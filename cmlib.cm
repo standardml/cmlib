@@ -12,6 +12,8 @@ library
         signature PARSE_ENGINE
         signature PARSING
         signature PARTITION
+        signature PSTREAM
+        signature PSUSP
         signature QUASILIST
         signature QUEUE
         signature SET
@@ -33,6 +35,8 @@ library
         structure Mergesort
         structure MJHash
         structure Partition
+        structure PStream
+        structure PSusp
         structure Quasilist
         structure Queue
         structure Stream
@@ -90,6 +94,8 @@ is
 	parsing.sml
 	partition.sig
 	partition.sml
+        psusp.sig
+        psusp.sml
 	quasilist.sig
 	quasilist.sml
 	queue.sig
@@ -101,6 +107,8 @@ is
 	set-splay.sml
 	sort.sig
 	splay-tree.sml
+        pstream.sig
+        pstream.sml
 	stream.sig
 	stream.sml
 	streamable.sig
