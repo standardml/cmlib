@@ -63,7 +63,9 @@ in
 	signature TABLE
 
 	structure CharHashable
+	structure CharOrdered
         structure IntHashable
+	structure IntInfOrdered
         structure IntOrdered
         structure IQueue
         structure JenkinsHash
@@ -82,6 +84,7 @@ in
         functor LexEngineFun
 	functor ListDict
 	functor ListHashable
+	functor ListOrdered
 	functor ListSet
         functor ParseEngineFun
         functor RedBlackDict

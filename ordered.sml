@@ -19,6 +19,25 @@ structure IntOrdered
       val compare = Int.compare
    end
 
+structure IntInfOrdered
+   :> ORDERED where type t = IntInf.int
+   =
+   struct
+      type t = IntInf.int
+      
+      val eq : IntInf.int * IntInf.int -> bool = (op =)  
+      val compare = IntInf.compare
+   end
+
+structure CharOrdered
+   :> ORDERED where type t = char
+   = 
+   struct
+      type t = char
+ 
+      val eq : char * char -> bool = op =
+      val compare = Char.compare
+   end
 
 structure StringOrdered
    :> ORDERED where type t = string
@@ -30,7 +49,6 @@ structure StringOrdered
       val compare = String.compare
    end
 
-
 structure CharOrdered
    :> ORDERED where type t = char
    =
@@ -41,6 +59,21 @@ structure CharOrdered
       val compare = Char.compare
    end
 
+functor ListOrdered (Ordered : ORDERED)
+   :> ORDERED where type t = Ordered.t list
+   =
+   struct
+      type t = Ordered.t list
+  
+      fun compare ([], []) = EQUAL
+        | compare (_, []) = GREATER
+        | compare ([], _) = LESS
+        | compare (x :: xs, y :: ys) =  
+          case Ordered.compare (x, y) of
+             EQUAL => compare (xs, ys)
+           | ord => ord
+      fun eq (xs, ys) = EQUAL = compare (xs, ys)
+   end
 
 functor InvertOrdered (Ordered : ORDERED)
    :> ORDERED where type t = Ordered.t

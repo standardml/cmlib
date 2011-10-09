@@ -27,9 +27,12 @@ library
         signature UNION_FIND
         signature WEAK
 
+	structure CharHashable
+	structure CharOrdered
         structure Cont
         structure Coroutine
         structure IntHashable
+	structure IntInfOrdered
         structure IntOrdered
         structure IQueue
         structure JenkinsHash
@@ -57,6 +60,7 @@ library
         functor LexEngineFun
         functor ListDict
         functor ListHashable
+        functor ListOrdered
         functor ListSet
         functor ParseEngineFun
         functor ParsingFun
