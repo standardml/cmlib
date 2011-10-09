@@ -37,6 +37,9 @@ local
 	lex-engine.sml
 	parsing.sig
 	parsing.sml
+	table.sig
+	table-dict.sml
+	table-hash.sml
 
 	parse-engine.sig
 	parse-engine.sml
@@ -55,6 +58,7 @@ in
         signature STREAMABLE
         signature SUSP
 	signature SYMBOL
+	signature TABLE
 
 	structure CharHashable
         structure IntHashable
@@ -84,4 +88,6 @@ in
 	functor SymbolFun
 	functor SymbolHashableFun
 	functor SymbolOrderedFun
+	functor DictTable
+	functor HashTableTable
 end

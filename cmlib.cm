@@ -22,6 +22,7 @@ library
         signature STREAMABLE
         signature SUSP
         signature SYMBOL
+	signature TABLE
         signature UNION_FIND
         signature WEAK
 
@@ -48,6 +49,7 @@ library
         structure UnitHashable
         structure Weak
 
+	functor DictTable
         functor HashTable
         functor LexEngineFun
         functor ListDict
@@ -116,6 +118,8 @@ is
 	susp.sig
 	symbol.sig
 	symbol.sml
+	table.sig
+	table-dict.sml
 	union-find.sig
 	union-find.sml
         weak.sig
