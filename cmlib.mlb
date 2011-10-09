@@ -74,7 +74,9 @@ in
 	structure Susp
         structure UnitHashable
 
+	functor DictTable
         functor HashTable
+	functor HashTableTable
         functor LexEngineFun
 	functor ListDict
 	functor ListHashable
@@ -88,6 +90,4 @@ in
 	functor SymbolFun
 	functor SymbolHashableFun
 	functor SymbolOrderedFun
-	functor DictTable
-	functor HashTableTable
 end

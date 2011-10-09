@@ -51,6 +51,7 @@ library
 
 	functor DictTable
         functor HashTable
+	functor HashTableTable
         functor LexEngineFun
         functor ListDict
         functor ListHashable
@@ -120,6 +121,7 @@ is
 	symbol.sml
 	table.sig
 	table-dict.sml
+	table-hash.sml
 	union-find.sig
 	union-find.sml
         weak.sig
