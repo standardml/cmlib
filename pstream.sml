@@ -37,7 +37,7 @@ structure PStream
              if IQueue.isEmpty q then
                 NONE
              else
-                SOME (Cons (IQueue.front q, fromIqueue q)))
+                SOME (Cons (IQueue.remove q, fromIqueue q)))
 
       fun toStream s =
          Stream.lazy
