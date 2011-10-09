@@ -35,6 +35,8 @@ local
 	hash-table.sml
 	lex-engine.sig
 	lex-engine.sml
+	multi-table.sig
+	multi-table-dict.sml
 	parsing.sig
 	parsing.sml
 	table.sig

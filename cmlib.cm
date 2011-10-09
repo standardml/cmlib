@@ -8,6 +8,7 @@ library
         signature HASHABLE
         signature IQUEUE
         signature LEX_ENGINE
+	signature MULTI_TABLE
         signature ORDERED
         signature PARSE_ENGINE
         signature PARSING
@@ -50,6 +51,7 @@ library
         structure Weak
 
 	functor DictTable
+	functor DictMultiTable
         functor HashTable
 	functor HashTableTable
         functor LexEngineFun
@@ -89,6 +91,8 @@ is
 	lex-engine.sig
 	lex-engine.sml
 	mergesort.sml
+	multi-table.sig
+	multi-table-dict.sml
 	ordered.sig
 	ordered.sml
 	parse-engine.sig
