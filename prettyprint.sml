@@ -97,6 +97,10 @@ structure PrettyPrint
          Consequently, it is an invariant that output=[] whenever bk=NONE.
          To maintain this, we must flush the output queue whenever bk becomes
          NONE.
+
+         Note that we always backtrack to the outermost decision point.  (It's not
+         necessary to do so, it just looks better.)  Consequently, there's no need to
+         remember older backtracking points.
       *)
 
       fun receive input f =
@@ -165,13 +169,14 @@ structure PrettyPrint
                            *)
                            if n < margin then
                               let
-                                 (* Notionally we are restoring the outer backtracking point (NONE) and
-                                    then setting a new one.  Thus, we flush the output queue.
+                                 (* Notionally we are expiring the backtracking point, thereby
+                                    restoring NONE, before setting a new one.  Thus, we flush
+                                    the output queue.
                                  *)
                                  val () = flushOutput iostream output
 
                                  fun k () =
-                                    (* Restore the outer backtracking point (NONE). *)
+                                    (* Restore the backtracking point to NONE. *)
                                     ppNewline env NONE [] (pp env NONE input')
 
                                  (* We know we have an backtracking point live, so we can enqueue directly. *)
