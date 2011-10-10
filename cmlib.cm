@@ -13,6 +13,7 @@ library
         signature PARSE_ENGINE
         signature PARSING
         signature PARTITION
+        signature PRETTY_PRINT
         signature PSTREAM
         signature PSUSP
         signature QUASILIST
@@ -40,6 +41,7 @@ library
         structure Mergesort
         structure MJHash
         structure Partition
+        structure PrettyPrint
         structure PStream
         structure PSusp
         structure Quasilist
@@ -105,6 +107,8 @@ is
 	parsing.sml
 	partition.sig
 	partition.sml
+        prettyprint.sig
+        prettyprint.sml
         psusp.sig
         psusp.sml
 	quasilist.sig
