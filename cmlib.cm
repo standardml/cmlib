@@ -1,6 +1,7 @@
 library
 
         signature CONT
+	signature COORD
         signature COROUTINE
         signature DICT
         signature HASH_INCREMENT
@@ -13,6 +14,7 @@ library
         signature PARSE_ENGINE
         signature PARSING
         signature PARTITION
+	signature POS
         signature PRETTY_PRINT
         signature PSTREAM
         signature PSUSP
@@ -31,6 +33,7 @@ library
 	structure CharHashable
 	structure CharOrdered
         structure Cont
+	structure Coord
         structure Coroutine
         structure IntHashable
 	structure IntInfOrdered
@@ -38,9 +41,11 @@ library
         structure IQueue
         structure JenkinsHash
         structure ListStreamable
+	structure MarkCharStream
         structure Mergesort
         structure MJHash
         structure Partition
+	structure Pos
         structure PrettyPrint
         structure PStream
         structure PSusp
@@ -64,6 +69,7 @@ library
         functor ListHashable
         functor ListOrdered
         functor ListSet
+	functor MarkStreamFn
         functor ParseEngineFun
         functor ParsingFun
         functor RedBlackDict
@@ -80,6 +86,8 @@ library
 is
 
 	cont.sig
+	coord.sig
+	coord.sml
 	coroutine.sig
 	coroutine.sml
 	dict.sig
@@ -96,6 +104,7 @@ is
 	iqueue.sml
 	lex-engine.sig
 	lex-engine.sml
+        markstream.sml
 	mergesort.sml
 	multi-table.sig
 	multi-table-dict.sml
@@ -107,6 +116,8 @@ is
 	parsing.sml
 	partition.sig
 	partition.sml
+	pos.sig
+	pos.sml
         prettyprint.sig
         prettyprint.sml
         psusp.sig

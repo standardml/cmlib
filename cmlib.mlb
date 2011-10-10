@@ -1,12 +1,16 @@
 $(SML_LIB)/basis/basis.mlb
 
 local	
+	coord.sig
+	coord.sml
 	hash-inc.sig
 	hash-inc.sml
 	iqueue.sig
 	iqueue.sml
 	ordered.sig
 	ordered.sml
+	pos.sig
+	pos.sml
 	quasilist.sig
 	quasilist.sml
 	red-black-tree.sml
@@ -35,6 +39,7 @@ local
 	hash-table.sml
 	lex-engine.sig
 	lex-engine.sml
+	markstream.sml
 	multi-table.sig
 	multi-table-dict.sml
 	parsing.sig
@@ -48,12 +53,14 @@ local
 	symbol.sig
 	symbol.sml
 in
+	signature COORD
 	signature HASH_INCREMENT
 	signature HASHABLE
         signature IQUEUE
         signature LEX_ENGINE
 	signature PARSE_ENGINE
 	signature PARSING
+	signature POS
         signature QUASILIST
         signature SORT
         signature STREAM
@@ -64,12 +71,15 @@ in
 
 	structure CharHashable
 	structure CharOrdered
+	structure Coord
         structure IntHashable
 	structure IntInfOrdered
         structure IntOrdered
         structure IQueue
         structure JenkinsHash
+	structure MarkCharStream
         structure Mergesort
+	structure Pos
         structure Quasilist
         structure Stream
         structure StreamStreamable
@@ -86,6 +96,7 @@ in
 	functor ListHashable
 	functor ListOrdered
 	functor ListSet
+	functor MarkStreamFn
         functor ParseEngineFun
         functor RedBlackDict
         functor RedBlackSet
