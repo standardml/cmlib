@@ -68,7 +68,7 @@ structure PrettyPrint
 
       datatype routine = R of unit -> routine   (* half a coroutine, so to speak *)
 
-      datatype mode = T | H | V | F of (unit -> routine) option
+      datatype mode = T | H | V | F
 
       exception NotInBox
       exception Failure of exn * routine
@@ -120,15 +120,9 @@ structure PrettyPrint
                 []
                 ))
 
-      fun maybeFlushOutput (iostream, _, _, _, _) bk output =
-         (case bk of
-             SOME _ => output
-           | NONE =>
-                (
-                app (write iostream) (rev output);
-                []
-                ))
-         
+      fun flushOutput iostream output =
+         app (write iostream) (rev output)
+
       fun ppNewline (env as (iostream, width, indent, _, _)) bk output k =
          let
             val output' =
@@ -165,41 +159,43 @@ structure PrettyPrint
                               Option.valOf bk ()
                       | V =>
                            ppNewline env bk output (pp env bk input')
-                      | F bkOuter =>
+                      | F =>
                            (* Write spaces if there's room, but set a backtracking point that will expire
                               at the end of the line.
                            *)
                            if n < margin then
                               let
-                                 (* Notionally we are restoring the outer backtracking point and then
-                                    setting a new one.  Thus, we flush the output queue if appropriate.
+                                 (* Notionally we are restoring the outer backtracking point (NONE) and
+                                    then setting a new one.  Thus, we flush the output queue.
                                  *)
-                                 val output = maybeFlushOutput env bkOuter output
+                                 val () = flushOutput iostream output
 
                                  fun k () =
-                                    (* Restore the outer backtracking point.
-                                       Never need to flush: if bkOuter=NONE then output=[] already.
-                                    *)
-                                    ppNewline env bkOuter output (pp env bkOuter input')
+                                    (* Restore the outer backtracking point (NONE). *)
+                                    ppNewline env NONE [] (pp env NONE input')
 
                                  (* We know we have an backtracking point live, so we can enqueue directly. *)
-                                 val output' = SPACES n :: output
+                                 val output' = [SPACES n]
                                  val margin' = margin - n
                               in
                                  pp env (SOME k) input' output' margin' 
                               end
                            else
-                              (* Restore the outer backtracking point. *)
-                              ppNewline env bkOuter
-                                 (maybeFlushOutput env bkOuter output)
-                                 (pp env bkOuter input'))
+                              (
+                              (* Expire the backtracking point. *)
+                              flushOutput iostream output;
+                              ppNewline env NONE [] (pp env NONE input')
+                              ))
                | Newline =>
                     let
                        val (bk', output') =
                           (case mode of
-                              F bkOuter => 
-                                 (* Restore the outer backtracking point. *)
-                                 (bkOuter, maybeFlushOutput env bkOuter output)
+                              F => 
+                                 (* Expire the backtracking point. *)
+                                 (
+                                 flushOutput iostream output;
+                                 (NONE, [])
+                                 )
                             | _ =>
                                  (bk, output))
                     in
@@ -250,30 +246,50 @@ structure PrettyPrint
                    pp (iostream, width, indent', sk, V) bk input output margin
               | Consistent =>
                    let
-                      fun ck' input2 output2 margin2 =
-                         (* Returning may set the backtracking point back to NONE,
-                            so we might need to flush the output queue.
-                         *)
-                         sk input2 (maybeFlushOutput env bk output2) margin2
+                      val (ck', bk') =
+                         (case bk of
+                             SOME _ =>
+                                (* If we already have a backtracking point, treat this as horizontal. *)
+                                (sk, bk)
+                           | NONE =>
+                                let
+                                   fun ck' input2 output2 margin2 =
+                                      (* Returning resets the backtracking point to NONE, so flush the
+                                         output queue.
+                                      *)
+                                      (
+                                      flushOutput iostream output2;
+                                      sk input2 [] margin2
+                                      )
 
-                      fun k () =
-                         (* Restore the old backtracking point.
-                            Never need to flush here: if bk=NONE then output=[] already.
-                         *)
-                         pp (iostream, width, indent', sk, V) bk input output margin
+                                   fun k () =
+                                      (* Never need to flush here: if bk=NONE then output=[] already. *)
+                                      pp (iostream, width, indent', sk, V) NONE input output margin
+                                in
+                                   (ck', SOME k)
+                                end)
                    in
-                      pp (iostream, width, indent', ck', H) (SOME k) input output margin 
+                      pp (iostream, width, indent', ck', H) bk' input output margin 
                    end
               | Freestyle =>
-                   let
-                      fun ck' input2 output2 margin2 =
-                         (* Returning may set the backtracking point back to NONE,
-                            so we might need to flush the output queue.
-                         *)
-                         sk input2 (maybeFlushOutput env bk output2) margin2
-                   in
-                      pp (iostream, width, indent', ck', F bk) bk input output margin
-                   end)
+                   (case bk of
+                       SOME _ =>
+                          (* If we already have a backtracking point, treat this as horizontal. *)
+                          pp (iostream, width, indent', sk, H) bk input output margin
+                     | NONE =>
+                          let
+                             fun ck' input2 output2 margin2 =
+                                (* Returning resets the backtracking point to NONE, so flush the
+                                   output queue.
+                                *)
+                                (
+                                flushOutput iostream output2;
+                                sk input2 [] margin2
+                                )
+                          in
+                             pp (iostream, width, indent', ck', F) NONE input output margin
+                          end))
+            
          end
 
       fun ppStart iostream width input =
