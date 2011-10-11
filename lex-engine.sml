@@ -110,7 +110,7 @@ functor LexEngineFun (structure Streamable : STREAMABLE
           end
 
 
-      type ('a, 'b) action = { str : symbol list,
+      type ('a, 'b) action = { match : symbol list,
                                len : int,
                                start : symbol Streamable.t,
                                follow : symbol Streamable.t,
@@ -146,7 +146,7 @@ functor LexEngineFun (structure Streamable : STREAMABLE
 
              val f = Vector.sub (acceptTable, acceptingState-1)
           in
-             f { str = rev chars,
+             f { match = rev chars,
                  len = len,
                  start = s,
                  follow = s',

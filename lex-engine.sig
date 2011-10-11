@@ -19,7 +19,7 @@ signature LEX_ENGINE =
       val next0x2 : string -> int -> int
 
       type ('a, 'b) action =
-         { str : symbol list,
+         { match : symbol list,
            len : int,
            start : symbol Streamable.t,
            follow : symbol Streamable.t,
