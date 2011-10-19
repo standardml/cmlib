@@ -4,7 +4,7 @@ functor MarkStreamFn (structure S : STREAMABLE
                       val eol: tok * tok S.t -> bool) = 
    struct
       (*[ val mark: 
-             string * tok S.t -> (tok * Coord.t) Stream.stream ]*)
+             string -> tok S.t -> Coord.t * (tok * Coord.t) Stream.stream ]*)
       fun mark name stream = 
          let
             fun loop c stream () = 
