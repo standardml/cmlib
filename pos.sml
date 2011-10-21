@@ -6,6 +6,11 @@ structure Pos :> POS =
    struct
       type t = Coord.t * Coord.t
 
+      fun toString (left, right) = 
+         Coord.toString left ^ "-" 
+         ^ Int.toString (Coord.line right) ^ "."
+         ^ Int.toString (Coord.char right)
+
       fun pos left right = 
          (case Coord.compare (left, right) of
             GREATER => (right, left)
@@ -23,9 +28,4 @@ structure Pos :> POS =
 
       fun min (l1, r1) (l2, r2) = 
          (Coord.leftmost l1 l2, Coord.rightmost r1 r2)
-
-      fun toString (left, right) = 
-         Coord.toString left ^ "-" 
-         ^ Int.toString (Coord.line right) ^ "."
-         ^ Int.toString (Coord.char right)
    end

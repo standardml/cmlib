@@ -37,6 +37,6 @@ structure Coord :> COORD =
 
       fun rightmost pos1 pos2 =
          case compare (pos1, pos2) of
-            LESS => pos1
-          | _ => pos2
+            LESS => pos2
+          | _ => pos1
    end
