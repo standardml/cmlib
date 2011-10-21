@@ -26,6 +26,6 @@ structure Pos :> POS =
 
       fun toString (left, right) = 
          Coord.toString left ^ "-" 
-         ^ Int.toString (Coord.line right) ^ "." 
-         ^ Int.toString (Coord.line right)
+         ^ Int.toString (Coord.line right) ^ "."
+         ^ Int.toString (Coord.char right)
    end
