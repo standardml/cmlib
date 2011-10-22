@@ -6,33 +6,34 @@
 
 signature COORD =
    sig
-      type t
+      type coord
+      type t = coord
       
       (* Positions are positions within a file; a filename must be given *)
-      val init : string -> t
+      val init : string -> coord
 
       (* Advance to the next position over a regular character or a newline *)
-      val nextchar : t -> t
-      val nextline : t -> t
+      val nextchar : coord -> coord
+      val nextline : coord -> coord
 
       (* Filename originally passed to init *)
-      val file : t -> string
+      val file : coord -> string
 
       (* Absolute position, which could be input to "M-x goto-char" in emacs *)
-      val abs : t -> int 
+      val abs : coord -> int 
 
       (* Line and character coordinates *)
-      val line : t -> int
-      val char : t -> int
+      val line : coord -> int
+      val char : coord -> int
 
       (* Comparision and equality are only defined on coordinates that come 
        * from the same call to "init" (morally placing them within the same 
        * document). *)
-      val leftmost : t -> t -> t
-      val rightmost : t -> t -> t
-      val eq : (t * t) -> bool
-      val compare : (t * t) -> order
-      val hash : t -> word
-      val toString : t -> string
+      val leftmost : coord -> coord -> coord
+      val rightmost : coord -> coord -> coord
+      val eq : (coord * coord) -> bool
+      val compare : (coord * coord) -> order
+      val hash : coord -> word
+      val toString : coord -> string
    end
 

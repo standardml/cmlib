@@ -2,6 +2,7 @@ library
 
         signature CONT
 	signature COORD
+        signature COORDINATED_STREAM
         signature COROUTINE
         signature DICT
         signature HASH_INCREMENT
@@ -34,6 +35,7 @@ library
 	structure CharOrdered
         structure Cont
 	structure Coord
+        structure CoordinatedStream
         structure Coroutine
         structure IntHashable
 	structure IntInfOrdered
@@ -88,6 +90,8 @@ is
 	cont.sig
 	coord.sig
 	coord.sml
+        coord-stream.sig
+        coord-stream.sml
 	coroutine.sig
 	coroutine.sml
 	dict.sig

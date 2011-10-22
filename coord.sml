@@ -3,7 +3,8 @@
 
 structure Coord :> COORD = 
    struct
-      type t = {file: string, char: int, line: int, abs: int}
+      type coord = {file: string, char: int, line: int, abs: int}
+      type t = coord
 
       fun init s = {file = s, char = 1, line = 1, abs = 1}
 
@@ -13,13 +14,13 @@ structure Coord :> COORD =
       fun nextline {file, char, line, abs} = 
          {file = file, char = 1, line = line + 1, abs = abs}
 
-      fun file (pos: t) = #file pos
+      fun file (pos: coord) = #file pos
 
-      fun abs (pos: t) = #abs pos
+      fun abs (pos: coord) = #abs pos
       
-      fun line (pos: t) = #line pos
+      fun line (pos: coord) = #line pos
   
-      fun char (pos: t) = #char pos
+      fun char (pos: coord) = #char pos
 
       fun eq (pos1, pos2) = abs pos1 = abs pos2
 

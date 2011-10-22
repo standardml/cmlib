@@ -27,3 +27,24 @@ structure StreamStreamable
       val front = Stream.front
 
    end
+
+
+functor CoercedStreamable (structure Streamable : STREAMABLE
+                           type 'a item
+                           val coerce : 'a item -> 'a)
+   :> STREAMABLE
+      where type 'a t = 'a item Streamable.t
+   =
+   struct
+
+      type 'a t = 'a item Streamable.t
+
+      datatype 'a front = Nil | Cons of 'a * 'a item Streamable.t
+
+      fun front s =
+         (case Streamable.front s of
+             Streamable.Nil => Nil
+           | Streamable.Cons (x, s') =>
+                Cons (coerce x, s'))
+
+   end
