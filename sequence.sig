@@ -141,7 +141,8 @@ sig
   val inject : (int*'a) seq -> 'a seq -> 'a seq
 
   (*
-    Appends two sequences (XXX)
+    @params s1 s2
+    @returns s1@s2
   *)
   val append : 'a seq * 'a seq -> 'a seq
 
