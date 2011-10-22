@@ -62,6 +62,7 @@ library
         structure UnitHashable
         structure Weak
 
+        functor CoercedStreamable
 	functor DictTable
 	functor DictMultiTable
         functor HashTable
