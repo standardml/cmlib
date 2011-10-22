@@ -1,0 +1,3 @@
+Group is
+    (* mergesort tests *)
+    tests/mergesort-test.cm
