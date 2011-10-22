@@ -44,8 +44,11 @@ structure Stream
              loop 0
           end
 
-      fun fromInstream ins =
+      fun fromTextInstream ins =
           fromProcess (fn () => TextIO.input1 ins)
+
+      fun fromBinInstream ins =
+          fromProcess (fn () => BinIO.input1 ins)
 
       fun fromLoop f seed =
           lazy

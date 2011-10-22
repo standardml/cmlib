@@ -12,7 +12,8 @@ signature STREAM =
       val fromProcess : (unit -> 'a option) -> 'a stream
       val fromList : 'a list -> 'a stream
       val fromString : string -> char stream
-      val fromInstream : TextIO.instream -> char stream
+      val fromTextInstream : TextIO.instream -> char stream
+      val fromBinInstream : BinIO.instream -> Word8.word stream
       val fromLoop : ('a -> ('a * 'b) option) -> 'a -> 'b stream
 
       val fix : ('a stream -> 'a stream) -> 'a stream
