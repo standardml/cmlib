@@ -19,8 +19,11 @@ library
         signature PRETTY_PRINT
         signature PSTREAM
         signature PSUSP
-        signature QUASILIST
+        signature QUASILIST 
         signature QUEUE
+        (*---------------------*)
+        signature SEQUENCE
+        (*---------------------*)
         signature SET
         signature SORT
         signature STREAM
@@ -31,6 +34,7 @@ library
         signature UNION_FIND
         signature WEAK
 
+        structure ArraySequence
 	structure CharHashable
 	structure CharOrdered
         structure Cont
@@ -58,6 +62,7 @@ library
         structure StringHashable
         structure StringOrdered
         structure Susp
+        structure TreeSequence
         structure UnionFind
         structure UnitHashable
         structure Weak
@@ -132,6 +137,9 @@ is
 	queue.sig
 	queue.sml
 	red-black-tree.sml
+        sequence.sig
+        sequence-array.sml
+        sequence-tree.sml
 	set.sig
 	set-list.sml
 	set-red-black.sml
