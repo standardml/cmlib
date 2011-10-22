@@ -37,10 +37,10 @@ structure Mergesort :> SORT =
                  (case f (x1, x2) of
                      LESS =>
                         x1 :: merge f rest1 l2
-                   | GREATER =>
-                        x2 :: merge f l1 rest2
                    | EQUAL =>
-                        x1 :: x2 :: merge f rest1 rest2))
+                        x1 :: merge f rest1 l2
+                   | GREATER =>
+                        x2 :: merge f l1 rest2))
 
       fun sort f l =
           (case l of

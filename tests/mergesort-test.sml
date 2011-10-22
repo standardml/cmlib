@@ -27,18 +27,22 @@ structure MergesortTest :> sig end =
                 (downiter 11 1)
 
     fun intListToString l =
-        "[" ^ String.concatWith ", " (map Int.toString l) ^ "]"
+        "[" ^ String.concatWith ", " (List.map Int.toString l) ^ "]"
 
     val () = List.app
                 (fn l =>
                     Testing.expectEq (Mergesort.sort (fn _ => EQUAL) l) l
                       ("Mergesort should be stable " ^ intListToString l))
-                [ [],
-                  [1],
-                  [1,2], [2,1],
-                  [1,2,3], [1,3,2],
-                  [3,1,2], [3,2,1],
-                  [2,1,3], [2,3,1] ]
+            [ [],
+              [1],
+              [1,2], [2,1],
+              [1,2,3], [1,3,2],
+              [3,1,2], [3,2,1],
+              [2,1,3], [2,3,1],
+              [1,2,3,4], [1,2,4,3], [1,3,2,4], [1,3,4,2], [1,4,2,3], [1,4,3,2],
+              [2,1,3,4], [2,1,4,3], [2,3,1,4], [2,3,4,1], [2,4,1,3], [2,4,3,1],
+              [3,1,2,4], [3,1,4,2], [3,2,1,4], [3,2,4,1], [3,4,1,2], [3,4,2,1],
+              [4,1,2,3], [4,1,3,2], [4,2,1,3], [4,2,3,1], [4,3,1,2], [4,3,2,1] ]
 
     val () = Testing.report ()
   end
