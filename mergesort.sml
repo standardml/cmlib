@@ -2,7 +2,7 @@
 structure Mergesort :> SORT =
    struct
 
-      (* stable merge using the tortoise and hare algorithm: the tortoise
+      (* stable split using the tortoise and hare algorithm: the tortoise
          moves by ones, the hare by twos, and when the hare gets to the end,
          the tortoise is halfway.  "collect" collects the front half of the
          list along the way. *)
