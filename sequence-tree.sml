@@ -12,9 +12,13 @@ struct
   datatype 'a treeview =  EMPTY 
                         | ELT of 'a 
                         | NODE of ('a treeview * 'a treeview) 
+
   type 'a seqtree = 'a treeview
 
   type 'a seq = 'a treeview                        
+
+  fun showt t = t
+  fun hidet t = t
 
   datatype 'a listview = NIL
                         | CONS of ('a * 'a seq)
@@ -65,15 +69,42 @@ struct
 
   fun cons (h, t) = NODE (ELT h, t)
 
+  fun foldl f b t =
+     (case t of
+         EMPTY => b
+       | ELT x =>
+            f (x, b)
+       | NODE (left, right) =>
+            foldl f (foldl f b left) right)
+
+  fun foldr f b t =
+     (case t of
+         EMPTY => b
+       | ELT x =>
+            f (x, b)
+       | NODE (left, right) =>
+            foldl f (foldl f b right) left)
+
+  fun iter f b s = foldl (fn (x, y) => f (y, x)) b s
+  
+  fun map f t =
+     (case t of
+         EMPTY => EMPTY
+       | ELT x =>
+            ELT (f x)
+       | NODE (left, right) =>
+            NODE (map f left, map f right))
+
+
+
   fun tabulate _ _ = raise NYI                   
   fun fromList _ = raise NYI
   fun collate _ = raise NYI
-  fun map _ _ = raise NYI
   fun map2 _ _ _ = raise NYI
   fun reduce _ _ _ = raise NYI
   fun scan _ _ _ = raise NYI
   fun filter _ _ = raise NYI    
-  fun iter _ _ _ = raise NYI
+  fun foldlh _ _ _ = raise NYI
   fun iterh _ _ _ = raise NYI
   fun flatten _ = raise NYI
   fun partition _ _ = raise NYI
@@ -89,9 +120,7 @@ struct
   fun toString _ _ = raise NYI
   fun tokens _ _ = raise NYI
   fun fields _ _ = raise NYI
-  fun showt _ = raise NYI
   fun showti _ _ = raise NYI
-  fun hidet _ = raise NYI
   fun showl _ = raise NYI
   fun hidel _ = raise NYI
 end

@@ -46,10 +46,10 @@ struct
 
   fun iter_gen fold = fold o flip
 
-  fun iterh_gen foldi f b s =
+  fun foldh_gen foldi f b s =
       case length s
        of 0 => (empty (), b)
-        | 1 => (singleton b, f(b, nth s 0))
+        | 1 => (singleton b, f(nth s 0, b))
         | n =>
           let
             (* TODO: (b :'a), so this is grossly space inefficient *)
@@ -59,7 +59,7 @@ struct
                 let
                   val _ = Array.update(p_res, idx, b)
                 in
-                  f (b,a)
+                  f (a,b)
                 end
 
             val res = foldi f' b s
@@ -67,9 +67,14 @@ struct
             (p_res, res)
           end
 
-  fun iter f = iter_gen Array.foldl f
+  val foldl = Array.foldl
+  val foldr = Array.foldr
 
-  fun iterh f = iterh_gen Array.foldli f
+  fun foldlh f b s = foldh_gen Array.foldli f b s
+
+  fun iter f b s = Array.foldl (flip f) b s
+
+  fun iterh f b s = foldh_gen Array.foldli (flip f) b s
 
   fun red act f b s =
       case length s

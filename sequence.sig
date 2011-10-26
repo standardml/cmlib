@@ -75,7 +75,7 @@ sig
   (* val mapprod : (('a * 'b) -> 'c) -> 'a seq -> 'b seq -> 'c seq *)
   (* val mapsum : (('a * 'b) -> 'c) -> 'a seq -> 'b seq -> 'c seq *)
 
-  (* Parallel iter (XXX say more)
+  (* Parallel fold (XXX say more)
     @params f b s
     @param f a combiner
     @param b a base case
@@ -106,13 +106,14 @@ sig
     @param b a base case
     @param s the sequence to iterate over
   *)
-  val iter : ('b * 'a -> 'b) -> 'b -> 'a seq -> 'b
+  val foldl : ('a * 'b -> 'b) -> 'b -> 'a seq -> 'b
+  val foldr : ('a * 'b -> 'b) -> 'b -> 'a seq -> 'b
 
   (*
     @params f b s
-    @returns all partial results of iter
+    @returns all partial results of foldl
   *)
-  val iterh : ('b * 'a -> 'b) -> 'b -> 'a seq -> ('b seq * 'b)
+  val foldlh : ('a * 'b -> 'b) -> 'b -> 'a seq -> ('b seq * 'b)
 
   (*
     Logically equivalent to "reduce append (empty ())"
@@ -277,5 +278,13 @@ sig
 
   val toList : 'a seq -> 'a list
   val cons : 'a * 'a seq -> 'a seq
+
+
+
+  (**** Deprecated ****)
+
+  val iter : ('b * 'a -> 'b) -> 'b -> 'a seq -> 'b
+  val iterh : ('b * 'a -> 'b) -> 'b -> 'a seq -> ('b seq * 'b)
+  
 
 end

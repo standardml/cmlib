@@ -61,6 +61,11 @@ struct
    val append = op @
    fun toList l = l
    val cons = op ::
+   val fold = List.foldl
+   val foldl = List.foldl
+   val foldr = List.foldr
+
+   fun iter f b s = foldl (fn (x, y) => f (y, x)) b s
  
    fun tabulate _ _ = raise NYI                   
    fun collate _ = raise NYI
@@ -68,7 +73,7 @@ struct
    fun reduce _ _ _ = raise NYI
    fun scan _ _ _ = raise NYI
    fun filter _ _ = raise NYI    
-   fun iter _ _ _ = raise NYI
+   fun foldlh _ _ _ = raise NYI
    fun iterh _ _ _ = raise NYI
    fun flatten _ = raise NYI
    fun partition _ _ = raise NYI
