@@ -1,27 +1,35 @@
+
+(* We want to reveal that TreeSequence.seq = TreeSequence.treeview.
+   We should just say "sig include SEQUENCE sharing type seq = treeview end",
+   but a bug in SML/NJ prevents that, so we go through the following convolution.
+*)
+
+structure TreeSequenceTree =
+   struct
+      datatype 'a seqtree =
+         EMPTY 
+       | ELT of 'a 
+       | NODE of 'a seqtree * 'a seqtree
+   end
+
 structure TreeSequence
-  :> sig
-      (* Circumvent NJ sharing bug;
-      *   this should be done with "sharing type seq = treeview" *)
-      type 'a seqtree
-      include SEQUENCE where type 'a seq = 'a seqtree
-                       where type 'a treeview = 'a seqtree
-    end =
+  :> SEQUENCE
+     where type 'a seq = 'a TreeSequenceTree.seqtree
+     where type 'a treeview = 'a TreeSequenceTree.seqtree
+  =
 struct
   exception NYI (* not yet implemented *)
 
-  datatype 'a treeview =  EMPTY 
-                        | ELT of 'a 
-                        | NODE of ('a treeview * 'a treeview) 
-
-  type 'a seqtree = 'a treeview
+  datatype treeview = datatype TreeSequenceTree.seqtree
 
   type 'a seq = 'a treeview                        
 
   fun showt t = t
   fun hidet t = t
 
-  datatype 'a listview = NIL
-                        | CONS of ('a * 'a seq)
+  datatype 'a listview =
+     NIL
+   | CONS of ('a * 'a seq)
 
   type 'a ord = 'a * 'a -> order
 
@@ -124,3 +132,4 @@ struct
   fun showl _ = raise NYI
   fun hidel _ = raise NYI
 end
+
