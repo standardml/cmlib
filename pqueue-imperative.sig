@@ -15,6 +15,9 @@ sig
   type 'a pq
   type 'a t = 'a pq
 
+  (* A reference to node generated when inserting *)
+  type 'a pqNodeRef
+
   (* empty represents the empty collection. *)
   val empty : unit -> 'a pq
 

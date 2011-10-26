@@ -7,6 +7,7 @@ library
         signature HASH_INCREMENT
         signature HASH_TABLE
         signature HASHABLE
+        signature IMPERATIVE_PQUEUE
         signature IQUEUE
         signature LEX_ENGINE
 	signature MULTI_TABLE
@@ -122,7 +123,7 @@ library
 	functor DictMultiTable
         functor HashTable
 	functor HashTableTable
-        functor ImpPairingPQueue
+        functor ImperativePairingPQueue
         functor LazyPairingPQueue
         functor LeftistPQueue
         functor LexEngineFun
@@ -183,7 +184,8 @@ is
 	pos.sig
 	pos.sml
         pqueue.sig
-        pqueue-imp-pairing.sml
+        pqueue-imperative.sig
+        pqueue-imperative-pairing.sml
         pqueue-lazy-pairing.sml
         pqueue-leftist.sml
         pqueue-pairing.sml

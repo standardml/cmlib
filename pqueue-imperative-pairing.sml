@@ -5,7 +5,7 @@
    In practice this data structure tends to be faster than alternatives like Fibonacci heaps
    in basically every situation where decreaseKey is required.  *)
 
-(* NOT PROPERLY TESTED AND LIKELY TO HAVE BUGS *)
+(* decreaseKey IS NOT PROPERLY TESTED AND HAS BUGS *)
 
 functor ImperativePairingPQueue (Key : ORDERED) : IMPERATIVE_PQUEUE =
 struct
@@ -21,6 +21,7 @@ struct
   type 'a pqNodeRef = 'a pq
 
   fun cmp((k1,v1),(k2,v2)) = Key.compare(!k1,!k2)
+  fun export(k,v) = (!k,v)
 
   exception EMPTY
 
@@ -51,7 +52,7 @@ struct
       end     
 
   fun findMin q = case !q of Empty => NONE
-                           | (Node {value=v, ...}) => SOME(v)
+                           | (Node {value=v, ...}) => SOME(export v)
 
   (* This is "2-pass" linking, which is the most standard for pairing heaps. *)
   fun mergePairs (q1 as ref Empty) = q1
@@ -60,8 +61,8 @@ struct
                  meld (meld q1 q2) (mergePairs q3)
 
   fun deleteMin (q as ref Empty) = NONE
-    | deleteMin (q as ref (Node {value=v, firstChild=qc as ref Empty, ...})) = (q := !qc; SOME(v) )
-    | deleteMin (q as ref (Node {value=v, firstChild=fc1,...})) = (q := !(mergePairs fc1); SOME(v) )
+    | deleteMin (q as ref (Node {value=v, firstChild=qc as ref Empty, ...})) = (q := !qc; SOME(export v) )
+    | deleteMin (q as ref (Node {value=v, firstChild=fc1,...})) = (q := !(mergePairs fc1); SOME(export v) )
 
   fun decreaseKey (q as ref (Node {value=(v1,k1), parent=p1, firstChild=fc1, succ=q2})) root newv = 
      (v1 := newv;            (* modify key, detach node, then meld with root *)

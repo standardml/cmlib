@@ -43,6 +43,8 @@ local
 	partition.sig
 	partition.sml
         pqueue.sig
+        pqueue-imperative.sig
+        pqueue-imperative-pairing.sig        
         pqueue-lazy-pairing.sml
         pqueue-leftist.sml
         pqueue-pairing.sml
@@ -91,6 +93,7 @@ in
         signature HASH_INCREMENT
         signature HASH_TABLE
         signature HASHABLE
+        signature IMPERATIVE_PQUEUE
         signature IQUEUE
         signature LEX_ENGINE
 	signature MULTI_TABLE
@@ -99,6 +102,7 @@ in
         signature PARSING
         signature PARTITION
 	signature POS
+        signature PQUEUE
         signature PRETTY_PRINT
         signature PSTREAM
         signature PSUSP
@@ -205,12 +209,16 @@ in
 	functor DictMultiTable
         functor HashTable
 	functor HashTableTable
+	functor ImperativePairingPQueue
+	functor LazyPairingPQueue
+	functor LeftistPQueue
         functor LexEngineFun
         functor ListDict
         functor ListHashable
         functor ListOrdered
         functor ListSet
 	functor MarkStreamFn
+	functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun
         functor RedBlackDict
