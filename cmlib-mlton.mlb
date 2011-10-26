@@ -1,8 +1,9 @@
 $(SML_LIB)/basis/basis.mlb
+$(SML_LIB)/basis/mlton.mlb
 
 local	
 	cont.sig
-	cont.sml
+	cont-mlton.sml
 	coord.sig
 	coord.sml
 	coroutine.sig
@@ -31,7 +32,7 @@ local
 	union-find-imperative.sig
 	ann "nonexhaustiveMatch ignore" in union-find-imperative.sml end
 	weak.sig
-	weak.sml
+	weak-mlton.sml
 
 	dict.sig
 	dict-list.sml
