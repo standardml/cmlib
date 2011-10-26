@@ -42,6 +42,10 @@ local
 	mergesort.sml
 	partition.sig
 	partition.sml
+        pqueue.sig
+        pqueue-lazy-pairing.sml
+        pqueue-leftist.sml
+        pqueue-pairing.sml
 	set.sig
 	set-list.sml
 	set-red-black.sml

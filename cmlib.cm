@@ -16,6 +16,7 @@ library
         signature PARTITION
 	signature POS
         signature PRETTY_PRINT
+        signature PQUEUE
         signature PSTREAM
         signature PSUSP
         signature QUASILIST 
@@ -121,12 +122,16 @@ library
 	functor DictMultiTable
         functor HashTable
 	functor HashTableTable
+        functor ImpPairingPQueue
+        functor LazyPairingPQueue
+        functor LeftistPQueue
         functor LexEngineFun
         functor ListDict
         functor ListHashable
         functor ListOrdered
         functor ListSet
 	functor MarkStreamFn
+        functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun
         functor RedBlackDict
@@ -177,6 +182,11 @@ is
 	partition.sml
 	pos.sig
 	pos.sml
+        pqueue.sig
+        pqueue-imp-pairing.sml
+        pqueue-lazy-pairing.sml
+        pqueue-leftist.sml
+        pqueue-pairing.sml
         prettyprint.sig
         prettyprint.sml
         psusp.sig
