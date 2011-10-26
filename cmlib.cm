@@ -89,6 +89,18 @@ library
 	structure StringRedBlackDict
 	structure StringSplaySet
 	structure StringSplayDict
+        (* Symbol *)
+	structure StringSymbol
+	structure Symbol
+	structure SymbolListDict
+	structure SymbolListSet
+	structure SymbolHashable
+	structure SymbolHashTable
+	structure SymbolOrdered
+	structure SymbolRedBlackSet
+	structure SymbolRedBlackDict
+	structure SymbolSplaySet
+	structure SymbolSplayDict
         structure Susp
         structure TreeSequence
         structure UnionFind
