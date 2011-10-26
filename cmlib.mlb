@@ -1,8 +1,13 @@
 $(SML_LIB)/basis/basis.mlb
+$(SML_LIB)/basis/mlton.mlb
 
 local	
+	cont.sig
+	cont-mlton.sml
 	coord.sig
 	coord.sml
+	coroutine.sig
+	coroutine.sml
 	hash-inc.sig
 	hash-inc.sml
 	iqueue.sig
@@ -11,19 +16,32 @@ local
 	ordered.sml
 	pos.sig
 	pos.sml
+	psusp.sig
+	psusp.sml
 	quasilist.sig
 	quasilist.sml
+	queue.sig
+	queue.sml
 	red-black-tree.sml
+	sequence.sig
+	sequence-array.sml
+	sequence-tree.sml
 	sort.sig
 	splay-tree.sml
         susp.sig
         susp.sml
+	union-find.sig
+	union-find.sml
+	weak.sig
+	weak-mlton.sml
 
 	dict.sig
 	dict-list.sml
 	dict-red-black.sml
 	dict-splay.sml
 	mergesort.sml
+	partition.sig
+	partition.sml
 	set.sig
 	set-list.sml
 	set-red-black.sml
@@ -33,6 +51,8 @@ local
         streamable.sig
         streamable.sml
 
+	coord-stream.sig
+	coord-stream.sml
 	hashable.sig
 	hashable.sml
 	hash-table.sig
@@ -44,66 +64,145 @@ local
 	multi-table-dict.sml
 	parsing.sig
 	parsing.sml
+	pstream.sig
+	pstream.sml
 	table.sig
 	table-dict.sml
 	table-hash.sml
 
 	parse-engine.sig
 	parse-engine.sml
+	prettyprint.sig
+	prettyprint.sml
 	symbol.sig
 	symbol.sml
+
+	defaults.sml
 in
+        signature CONT
 	signature COORD
-	signature HASH_INCREMENT
-	signature HASHABLE
+        signature COORDINATED_STREAM
+        signature COROUTINE
+        signature DICT
+        signature HASH_INCREMENT
+        signature HASH_TABLE
+        signature HASHABLE
         signature IQUEUE
         signature LEX_ENGINE
-	signature PARSE_ENGINE
-	signature PARSING
+	signature MULTI_TABLE
+        signature ORDERED
+        signature PARSE_ENGINE
+        signature PARSING
+        signature PARTITION
 	signature POS
-        signature QUASILIST
+        signature PRETTY_PRINT
+        signature PSTREAM
+        signature PSUSP
+        signature QUASILIST 
+        signature QUEUE
+        signature SEQUENCE
+        signature SET
         signature SORT
         signature STREAM
         signature STREAMABLE
         signature SUSP
-	signature SYMBOL
+        signature SYMBOL
 	signature TABLE
+        signature UNION_FIND
+        signature WEAK
 
+        structure ArraySequence
+	(* Char *)
+	structure CharListDict
+	structure CharListSet
 	structure CharHashable
+	structure CharHashTable
 	structure CharOrdered
+	structure CharRedBlackSet
+	structure CharRedBlackDict
+	structure CharSplaySet
+	structure CharSplayDict
+        structure Cont
 	structure Coord
-        structure IntHashable
+        structure CoordinatedStream
+        structure Coroutine
+	(* Int *)
+	structure IntListDict
+	structure IntListSet
+	structure IntHashable
+	structure IntHashTable
+	structure IntOrdered
+	structure IntRedBlackSet
+	structure IntRedBlackDict
+	structure IntSplaySet
+	structure IntSplayDict
+	(* IntInf *)
+	structure IntInfListDict
+	structure IntInfListSet
 	structure IntInfOrdered
-        structure IntOrdered
+	structure IntInfRedBlackSet
+	structure IntInfRedBlackDict
+	structure IntInfSplaySet
+	structure IntInfSplayDict
         structure IQueue
         structure JenkinsHash
+        structure ListStreamable
 	structure MarkCharStream
         structure Mergesort
+        structure MJHash
+        structure Partition
 	structure Pos
+        structure PrettyPrint
+        structure PStream
+        structure PSusp
         structure Quasilist
+        structure Queue
         structure Stream
         structure StreamStreamable
-        structure StringHashable
-        structure StringOrdered
-	structure Susp
-        structure UnitHashable
+        (* String *)
+	structure StringListDict
+	structure StringListSet
+	structure StringHashable
+	structure StringHashTable
+	structure StringOrdered
+	structure StringRedBlackSet
+	structure StringRedBlackDict
+	structure StringSplaySet
+	structure StringSplayDict
+        structure Susp
+        structure TreeSequence
+        structure UnionFind
+	(* Unit *)
+	structure UnitListDict
+	structure UnitListSet
+	structure UnitHashable
+	structure UnitHashTable
+	structure UnitOrdered
+	structure UnitRedBlackSet
+	structure UnitRedBlackDict
+	structure UnitSplaySet
+	structure UnitSplayDict
+        structure Weak
 
+        functor CoercedStreamable
 	functor DictTable
+	functor DictMultiTable
         functor HashTable
 	functor HashTableTable
         functor LexEngineFun
-	functor ListDict
-	functor ListHashable
-	functor ListOrdered
-	functor ListSet
+        functor ListDict
+        functor ListHashable
+        functor ListOrdered
+        functor ListSet
 	functor MarkStreamFn
         functor ParseEngineFun
+        functor ParsingFun
         functor RedBlackDict
         functor RedBlackSet
         functor SetHashable
         functor SplayDict
         functor SplaySet
-	functor SymbolFun
-	functor SymbolHashableFun
-	functor SymbolOrderedFun
+        functor SymbolFun
+        functor SymbolHashableFun
+        functor SymbolOrderedFun
 end

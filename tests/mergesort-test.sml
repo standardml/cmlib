@@ -1,6 +1,8 @@
 (* MergesortTest is only evaluated for its effects *)
 structure MergesortTest :> sig end =
   struct
+    val () = print "Mergesort test (mergesort-test.sml)\n"
+
     val () = Testing.reset ()
 
     fun iter i j = if i > j then [] else i :: iter (i + 1) j

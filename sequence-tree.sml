@@ -9,12 +9,12 @@ structure TreeSequence
 struct
   exception NYI (* not yet implemented *)
 
-  datatype 'a seq =  EMPTY 
+  datatype 'a treeview =  EMPTY 
                         | ELT of 'a 
-                        | NODE of ('a seq * 'a seq) 
-  type 'a seqtree = 'a seq                        
+                        | NODE of ('a treeview * 'a treeview) 
+  type 'a seqtree = 'a treeview
 
-  type 'a treeview = 'a seq                        
+  type 'a seq = 'a treeview                        
 
   datatype 'a listview = NIL
                         | CONS of ('a * 'a seq)

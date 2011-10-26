@@ -4,3 +4,4 @@ Group is
 
     ../cmlib.cm
     mergesort-test.sml
+    sets-dicts-test.sml

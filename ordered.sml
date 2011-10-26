@@ -1,11 +1,12 @@
 
-structure UnitOrdered
-   :> ORDERED where type t = unit
+structure CharOrdered
+   :> ORDERED where type t = char
    =
    struct
-      type t = unit
-      fun eq _ = true
-      fun compare _ = EQUAL
+      type t = char
+
+      val eq : char * char -> bool = op =
+      val compare = Char.compare
    end
 
 
@@ -19,6 +20,7 @@ structure IntOrdered
       val compare = Int.compare
    end
 
+
 structure IntInfOrdered
    :> ORDERED where type t = IntInf.int
    =
@@ -27,16 +29,6 @@ structure IntInfOrdered
       
       val eq : IntInf.int * IntInf.int -> bool = (op =)  
       val compare = IntInf.compare
-   end
-
-structure CharOrdered
-   :> ORDERED where type t = char
-   = 
-   struct
-      type t = char
- 
-      val eq : char * char -> bool = op =
-      val compare = Char.compare
    end
 
 structure StringOrdered
@@ -49,15 +41,16 @@ structure StringOrdered
       val compare = String.compare
    end
 
-structure CharOrdered
-   :> ORDERED where type t = char
+
+structure UnitOrdered
+   :> ORDERED where type t = unit
    =
    struct
-      type t = char
-
-      val eq : char * char -> bool = op =
-      val compare = Char.compare
+      type t = unit
+      fun eq _ = true
+      fun compare _ = EQUAL
    end
+
 
 functor ListOrdered (Ordered : ORDERED)
    :> ORDERED where type t = Ordered.t list
@@ -74,6 +67,7 @@ functor ListOrdered (Ordered : ORDERED)
            | ord => ord
       fun eq (xs, ys) = EQUAL = compare (xs, ys)
    end
+
 
 functor InvertOrdered (Ordered : ORDERED)
    :> ORDERED where type t = Ordered.t

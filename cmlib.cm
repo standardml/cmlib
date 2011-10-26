@@ -1,5 +1,4 @@
 library
-
         signature CONT
 	signature COORD
         signature COORDINATED_STREAM
@@ -21,9 +20,7 @@ library
         signature PSUSP
         signature QUASILIST 
         signature QUEUE
-        (*---------------------*)
         signature SEQUENCE
-        (*---------------------*)
         signature SET
         signature SORT
         signature STREAM
@@ -35,15 +32,38 @@ library
         signature WEAK
 
         structure ArraySequence
+	(* Char *)
+	structure CharListDict
+	structure CharListSet
 	structure CharHashable
+	structure CharHashTable
 	structure CharOrdered
+	structure CharRedBlackSet
+	structure CharRedBlackDict
+	structure CharSplaySet
+	structure CharSplayDict
         structure Cont
 	structure Coord
         structure CoordinatedStream
         structure Coroutine
-        structure IntHashable
+	(* Int *)
+	structure IntListDict
+	structure IntListSet
+	structure IntHashable
+	structure IntHashTable
+	structure IntOrdered
+	structure IntRedBlackSet
+	structure IntRedBlackDict
+	structure IntSplaySet
+	structure IntSplayDict
+	(* IntInf *)
+	structure IntInfListDict
+	structure IntInfListSet
 	structure IntInfOrdered
-        structure IntOrdered
+	structure IntInfRedBlackSet
+	structure IntInfRedBlackDict
+	structure IntInfSplaySet
+	structure IntInfSplayDict
         structure IQueue
         structure JenkinsHash
         structure ListStreamable
@@ -59,12 +79,29 @@ library
         structure Queue
         structure Stream
         structure StreamStreamable
-        structure StringHashable
-        structure StringOrdered
+        (* String *)
+	structure StringListDict
+	structure StringListSet
+	structure StringHashable
+	structure StringHashTable
+	structure StringOrdered
+	structure StringRedBlackSet
+	structure StringRedBlackDict
+	structure StringSplaySet
+	structure StringSplayDict
         structure Susp
         structure TreeSequence
         structure UnionFind
-        structure UnitHashable
+	(* Unit *)
+	structure UnitListDict
+	structure UnitListSet
+	structure UnitHashable
+	structure UnitHashTable
+	structure UnitOrdered
+	structure UnitRedBlackSet
+	structure UnitRedBlackDict
+	structure UnitSplaySet
+	structure UnitSplayDict
         structure Weak
 
         functor CoercedStreamable
@@ -168,3 +205,6 @@ is
 	cont-nj.sml
 	susp-nj.sml
         weak-nj.sml
+
+	defaults.sml
+      
