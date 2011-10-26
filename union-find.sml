@@ -28,6 +28,7 @@ structure UnionFind :> UNION_FIND
 
       fun union f set1 set2 =
          let
+            (* root always returns a Root state *)
             val ancestor1 as ref (Root (label1, rank1)) = root set1
             val ancestor2 as ref (Root (label2, rank2)) = root set2
          in
