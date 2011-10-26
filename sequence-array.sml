@@ -1,4 +1,5 @@
-structure ArraySequence  =
+structure ArraySequence : SEQUENCE
+=
 struct
   type 'a seq = 'a array
   type 'a ord = 'a * 'a -> order
@@ -371,5 +372,12 @@ struct
   fun scanOld f b s = iter f b s
 
   fun merge cmp s t = sort cmp (hidet (NODE(s,t)))
+
+  fun cons (h, t) = append (singleton h, t)
+
+  fun toList a = Array.foldr (op ::) [] a
+
+  fun collate _ = raise NYI
+
 end
 structure A = ArraySequence

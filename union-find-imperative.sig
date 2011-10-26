@@ -1,5 +1,5 @@
 
-signature UNION_FIND =
+signature IMPERATIVE_UNION_FIND =
    sig
 
       type 'a set

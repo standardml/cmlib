@@ -30,7 +30,7 @@ library
         signature SUSP
         signature SYMBOL
 	signature TABLE
-        signature UNION_FIND
+        signature IMPERATIVE_UNION_FIND
         signature WEAK
 
         structure ArraySequence
@@ -68,11 +68,11 @@ library
 	structure IntInfSplayDict
         structure IQueue
         structure JenkinsHash
+        structure ListSequence
         structure ListStreamable
 	structure MarkCharStream
         structure Mergesort
         structure MJHash
-        structure Partition
 	structure Pos
         structure PrettyPrint
         structure PStream
@@ -105,7 +105,7 @@ library
 	structure SymbolSplayDict
         structure Susp
         structure TreeSequence
-        structure UnionFind
+        structure IUnionFind
 	(* Unit *)
 	structure UnitListDict
 	structure UnitListSet
@@ -135,6 +135,7 @@ library
         functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun
+        functor PartitionFun
         functor RedBlackDict
         functor RedBlackSet
         functor SetHashable
@@ -200,6 +201,7 @@ is
 	red-black-tree.sml
         sequence.sig
         sequence-array.sml
+        sequence-list.sml
         sequence-tree.sml
 	set.sig
 	set-list.sml
@@ -219,8 +221,8 @@ is
 	table.sig
 	table-dict.sml
 	table-hash.sml
-	union-find.sig
-	union-find.sml
+	union-find-imperative.sig
+	union-find-imperative.sml
         weak.sig
 
 	basis.cm

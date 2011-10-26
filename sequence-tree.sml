@@ -48,6 +48,23 @@ struct
                        end
                    | _ => raise Subscript
 
+  val append = NODE
+
+  fun toList t =
+     let
+        fun loop t l =
+           (case t of
+               EMPTY => l
+             | ELT x =>
+                  x :: l
+             | NODE (left, right) =>
+                  loop left (loop right l))
+     in
+        loop t []
+     end
+
+  fun cons (h, t) = NODE (ELT h, t)
+
   fun tabulate _ _ = raise NYI                   
   fun fromList _ = raise NYI
   fun collate _ = raise NYI
@@ -61,7 +78,6 @@ struct
   fun flatten _ = raise NYI
   fun partition _ _ = raise NYI
   fun inject _ _ = raise NYI
-  fun append _ = raise NYI
   fun take _ = raise NYI
   fun drop _ = raise NYI
   fun rake _ _ = raise NYI

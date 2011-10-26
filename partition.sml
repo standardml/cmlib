@@ -1,42 +1,48 @@
 
-structure Partition :> PARTITION =
+functor PartitionFun (structure Sequence : SEQUENCE)
+   :>
+   PARTITION where type 'a seq = 'a Sequence.seq
+   =
    struct
 
-      open UnionFind
+      open IUnionFind
+      open Sequence
 
-      fun partition f l =
+      fun partition f s =
          let
-            fun loop sets l =
-               (case l of
-                   nil =>
+            fun loop sets s =
+               (case showt s of
+                   EMPTY =>
                       sets
-                 | h :: t =>
+                 | ELT x =>
                       let
-                         val set = new (Quasilist.One h)
+                         val set = new (singleton x)
                          
                          val () =
                             app
-                            (fn (x, set') =>
+                            (fn (y, set') =>
                                 if sameSet (set, set') then
                                    ()
-                                else if f (h, x) then
-                                   union Quasilist.Append set set'
+                                else if f (x, y) then
+                                   union append set set'
                                 else
                                    ())
                             sets
                       in
-                         loop ((h, set) :: sets) t
-                      end)
+                         (x, set) :: sets
+                      end
+                 | NODE (left, right) =>
+                      loop (loop sets left) right)
 
-            val sets = loop [] l
+            val sets = loop [] s
          in
-            foldl
+            List.foldl
             (fn ((_, set), ls) =>
                 if isCanonical set then
-                   Quasilist.toList (find set) :: ls
+                   cons (find set, ls)
                 else
                    ls)
-            []
+            (empty ())
             sets
          end
          

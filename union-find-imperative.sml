@@ -1,5 +1,5 @@
 
-structure UnionFind :> UNION_FIND
+structure IUnionFind :> IMPERATIVE_UNION_FIND
    =
    struct
 

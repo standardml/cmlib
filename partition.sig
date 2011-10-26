@@ -2,6 +2,7 @@
 signature PARTITION =
    sig
 
-      val partition : ('a * 'a -> bool) -> 'a list -> 'a list list
+      type 'a seq
+      val partition : ('a * 'a -> bool) -> 'a seq -> 'a seq seq
 
    end

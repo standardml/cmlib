@@ -275,4 +275,7 @@ sig
    *)
   val hidel : 'a listview -> 'a seq
 
+  val toList : 'a seq -> 'a list
+  val cons : 'a * 'a seq -> 'a seq
+
 end
