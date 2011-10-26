@@ -31,7 +31,7 @@ local
         susp.sig
         susp.sml
 	union-find.sig
-	union-find.sml
+	ann "nonexhaustiveMatch ignore" in union-find.sml end
 	weak.sig
 	weak-mlton.sml
 
@@ -44,7 +44,7 @@ local
 	partition.sml
         pqueue.sig
         pqueue-imperative.sig
-        pqueue-imperative-pairing.sig        
+        pqueue-imperative-pairing.sml        
         pqueue-lazy-pairing.sml
         pqueue-leftist.sml
         pqueue-pairing.sml
