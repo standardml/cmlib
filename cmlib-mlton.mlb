@@ -64,7 +64,6 @@ local
 	hash-table.sml
 	lex-engine.sig
 	lex-engine.sml
-	markstream.sml
 	multi-table.sig
 	multi-table-dict.sml
 	parsing.sig
@@ -154,7 +153,6 @@ in
         structure JenkinsHash
         structure ListSequence
         structure ListStreamable
-	structure MarkCharStream
         structure Mergesort
         structure MJHash
 	structure Pos
@@ -214,7 +212,6 @@ in
         functor ListHashable
         functor ListOrdered
         functor ListSet
-	functor MarkStreamFn
         functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun

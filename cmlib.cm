@@ -69,7 +69,6 @@ library
         structure JenkinsHash
         structure ListSequence
         structure ListStreamable
-	structure MarkCharStream
         structure Mergesort
         structure MJHash
 	structure Pos
@@ -129,7 +128,6 @@ library
         functor ListHashable
         functor ListOrdered
         functor ListSet
-	functor MarkStreamFn
         functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun
@@ -168,7 +166,6 @@ is
 	iqueue.sml
 	lex-engine.sig
 	lex-engine.sml
-        markstream.sml
 	mergesort.sml
 	multi-table.sig
 	multi-table-dict.sml
