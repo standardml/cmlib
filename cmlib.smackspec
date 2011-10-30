@@ -8,4 +8,6 @@ platform: smlnj
    test: sml -m tests/test.cm
 
 platform: mlton
-   test: mlton tests/test.mlb; tests/test; rm test
+   comment: QCheck must be set up for this to work. Run the following:
+   comment: smackage make qcheck -f Makefile.mlton
+   test: mlton tests/test.mlb; tests/test; rm tests/test

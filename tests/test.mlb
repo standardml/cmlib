@@ -1,9 +1,9 @@
 
     ../cmlib.mlb
-    (* $(SMACKAGE)/qcheck/v1/qcheck.mlb *)
+    $(SMACKAGE)/qcheck/v1/qcheck.mlb
     testing.sig
     testing.sml
 
     mergesort-test.sml
-    (* mergesort-qcheck.sml *)
+    mergesort-qcheck.sml
     sets-dicts-test.sml
