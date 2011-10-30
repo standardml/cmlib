@@ -74,6 +74,8 @@ structure MergesortQCheck =
 
     (*** generators and tests below here ***)
 
+    val () = print "Mergesort quickcheck (mergesort-qcheck.sml)\n"
+
     (* or:
     val genIntList = Gen.list Gen.flip Gen.Int.int
     *)
