@@ -1,7 +1,10 @@
 Group is
+    ../cmlib.cm
+    $SMACKAGE/qcheck/v1/qcheck.cm
     testing.sig
     testing.sml
 
-    ../cmlib.cm
     mergesort-test.sml
+    mergesort-qcheck.sml
     sets-dicts-test.sml
+
