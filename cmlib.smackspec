@@ -2,7 +2,7 @@ description: CMlib, an SML standard library
 maintainer: Karl Crary 
 maintainer: Robert J. Simmons
 keywords: cmlib, standard library, sets, dictionaries, maps, tables
-requires: qcheck v1
+requires: qcheck v1 (v1.2.0)
 
 platform: smlnj 
    test: sml -m tests/test.cm
