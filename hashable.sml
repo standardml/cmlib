@@ -1,12 +1,12 @@
-
-structure UnitHashable
-   :> HASHABLE where type t = unit
+structure CharHashable
+   :> HASHABLE where type t = char
    =
    struct
-      type t = unit
+      type t = char
 
-      fun eq _ = true
-      fun hash _ = 0w0
+      val eq : char * char -> bool = op =
+
+      fun hash ch = Word.fromInt (Char.ord ch)
    end
 
 
@@ -44,17 +44,16 @@ structure StringHashable
    end
 
 
-structure CharHashable
-   :> HASHABLE where type t = char
+structure UnitHashable
+   :> HASHABLE where type t = unit
    =
    struct
-      type t = char
+      type t = unit
 
-      val eq : char * char -> bool = op =
-
-      fun hash ch = Word.fromInt (Char.ord ch)
+      fun eq _ = true
+      fun hash _ = 0w0
    end
-         
+
 
 functor ListHashable (structure Elem : HASHABLE)
    :> HASHABLE where type t = Elem.t list
