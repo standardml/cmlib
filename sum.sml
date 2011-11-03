@@ -43,6 +43,14 @@ struct
     fun mapR r   = map (fn x => x) r
     fun mapA f   = map f f
 
+    (* monadic bind for ('a, _) sum and (_, 'b) sum monads *)
+    fun bindL s f = case s of
+			INL l -> f l
+		      | INR r -> s
+    fun bindR s f = case s of
+			INL l -> s
+		      | INR r -> f r
+
     (* equality *)
     fun equal   eqA eqB = fn (INL a1, INL a2) => eqA (a1, a2)
 			   | (INR b1, INR b2) => eqB (b1, b2)

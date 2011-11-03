@@ -5,6 +5,8 @@ sig
 
     datatype ('a, 'b) sum = INL of 'a | INR of 'b
 
+    (* Raised by the unsafe destructors, outL and outR
+       if the wrong constructor is encountered *)
     exception Sum
 
     (* Swap the INL and INR constructors of the datatype *)
@@ -35,6 +37,10 @@ sig
     val mapL : ('a -> 'c) -> ('a, 'b) sum -> ('c, 'b) sum
     val mapR : ('b -> 'c) -> ('a, 'b) sum -> ('a, 'c) sum
     val mapA : ('a -> 'b) -> ('a, 'a) sum -> ('b, 'b) sum
+
+    (* monadic bind for ('a, _) sum and (_, 'b) sum monads *)
+    val bindL : ('a, 'b) sum -> ('a -> ('c, 'b) sum) -> ('c, 'b) sum
+    val bindR : ('a, 'b) sum -> ('b -> ('a, 'c) sum) -> ('a, 'c) sum
 
     (* equality *)
     val equal   : ('a * 'a -> bool) -> ('b * 'b -> bool) ->
