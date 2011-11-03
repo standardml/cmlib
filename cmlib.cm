@@ -73,11 +73,10 @@ library
         structure Mergesort
         structure MJHash
 	structure Pos
-        structure PrettyPrint
-        structure PStream
-        structure PSusp
-        structure Queue
-	structure Sum
+	structure PrettyPrint
+	structure PStream
+	structure PSusp
+	structure Queue
         structure Stream
         structure StreamStreamable
         (* String *)
@@ -90,6 +89,7 @@ library
 	structure StringRedBlackDict
 	structure StringSplaySet
 	structure StringSplayDict
+	structure Sum
         (* Symbol *)
 	structure StringSymbol
 	structure Symbol
