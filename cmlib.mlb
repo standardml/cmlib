@@ -26,6 +26,8 @@ local
 	sequence-tree.sml
 	sort.sig
 	splay-tree.sml
+	sum.sig
+	sum.sml
         susp.sig
         susp.sml
 	union-find-imperative.sig
@@ -109,6 +111,7 @@ in
         signature SORT
         signature STREAM
         signature STREAMABLE
+	signature SUM
         signature SUSP
         signature SYMBOL
 	signature TABLE
@@ -159,6 +162,7 @@ in
         structure PStream
         structure PSusp
         structure Queue
+	structure Sum
         structure Stream
         structure StreamStreamable
         (* String *)
