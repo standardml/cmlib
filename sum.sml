@@ -45,11 +45,11 @@ struct
 
     (* monadic bind for ('a, _) sum and (_, 'b) sum monads *)
     fun bindL s f = case s of
-			INL l -> f l
-		      | INR r -> s
+			INL l => f l
+		      | INR r => INR r
     fun bindR s f = case s of
-			INL l -> s
-		      | INR r -> f r
+			INL l => INL l
+		      | INR r => f r
 
     (* equality *)
     fun equal   eqA eqB = fn (INL a1, INL a2) => eqA (a1, a2)
