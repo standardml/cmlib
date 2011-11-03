@@ -26,6 +26,7 @@ library
         signature SORT
         signature STREAM
         signature STREAMABLE
+	signature SUM
         signature SUSP
         signature SYMBOL
 	signature TABLE
@@ -76,6 +77,7 @@ library
         structure PStream
         structure PSusp
         structure Queue
+	structure Sum
         structure Stream
         structure StreamStreamable
         (* String *)
@@ -208,6 +210,8 @@ is
 	stream.sml
 	streamable.sig
 	streamable.sml
+	sum.sig
+	sum.sml
 	susp.sig
 	symbol.sig
 	symbol.sml
