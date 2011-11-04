@@ -4,7 +4,8 @@
 
 structure Pos :> POS = 
    struct
-      type t = Coord.t * Coord.t
+      type pos = Coord.t * Coord.t
+      type t = pos
 
       fun toString (left, right) = 
          Coord.toString left ^ "-" 
