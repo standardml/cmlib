@@ -1,6 +1,7 @@
 $(SML_LIB)/basis/basis.mlb
 
 local	
+   ann "sequenceNonUnit ignore" in
 	cont.sig
 	cont.sml
 	coord.sig
@@ -83,6 +84,7 @@ local
 	symbol.sml
 
 	defaults.sml
+   end
 in
         signature CONT
 	signature COORD
