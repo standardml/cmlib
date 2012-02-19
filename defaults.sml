@@ -37,7 +37,7 @@ structure CharRedBlackDict   = RedBlackDict (structure Key = CharOrdered)
 structure IntRedBlackDict    = RedBlackDict (structure Key = IntOrdered)
 structure IntInfRedBlackDict = RedBlackDict (structure Key = IntInfOrdered)
 structure StringRedBlackDict = RedBlackDict (structure Key = StringOrdered)
-structure SymbolRedBlackDict = RedBlackSet (structure Elem = SymbolOrdered)
+structure SymbolRedBlackDict = RedBlackDict (structure Key = SymbolOrdered)
 structure UnitRedBlackDict   = RedBlackDict (structure Key = UnitOrdered)
 
 structure CharSplaySet   = SplaySet (structure Elem = CharOrdered)
