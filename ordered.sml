@@ -31,6 +31,7 @@ structure IntInfOrdered
       val compare = IntInf.compare
    end
 
+
 structure StringOrdered
    :> ORDERED where type t = string
    =

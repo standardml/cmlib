@@ -21,6 +21,17 @@ structure IntHashable
    end
 
 
+structure IntInfHashable
+   :> HASHABLE where type t = IntInf.int
+   =
+   struct
+      type t = IntInf.int
+
+      val eq : IntInf.int * IntInf.int -> bool = op =
+      val hash = Word.fromLargeInt
+   end
+
+
 structure StringHashable
    :> HASHABLE where type t = string
    =
