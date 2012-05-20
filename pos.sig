@@ -2,7 +2,7 @@
  * coordinate positions. *)
 
 (* Adapted from Chris Okasaki, Robert Harper, and Tom Murphy VII's position
- * library, as well as Kaustuv Chaudhur's Mark library for the L2/C0
+ * library, as well as Kaustuv Chaudhuri's Mark library for the L2/C0
  * compiler. *)
 
 signature POS = 
