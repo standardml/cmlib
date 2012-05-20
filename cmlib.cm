@@ -61,6 +61,7 @@ library
 	(* IntInf *)
 	structure IntInfListDict
 	structure IntInfListSet
+	structure IntInfHashable
 	structure IntInfOrdered
 	structure IntInfRedBlackSet
 	structure IntInfRedBlackDict
