@@ -110,4 +110,9 @@ structure Stream
                         Nil
                    | Cons (x, s') =>
                         Cons (f x, map f s')))
+
+      fun app f s =
+         case front s of 
+            Nil => ()
+          | Cons (x, s') => (f x; app f s')
    end

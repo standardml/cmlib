@@ -24,5 +24,6 @@ signature STREAM =
       val take : 'a stream * int -> 'a list
       val drop : 'a stream * int -> 'a stream
       val map : ('a -> 'b) -> 'a stream -> 'b stream
+      val app : ('a -> unit) -> 'a stream -> unit
 
    end
