@@ -1,0 +1,9 @@
+../cmlib.mlb
+
+local
+   testing.sig
+   testing.sml
+in
+   signature TESTING
+   structure Testing
+end
