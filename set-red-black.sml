@@ -130,10 +130,14 @@ functor RedBlackSet (structure Elem : ORDERED)
                               andalso
                               subsetMain right1 right2
                          | LESS =>
+                              memberMain left2 elem1
+                              andalso
                               subsetMain left1 left2
                               andalso
                               subsetMain right1 tree2
                          | GREATER =>
+                              memberMain right2 elem1
+                              andalso
                               subsetMain right1 right2
                               andalso
                               subsetMain left1 tree2)))
