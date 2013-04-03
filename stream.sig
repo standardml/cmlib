@@ -11,10 +11,12 @@ signature STREAM =
 
       val fromProcess : (unit -> 'a option) -> 'a stream
       val fromList : 'a list -> 'a stream
+      val fromLoop : ('a -> ('a * 'b) option) -> 'a -> 'b stream
+      val fromTable : ('a * int -> 'b) -> 'a -> int -> 'b stream
+
       val fromString : string -> char stream
       val fromTextInstream : TextIO.instream -> char stream
       val fromBinInstream : BinIO.instream -> Word8.word stream
-      val fromLoop : ('a -> ('a * 'b) option) -> 'a -> 'b stream
 
       val fix : ('a stream -> 'a stream) -> 'a stream
 
@@ -25,5 +27,6 @@ signature STREAM =
       val drop : 'a stream * int -> 'a stream
       val map : ('a -> 'b) -> 'a stream -> 'b stream
       val app : ('a -> unit) -> 'a stream -> unit
+      val fold : ('a * 'b Susp.susp -> 'b) -> 'b -> 'a stream -> 'b
 
    end

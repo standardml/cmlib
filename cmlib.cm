@@ -1,9 +1,13 @@
 library
+        signature BYTESTRING
         signature CONT
+        signature CONVERT_WORD
 	signature COORD
         signature COORDINATED_STREAM
         signature COROUTINE
+        signature CRYPTO_HASH
         signature DICT
+        signature FROM_STRING
         signature HASH_INCREMENT
         signature HASH_TABLE
         signature HASHABLE
@@ -34,6 +38,7 @@ library
         signature WEAK
 
         structure ArraySequence
+        structure Bytestring
 	(* Char *)
 	structure CharListDict
 	structure CharListSet
@@ -45,9 +50,11 @@ library
 	structure CharSplaySet
 	structure CharSplayDict
         structure Cont
+        structure ConvertWord
 	structure Coord
         structure CoordinatedStream
         structure Coroutine
+        structure FromString
 	(* Int *)
 	structure IntListDict
 	structure IntListSet
@@ -78,6 +85,7 @@ library
 	structure PStream
 	structure PSusp
 	structure Queue
+        structure SHA256
         structure Stream
         structure StreamStreamable
         (* String *)
@@ -148,17 +156,23 @@ library
 
 is
 
+        bytestring.sig
+        bytestring.sml
 	cont.sig
+        convert-word.sig
 	coord.sig
 	coord.sml
         coord-stream.sig
         coord-stream.sml
 	coroutine.sig
 	coroutine.sml
+        cryptohash.sig
 	dict.sig
 	dict-list.sml
         dict-red-black.sml
 	dict-splay.sml
+        from-string.sig
+        from-string.sml
 	hash-inc.sig
 	hash-inc.sml
 	hashable.sig
@@ -203,6 +217,7 @@ is
 	set-list.sml
 	set-red-black.sml
 	set-splay.sml
+        sha256.sml
 	sort.sig
 	splay-tree.sml
         pstream.sig
@@ -227,8 +242,8 @@ is
 
         (* SML/NJ implementations *)
 	cont-nj.sml
+        convert-word-nj-win.sml
 	susp-nj.sml
         weak-nj.sml
 
 	defaults.sml
-      

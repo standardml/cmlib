@@ -29,27 +29,6 @@ structure Stream
                      [] => Nil
                    | h :: t => Cons (h, fromList t)))
 
-      fun fromString str =
-          let
-             val n = size str
-                
-             fun loop i =
-                 lazy
-                 (fn () =>
-                        if i >= n then
-                           Nil
-                        else
-                           Cons (String.sub (str, i), loop (i+1)))
-          in
-             loop 0
-          end
-
-      fun fromTextInstream ins =
-          fromProcess (fn () => TextIO.input1 ins)
-
-      fun fromBinInstream ins =
-          fromProcess (fn () => BinIO.input1 ins)
-
       fun fromLoop f seed =
           lazy
           (fn () =>
@@ -58,6 +37,23 @@ structure Stream
                      Nil
                 | SOME (seed', x) =>
                      Cons (x, fromLoop f seed')))
+
+      fun fromTable sub table i =
+          lazy
+          (fn () =>
+              (Cons (sub (table, i), fromTable sub table (i+1))
+               handle Subscript => Nil))
+
+             
+
+      fun fromString str = fromTable String.sub str 0
+
+      fun fromTextInstream ins =
+          fromProcess (fn () => TextIO.input1 ins)
+
+      fun fromBinInstream ins =
+          fromProcess (fn () => BinIO.input1 ins)
+
 
 
       fun fix f = f (lazy (fn () => front (fix f)))
@@ -112,7 +108,15 @@ structure Stream
                         Cons (f x, map f s')))
 
       fun app f s =
-         case front s of 
-            Nil => ()
-          | Cons (x, s') => (f x; app f s')
+         (case front s of 
+             Nil => ()
+           | Cons (x, s') => (f x; app f s'))
+
+
+      fun fold f x s =
+         (case front s of
+             Nil => x
+           | Cons (h, t) =>
+                f (h, Susp.delay (fn () => fold f x t)))
+
    end
