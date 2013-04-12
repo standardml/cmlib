@@ -17,6 +17,8 @@ signature CONVERT_WORD =
       val wordToWord32X : word -> word32
       val wordToWord64 : word -> word64
       val wordToWord64X : word -> word64
+      val wordToBytesB : word -> Bytestring.string
+      val wordToBytesL : word -> Bytestring.string
 
       val word8ToWord : word8 -> word
       val word8ToWordX : word8 -> word
@@ -55,6 +57,8 @@ signature CONVERT_WORD =
       val word64ToBytesL : word64 -> Bytestring.string
 
       exception ConvertWord
+      val bytesToWordB : Bytestring.string -> word
+      val bytesToWordL : Bytestring.string -> word
       val bytesToWord31B : Bytestring.string -> word31
       val bytesToWord31L : Bytestring.string -> word31
       val bytesToWord32B : Bytestring.string -> word32

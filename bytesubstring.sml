@@ -1,43 +1,48 @@
 
-structure Bytestring :> BYTESTRING =
+structure Bytesubstring :> BYTESUBSTRING =
    struct
 
-      type string = Word8Vector.vector
+      type substring = Word8VectorSlice.slice
+      type string = Bytestring.string
       type byte = Word8.word
       type char = byte
 
-      structure V = Word8Vector
+      structure V = Word8VectorSlice
       
-      val maxSize = V.maxLen
+      val tovec = Bytestring.toWord8Vector
+      val fromvec = Bytestring.fromWord8Vector
+
       val size = V.length
       val sub = V.sub
-      val concat = V.concat
-      val implode = V.fromList
+      val isEmpty = V.isEmpty
+      val getc = V.getItem
+      val slice = V.subslice
 
-      fun op ^ (s1, s2) = V.concat [s1, s2]
+      fun base s =
+         let
+            val (s', start, len) = V.base s
+         in
+            (fromvec s', start, len)
+         end
 
-      fun str b = V.fromList [b]
+      fun extract (s, start, leno) = V.slice (tovec s, start, leno)
 
-      val null = V.fromList []
+      fun substring (s, start, len) = V.slice (tovec s, start, SOME len)
+
+      fun full s = V.full (tovec s)
+
+      fun string s = fromvec (V.vector s)
+
+      fun concat l = fromvec (V.concat l)
 
       fun explode s = V.foldr (op ::) nil s
 
-      fun substring (s, start, len) =
-         Word8VectorSlice.vector (Word8VectorSlice.slice (s, start, SOME len))
+      fun splitAt (s, i) =
+         (V.subslice (s, 0, SOME i),
+          V.subslice (s, i, NONE))
 
-      fun extract (s, start, leno) =
-         Word8VectorSlice.vector (Word8VectorSlice.slice (s, start, leno))
-
-
-      fun fromWord8Vector s = s
-      fun toWord8Vector s = s
-
-      fun rev s =
-         let
-            val len = size s
-         in
-            V.tabulate (size s, (fn i => V.sub (s, len-i-1)))
-         end
+      fun fromWord8Slice s = s
+      fun toWord8Slice s = s
 
       fun eq (s1, s2) =
          let
@@ -77,29 +82,8 @@ structure Bytestring :> BYTESTRING =
 
 
 
-      fun fromStringOrd str =
-         V.fromList (map (fn ch => Word8.fromInt (Char.ord ch)) (String.explode str))
-
       fun toStringOrd s =
          String.implode (List.rev (V.foldl (fn (b, l) => Char.chr (Word8.toInt b) :: l) [] s))
-
-      fun fromStringHex str =
-         let
-            val len = String.size str
-
-            fun loop acc i =
-               if i = len then
-                  SOME (V.fromList (List.rev acc))
-               else if i + 2 > len then
-                  NONE
-               else
-                  (case FromString.scanSubstringAll (Word8.scan StringCvt.HEX) (Substring.substring (str, i, 2)) of
-                      NONE => NONE
-                    | SOME b =>
-                         loop (b :: acc) (i+2))
-         in
-            loop [] 0
-         end
 
       val ch0 = Char.ord #"0"
       val cha = Char.ord #"a" - 10
@@ -115,19 +99,19 @@ structure Bytestring :> BYTESTRING =
             ""
          else
             let
-               val b = Word8Vector.sub (s, 0)
+               val b = V.sub (s, 0)
             in
                String.concat
                (nibblestr (Word8.>> (b, 0w4))
                 :: nibblestr (Word8.andb (b, 0wxf))
-                :: Word8VectorSlice.foldr
+                :: V.foldr
                       (fn (b, l) =>
                           sep
                           :: nibblestr (Word8.>> (b, 0w4))
                           :: nibblestr (Word8.andb (b, 0wxf))
                           :: l)
                       []
-                      (Word8VectorSlice.slice (s, 1, NONE)))
+                      (V.subslice (s, 1, NONE)))
             end
 
       val toStringHex = toStringHex' ""

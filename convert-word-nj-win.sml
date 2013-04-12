@@ -188,6 +188,8 @@ structure ConvertWord : CONVERT_WORD =
       val wordToWord32X = word31ToWord32X
       val wordToWord64 = word31ToWord64
       val wordToWord64X = word31ToWord64X
+      val wordToBytesB = word31ToBytesB
+      val wordToBytesL = word31ToBytesL
 
       val word8ToWord = word8ToWord31
       val word8ToWordX = word8ToWord31X
@@ -197,5 +199,7 @@ structure ConvertWord : CONVERT_WORD =
       val word32ToWordX = word32ToWord31
       val word64ToWord = word64ToWord31
       val word64ToWordX = word64ToWord31
+      val bytesToWordB = bytesToWord31B
+      val bytesToWordL = bytesToWord31L
 
    end

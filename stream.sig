@@ -15,6 +15,7 @@ signature STREAM =
       val fromTable : ('a * int -> 'b) -> 'a -> int -> 'b stream
 
       val fromString : string -> char stream
+      val fromBytestring : Bytestring.string -> Word8.word stream
       val fromTextInstream : TextIO.instream -> char stream
       val fromBinInstream : BinIO.instream -> Word8.word stream
 
@@ -23,6 +24,7 @@ signature STREAM =
       exception Empty
       val hd : 'a stream -> 'a
       val tl : 'a stream -> 'a stream
+      val @ : 'a stream * 'a stream -> 'a stream
       val take : 'a stream * int -> 'a list
       val drop : 'a stream * int -> 'a stream
       val map : ('a -> 'b) -> 'a stream -> 'b stream

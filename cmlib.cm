@@ -1,12 +1,22 @@
 library
+
+        signature ARITH
         signature BYTESTRING
+        signature BYTESUBSTRING
         signature CONT
+        signature CONVERT_INT_INF
         signature CONVERT_WORD
 	signature COORD
         signature COORDINATED_STREAM
         signature COROUTINE
         signature CRYPTO_HASH
         signature DICT
+        signature EC_FIELD
+        signature ECDSA
+        signature ELLIPTIC_CURVE
+        signature ELLIPTIC_CURVE_CODING
+        signature ELLIPTIC_CURVE_CRYPTO
+        signature ELLIPTIC_CURVE_PARAMS
         signature FROM_STRING
         signature HASH_INCREMENT
         signature HASH_TABLE
@@ -25,6 +35,8 @@ library
         signature PSTREAM
         signature PSUSP
         signature QUEUE
+        signature RAND
+        signature RANDOM
         signature SEQUENCE
         signature SET
         signature SORT
@@ -37,8 +49,10 @@ library
         signature IMPERATIVE_UNION_FIND
         signature WEAK
 
+        structure Arith
         structure ArraySequence
         structure Bytestring
+        structure Bytesubstring
 	(* Char *)
 	structure CharListDict
 	structure CharListSet
@@ -50,10 +64,22 @@ library
 	structure CharSplaySet
 	structure CharSplayDict
         structure Cont
+        structure ConvertIntInf
         structure ConvertWord
 	structure Coord
         structure CoordinatedStream
         structure Coroutine
+        structure ECDERp
+        structure ECDER2m
+        structure ECDSAp
+        structure ECDSA2m
+        structure EllipticCurveCryptoFp
+        structure EllipticCurveCryptoF2m
+        structure EllipticCurveF2m
+        structure EllipticCurveFp
+        structure EllipticCurveParams
+        structure FieldF2m
+        structure FieldFp
         structure FromString
 	(* Int *)
 	structure IntListDict
@@ -85,7 +111,9 @@ library
 	structure PStream
 	structure PSusp
 	structure Queue
+        structure RIPEMD160
         structure SHA256
+        structure SimpleRandom
         structure Stream
         structure StreamStreamable
         (* String *)
@@ -126,9 +154,13 @@ library
 	structure UnitSplayDict
         structure Weak
 
+        functor BytestringRand
         functor CoercedStreamable
 	functor DictTable
 	functor DictMultiTable
+        functor ECDSAFun
+        functor EllipticCurveCryptoFun
+        functor EllipticCurveDERFun
         functor HashTable
 	functor HashTableTable
         functor ImperativePairingPQueue
@@ -156,9 +188,16 @@ library
 
 is
 
+        arith.sig
+        arith.sml
+        asn1.sig
         bytestring.sig
         bytestring.sml
+        bytesubstring.sig
+        bytesubstring.sml
 	cont.sig
+        convert-intinf.sig
+        convert-intinf.sml
         convert-word.sig
 	coord.sig
 	coord.sml
@@ -167,10 +206,24 @@ is
 	coroutine.sig
 	coroutine.sml
         cryptohash.sig
+        der.sml
 	dict.sig
 	dict-list.sml
         dict-red-black.sml
 	dict-splay.sml
+        digital-signature.sig
+        ec.sig
+        ec-coding.sig
+        ec-crypto.sig
+        ec-crypto.sml
+        ec-der.sml
+        ec-field.sig
+        ec-fp.sml
+        ec-f2m.sml
+        ec-params.sig
+        ec-params.sml
+        ecdsa.sig
+        ecdsa.sml
         from-string.sig
         from-string.sml
 	hash-inc.sig
@@ -208,7 +261,11 @@ is
         psusp.sml
 	queue.sig
 	queue.sml
+        rand.sig
+        rand-bytestring.sml
+        random.sig
 	red-black-tree.sml
+        ripemd160.sml
         sequence.sig
         sequence-array.sml
         sequence-list.sml
@@ -218,6 +275,7 @@ is
 	set-red-black.sml
 	set-splay.sml
         sha256.sml
+        simple-random.sml
 	sort.sig
 	splay-tree.sml
         pstream.sig

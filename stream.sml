@@ -48,6 +48,8 @@ structure Stream
 
       fun fromString str = fromTable String.sub str 0
 
+      fun fromBytestring str = fromTable Bytestring.sub str 0
+
       fun fromTextInstream ins =
           fromProcess (fn () => TextIO.input1 ins)
 
@@ -73,6 +75,17 @@ structure Stream
                  raise Empty
             | Cons (_, s') =>
                  s')
+
+       
+      fun op @ (s1, s2) =
+          lazy
+          (fn () =>
+              (case front s1 of
+                  Nil =>
+                     front s2
+                | Cons (h, t) =>
+                     Cons (h, t @ s2)))
+
 
       fun take (s, n) =
           if n < 0 then

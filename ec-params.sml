@@ -1,0 +1,62 @@
+
+structure EllipticCurveParams :> ELLIPTIC_CURVE_PARAMS =
+   struct
+
+      type paramp = EllipticCurveCryptoFp.param
+      type param2m = EllipticCurveCryptoF2m.param
+
+      fun intFromHex str = Option.valOf (StringCvt.scanString (IntInf.scan StringCvt.HEX) str)
+
+      val secp256k1 : ECDSAp.param =
+         {
+         curve = {
+                 index = intFromHex "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F",
+                 a = 0,
+                 b = 7
+                 },
+         base = SOME (intFromHex "79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798",
+                      intFromHex "483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8"),
+         order = intFromHex "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141",
+         cofactor = 1
+         }
+
+      val secp256r1 : ECDSAp.param =
+         {
+         curve = {
+                 index = intFromHex "FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF",
+                 a = 0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC,
+                 b = 0x5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B
+                 },
+         base = SOME (intFromHex "6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296",
+                      intFromHex "4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5"),
+         order = intFromHex "FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551",
+         cofactor = 1
+         }
+
+      val sect283k1 : ECDSA2m.param =
+         {
+         curve = {
+                 index = (283, intFromHex "800000000000000000000000000000000000000000000000000000000000000000010a1"),
+                 a = 0,
+                 b = 1
+                 },
+         base = SOME (intFromHex "0503213F78CA44883F1A3B8162F188E553CD265F23C1567A16876913B0C2AC2458492836",
+                      intFromHex "01CCDA380F1C9E318D90F95D07E5426FE87E45C0E8184698E45962364E34116177DD2259"),
+         order = intFromHex "01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9AE2ED07577265DFF7F94451E061E163C61",
+         cofactor = 4
+         }
+
+      val sect283r1 : ECDSA2m.param =
+         {
+         curve = {
+                 index = (283, intFromHex "800000000000000000000000000000000000000000000000000000000000000000010a1"),
+                 a = 1,
+                 b = 0x027B680AC8B8596DA5A4AF8A19A0303FCA97FD7645309FA2A581485AF6263E313B79A2F5
+                 },
+         base = SOME (intFromHex "05F939258DB7DD90E1934F8C70B0DFEC2EED25B8557EAC9C80E2E198F8CDBECD86B12053",
+                      intFromHex "03676854FE24141CB98FE6D4B20D02B4516FF702350EDDB0826779C813F0DF45BE8112F4"),
+         order = intFromHex "03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEF90399660FC938A90165B042A7CEFADB307",
+         cofactor = 2
+         }
+
+   end
