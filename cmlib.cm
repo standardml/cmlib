@@ -332,7 +332,7 @@ is
 
         (* SML/NJ implementations *)
 	cont-nj.sml
-        convert-word-nj-win.sml
+        convert-word-nj.sml
 	susp-nj.sml
         weak-nj.sml
 
