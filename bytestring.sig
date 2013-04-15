@@ -17,6 +17,8 @@ signature BYTESTRING =
       val str : byte -> string
       val implode : byte list -> string
       val explode : string -> byte list
+      val map : (byte -> byte) -> string -> string
+      val map2 : (byte * byte -> byte) -> string * string -> string
       val rev : string -> string
       val eq : string * string -> bool
       val compare : string * string -> order

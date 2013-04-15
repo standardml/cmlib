@@ -8,7 +8,7 @@ functor EllipticCurveCryptoFun (structure EllipticCurve : ELLIPTIC_CURVE)
    struct
 
       structure EC = EllipticCurve
-      structure R = BytestringRand (structure Random = SimpleRandom)
+      structure SecureRand = RandFromRandom (structure Random = AESFortuna)
 
       open IntInf
 
@@ -119,7 +119,7 @@ functor EllipticCurveCryptoFun (structure EllipticCurve : ELLIPTIC_CURVE)
 
       fun newkey ({curve, base, order, ...}:param) =
          let
-            val d = R.randomIntInf (order-1) + 1
+            val d = SecureRand.randIntInf (order-1) + 1
          in
             (mult (curve, d, base), d)
          end

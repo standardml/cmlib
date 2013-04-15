@@ -9,18 +9,10 @@ structure Bytestring :> BYTESTRING =
       structure V = Word8Vector
       
       val maxSize = V.maxLen
+
       val size = V.length
+
       val sub = V.sub
-      val concat = V.concat
-      val implode = V.fromList
-
-      fun op ^ (s1, s2) = V.concat [s1, s2]
-
-      fun str b = V.fromList [b]
-
-      val null = V.fromList []
-
-      fun explode s = V.foldr (op ::) nil s
 
       fun substring (s, start, len) =
          Word8VectorSlice.vector (Word8VectorSlice.slice (s, start, SOME len))
@@ -28,9 +20,25 @@ structure Bytestring :> BYTESTRING =
       fun extract (s, start, leno) =
          Word8VectorSlice.vector (Word8VectorSlice.slice (s, start, leno))
 
+      fun op ^ (s1, s2) = V.concat [s1, s2]
 
-      fun fromWord8Vector s = s
-      fun toWord8Vector s = s
+      val concat = V.concat
+
+      val null = V.fromList []
+
+      fun str b = V.fromList [b]
+
+      val implode = V.fromList
+
+      fun explode s = V.foldr (op ::) nil s
+
+      fun map f s = V.map f s
+
+      fun map2 f (s1, s2) =
+         if V.length s1 <> V.length s2 then
+            raise ListPair.UnequalLengths
+         else
+            V.mapi (fn (i, b1) => f (b1, V.sub (s2, i))) s1
 
       fun rev s =
          let
@@ -77,8 +85,12 @@ structure Bytestring :> BYTESTRING =
 
 
 
+      fun fromWord8Vector s = s
+
+      fun toWord8Vector s = s
+
       fun fromStringOrd str =
-         V.fromList (map (fn ch => Word8.fromInt (Char.ord ch)) (String.explode str))
+         V.fromList (List.map (fn ch => Word8.fromInt (Char.ord ch)) (String.explode str))
 
       fun toStringOrd s =
          String.implode (List.rev (V.foldl (fn (b, l) => Char.chr (Word8.toInt b) :: l) [] s))

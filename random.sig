@@ -1,13 +1,12 @@
 
+(* Secure random number generation. *)
+
 signature RANDOM =
    sig
 
-      type data
+      val random : int -> Bytestring.string  (* generates the indicated number of bytes *)
 
-      val random : int -> data
-      val addEntropy : Bytestring.string -> unit      
-      val reseed : unit -> unit
+      type seed
+      val reseed : seed -> unit      
 
    end
-
-      

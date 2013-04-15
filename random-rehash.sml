@@ -1,12 +1,12 @@
 
-structure SimpleRandom :> RANDOM where type data = Bytestring.string =
+(* According to Wikipedia, this isn't a good secure random number generator. *)
+
+structure RehashRandom
+   :> 
+   RANDOM
+   where type seed = Bytestring.string
+   =
    struct
-
-      (* According to Wikipedia, this isn't a good secure random number generator, but it's
-         simple and it's better than nothing.  We should replace this eventually.
-      *)
-
-      type data = Bytestring.string
 
       fun hash str = SHA256.hashBytes (SHA256.hashBytes str)
 
@@ -34,9 +34,9 @@ structure SimpleRandom :> RANDOM where type data = Bytestring.string =
                Bytestring.concat (loop [] n)
          end
 
-      fun addEntropy str =
-         seed := hash (Bytestring.^ (!seed, str))
+      type seed = Bytestring.string
 
-      fun reseed () = ()
+      fun reseed str =
+         seed := hash (Bytestring.^ (!seed, str))
 
    end

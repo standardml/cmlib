@@ -132,8 +132,7 @@ structure Arith :> ARITH =
          end
 
 
-      (* Using a cryptographic random number generator is overkill, but it's what we have handy. *)
-      structure R = BytestringRand (structure Random = SimpleRandom)
+      structure R = MTRand
 
       fun isprime x =
          let
@@ -143,7 +142,7 @@ structure Arith :> ARITH =
             (* Miller-Rabin test *)
             fun maybePrime () =
                let
-                  val a = R.randomIntInf x
+                  val a = R.randIntInf m + 1
                   
                   val atod = powmod (a, d, x)
 
@@ -200,7 +199,7 @@ structure Arith :> ARITH =
 
                          fun loopz () =
                             let
-                               val z = R.randomIntInf (p-3) + 2
+                               val z = R.randIntInf (p-3) + 2
                             in
                                if legendre (z, p) = p-1 then
                                   z

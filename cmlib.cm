@@ -3,6 +3,7 @@ library
         signature ARITH
         signature BYTESTRING
         signature BYTESUBSTRING
+        signature CIPHER
         signature CONT
         signature CONVERT_INT_INF
         signature CONVERT_WORD
@@ -12,11 +13,13 @@ library
         signature CRYPTO_HASH
         signature DICT
         signature EC_FIELD
+        signature ECDH
         signature ECDSA
         signature ELLIPTIC_CURVE
         signature ELLIPTIC_CURVE_CODING
         signature ELLIPTIC_CURVE_CRYPTO
         signature ELLIPTIC_CURVE_PARAMS
+        signature FORTUNA
         signature FROM_STRING
         signature HASH_INCREMENT
         signature HASH_TABLE
@@ -39,6 +42,7 @@ library
         signature RANDOM
         signature SEQUENCE
         signature SET
+        signature SHARED_SECRET
         signature SORT
         signature STREAM
         signature STREAMABLE
@@ -49,6 +53,13 @@ library
         signature IMPERATIVE_UNION_FIND
         signature WEAK
 
+        structure AES
+        structure AESCBC
+        structure AESCFB
+        structure AESCTR
+        structure AESOFB
+        structure AESFortuna
+        structure AESRandom
         structure Arith
         structure ArraySequence
         structure Bytestring
@@ -71,6 +82,8 @@ library
         structure Coroutine
         structure ECDERp
         structure ECDER2m
+        structure ECDHp
+        structure ECDH2m
         structure ECDSAp
         structure ECDSA2m
         structure EllipticCurveCryptoFp
@@ -105,15 +118,16 @@ library
         structure ListSequence
         structure ListStreamable
         structure Mergesort
+        structure MTRand
         structure MJHash
 	structure Pos
 	structure PrettyPrint
 	structure PStream
 	structure PSusp
 	structure Queue
+        structure RehashRandom
         structure RIPEMD160
         structure SHA256
-        structure SimpleRandom
         structure Stream
         structure StreamStreamable
         (* String *)
@@ -154,13 +168,17 @@ library
 	structure UnitSplayDict
         structure Weak
 
-        functor BytestringRand
+        functor CBCCipherFun
+        functor CFBCipherFun
+        functor CTRCipherFun
         functor CoercedStreamable
 	functor DictTable
 	functor DictMultiTable
+        functor ECDHFun
         functor ECDSAFun
         functor EllipticCurveCryptoFun
         functor EllipticCurveDERFun
+        functor FortunaFun
         functor HashTable
 	functor HashTableTable
         functor ImperativePairingPQueue
@@ -171,10 +189,13 @@ library
         functor ListHashable
         functor ListOrdered
         functor ListSet
+        functor OFBCipherFun
         functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun
         functor PartitionFun
+        functor RandFromRand32
+        functor RandFromRandom
         functor RedBlackDict
         functor RedBlackSet
         functor SetHashable
@@ -188,6 +209,7 @@ library
 
 is
 
+        aes.sml
         arith.sig
         arith.sml
         asn1.sig
@@ -195,6 +217,7 @@ is
         bytestring.sml
         bytesubstring.sig
         bytesubstring.sml
+        cipher.sig
 	cont.sig
         convert-intinf.sig
         convert-intinf.sml
@@ -217,6 +240,8 @@ is
         ec-crypto.sig
         ec-crypto.sml
         ec-der.sml
+        ecdh.sig
+        ecdh.sml
         ec-field.sig
         ec-fp.sml
         ec-f2m.sml
@@ -224,6 +249,8 @@ is
         ec-params.sml
         ecdsa.sig
         ecdsa.sml
+        fortuna.sig
+        fortuna.sml
         from-string.sig
         from-string.sml
 	hash-inc.sig
@@ -262,8 +289,12 @@ is
 	queue.sig
 	queue.sml
         rand.sig
-        rand-bytestring.sml
+        rand-from-rand32.sml
+        rand-from-random.sml
+        rand-mt.sml
         random.sig
+        random-aes.sml
+        random-rehash.sml
 	red-black-tree.sml
         ripemd160.sml
         sequence.sig
@@ -275,13 +306,14 @@ is
 	set-red-black.sml
 	set-splay.sml
         sha256.sml
-        simple-random.sml
+        shared-secret.sig
 	sort.sig
 	splay-tree.sml
         pstream.sig
         pstream.sml
 	stream.sig
 	stream.sml
+        stream-cipher-fun.sml
 	streamable.sig
 	streamable.sml
 	sum.sig

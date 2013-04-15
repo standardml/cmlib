@@ -44,6 +44,37 @@ structure FieldF2m
 
       fun negate (_, x) = x
 
+      fun times ((m, poly), x, y) =
+         let
+            val hi = << (1, Word.fromInt m)
+
+            (* compute x * y + acc *)
+            fun loop (x, y, acc) =
+               if x = 0 then
+                  acc
+               else
+                  let
+                     val acc' =
+                        if andb (x, 1) = 0 then
+                           acc
+                        else
+                           xorb (acc, y)
+
+                     val y' = << (y, 0w1)
+
+                     val y'' =
+                        if andb (y', hi) = 0 then
+                           y'
+                        else
+                           xorb (y', poly)
+
+                  in
+                     loop (~>> (x, 0w1), y'', acc')
+                  end
+         in
+            loop (x, y, 0)
+         end
+
       fun polymult (x, y) =
          let
             (* a * b + c *)
@@ -91,37 +122,6 @@ structure FieldF2m
             end
 
 
-      fun times ((m, poly), x, y) =
-         let
-            val hi = << (1, Word.fromInt m)
-
-            (* compute x * y + acc *)
-            fun loop (x, y, acc) =
-               if x = 0 then
-                  acc
-               else
-                  let
-                     val acc' =
-                        if andb (x, 1) = 0 then
-                           acc
-                        else
-                           xorb (acc, y)
-
-                     val y' = << (y, 0w1)
-
-                     val y'' =
-                        if andb (y', hi) = 0 then
-                           y'
-                        else
-                           xorb (y', poly)
-                  in
-                     loop (~>> (x, 0w1), y'', acc')
-                  end
-         in
-            loop (x, y, 0)
-         end
-      
-
       fun inverse ((m, poly), x) =
          let
             fun loop (acca, accb, x, y) =
@@ -139,7 +139,6 @@ structure FieldF2m
          in
             loop (0, 1, poly, x)
          end
-
 
       fun elemToBytes ((m, _), x) = ConvertIntInf.toFixedBytesB (Int.div (Int.+ (m, 7), 8), x)
 
@@ -163,7 +162,7 @@ structure EllipticCurveF2m
       structure Field = FieldF2m
 
       structure F = Field
-      structure R = BytestringRand (structure Random = SimpleRandom)
+      structure InsecureRand = MTRand
       val xorb = IntInf.xorb
 
       type curve = {index : Field.index, a : Field.elem, b : Field.elem}
@@ -276,7 +275,8 @@ structure EllipticCurveF2m
          let
             fun loop () =
                let
-                  val t = R.randomBits m
+                  (* Don't need cryptographic randomness here. *)
+                  val t = InsecureRand.randBits m
       
                   fun innerloop (z, w, i) =
                      if i = 0 then

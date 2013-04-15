@@ -7,7 +7,7 @@ functor ECDSAFun (structure EllipticCurveCrypto : ELLIPTIC_CURVE_CRYPTO)
    =
    struct
 
-      structure R = BytestringRand (structure Random = SimpleRandom)
+      structure SecureRand = RandFromRandom (structure Random = AESFortuna)
 
       open EllipticCurveCrypto
       open IntInf
@@ -27,7 +27,7 @@ functor ECDSAFun (structure EllipticCurveCrypto : ELLIPTIC_CURVE_CRYPTO)
                the hash used to generate the message is weak.
             *)
             val k =
-               xorb (R.randomBits (Int.+ (log2 order, 1)), e) mod (order-1) + 1
+               xorb (SecureRand.randBits (Int.+ (log2 order, 1)), e) mod (order-1) + 1
          in
             (case mult (curve, k, base) of
                 NONE =>

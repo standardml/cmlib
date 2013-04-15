@@ -5,10 +5,10 @@ signature CONVERT_WORD =
       (* required words *)
       type word = Word.word
       type word8 = Word8.word
+      type word32 = Word32.word  (* optional in the SML Basis, but required by CMLIB *)
       
-      (* optional words *)
+      (* optional words, set to unit if not supported *)
       type word31
-      type word32
       type word64
 
       val wordToWord8 : word -> word8
@@ -19,6 +19,7 @@ signature CONVERT_WORD =
       val wordToWord64X : word -> word64
       val wordToBytesB : word -> Bytestring.string
       val wordToBytesL : word -> Bytestring.string
+      val wordToIntInf : word -> IntInf.int
 
       val word8ToWord : word8 -> word
       val word8ToWordX : word8 -> word
@@ -28,6 +29,7 @@ signature CONVERT_WORD =
       val word8ToWord32X : word8 -> word32
       val word8ToWord64 : word8 -> word64
       val word8ToWord64X : word8 -> word64
+      val word8ToIntInf : word8 -> IntInf.int
 
       val word31ToWord : word31 -> word
       val word31ToWordX : word31 -> word
@@ -38,6 +40,7 @@ signature CONVERT_WORD =
       val word31ToWord64X : word31 -> word64
       val word31ToBytesB : word31 -> Bytestring.string
       val word31ToBytesL : word31 -> Bytestring.string
+      val word31ToIntInf : word31 -> IntInf.int
 
       val word32ToWord : word32 -> word
       val word32ToWordX : word32 -> word
@@ -47,6 +50,7 @@ signature CONVERT_WORD =
       val word32ToWord64X : word32 -> word64
       val word32ToBytesB : word32 -> Bytestring.string
       val word32ToBytesL : word32 -> Bytestring.string
+      val word32ToIntInf : word32 -> IntInf.int
 
       val word64ToWord : word64 -> word
       val word64ToWordX : word64 -> word
@@ -55,6 +59,13 @@ signature CONVERT_WORD =
       val word64ToWord32 : word64 -> word32
       val word64ToBytesB : word64 -> Bytestring.string
       val word64ToBytesL : word64 -> Bytestring.string
+      val word64ToIntInf : word64 -> IntInf.int
+
+      val intInfToWord : IntInf.int -> word
+      val intInfToWord8 : IntInf.int -> word8
+      val intInfToWord31 : IntInf.int -> word31
+      val intInfToWord32 : IntInf.int -> word32
+      val intInfToWord64 : IntInf.int -> word64
 
       exception ConvertWord
       val bytesToWordB : Bytestring.string -> word
