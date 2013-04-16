@@ -20,6 +20,9 @@ signature BYTESUBSTRING =
       val concat : substring list -> string
       val explode : substring -> byte list
       val splitAt : substring * int -> substring * substring
+      val map : (byte -> byte) -> substring -> string
+      val map2 : (byte * byte -> byte) -> substring * substring -> string
+      val rev : substring -> string
       val eq : substring * substring -> bool
       val compare : substring * substring -> order
 

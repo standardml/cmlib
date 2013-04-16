@@ -41,8 +41,20 @@ structure Bytesubstring :> BYTESUBSTRING =
          (V.subslice (s, 0, SOME i),
           V.subslice (s, i, NONE))
 
-      fun fromWord8Slice s = s
-      fun toWord8Slice s = s
+      fun map f s = fromvec (V.map f s)
+
+      fun map2 f (s1, s2) =
+         if V.length s1 <> V.length s2 then
+            raise ListPair.UnequalLengths
+         else
+            fromvec (V.mapi (fn (i, b1) => f (b1, V.sub (s2, i))) s1)
+
+      fun rev s =
+         let
+            val len = size s
+         in
+            fromvec (Word8Vector.tabulate (size s, (fn i => V.sub (s, len-i-1))))
+         end
 
       fun eq (s1, s2) =
          let
@@ -80,6 +92,9 @@ structure Bytesubstring :> BYTESUBSTRING =
             loop 0
          end
 
+      fun fromWord8Slice s = s
+
+      fun toWord8Slice s = s
 
 
       val toString = Byte.unpackStringVec
