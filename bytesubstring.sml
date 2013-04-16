@@ -82,8 +82,7 @@ structure Bytesubstring :> BYTESUBSTRING =
 
 
 
-      fun toStringOrd s =
-         String.implode (List.rev (V.foldl (fn (b, l) => Char.chr (Word8.toInt b) :: l) [] s))
+      val toString = Byte.unpackStringVec
 
       val ch0 = Char.ord #"0"
       val cha = Char.ord #"a" - 10

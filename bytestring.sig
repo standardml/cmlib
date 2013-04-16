@@ -24,11 +24,11 @@ signature BYTESTRING =
       val compare : string * string -> order
 
       val fromWord8Vector : Word8Vector.vector -> string
-      val fromStringOrd : String.string -> string
+      val fromString : String.string -> string
       val fromStringHex : String.string -> string option
 
       val toWord8Vector : string -> Word8Vector.vector
-      val toStringOrd : string -> String.string
+      val toString : string -> String.string
       val toStringHex : string -> String.string
       val toStringHex' : String.string -> string -> String.string
 

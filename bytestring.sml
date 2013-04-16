@@ -89,11 +89,10 @@ structure Bytestring :> BYTESTRING =
 
       fun toWord8Vector s = s
 
-      fun fromStringOrd str =
-         V.fromList (List.map (fn ch => Word8.fromInt (Char.ord ch)) (String.explode str))
 
-      fun toStringOrd s =
-         String.implode (List.rev (V.foldl (fn (b, l) => Char.chr (Word8.toInt b) :: l) [] s))
+      val fromString = Byte.stringToBytes
+
+      val toString = Byte.bytesToString
 
       fun fromStringHex str =
          let

@@ -26,7 +26,7 @@ signature BYTESUBSTRING =
       val fromWord8Slice : Word8VectorSlice.slice -> substring
 
       val toWord8Slice : substring -> Word8VectorSlice.slice
-      val toStringOrd : substring -> String.string
+      val toString : substring -> String.string
       val toStringHex : substring -> String.string
       val toStringHex' : String.string -> substring -> String.string
 
