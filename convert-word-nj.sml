@@ -33,7 +33,8 @@ structure ConvertWord : CONVERT_WORD =
       val word31ToIntInf = Word31.toLargeInt
 
       fun word31ToWord64 w = 
-         Word64.fromLargeInt (Word31.toLargeInt w)  (* inefficient! LargeInt = IntInf *)
+         (* probably inefficient, since LargeInt is infinite precision *)
+         Word64.fromLargeInt (Word31.toLargeInt w)
 
       fun word31ToWord64X w =
          let
@@ -47,7 +48,7 @@ structure ConvertWord : CONVERT_WORD =
 
       val word32ToWord8 = Word8.fromLarge
       val word32ToWord31 = Word31.fromLarge
-      fun word32ToWord64 w = Word64.fromLargeInt (Word32.toLargeInt w)  (* inefficient! *)
+      fun word32ToWord64 w = Word64.fromLargeInt (Word32.toLargeInt w)
       val word32ToIntInf = Word32.toLargeInt
 
       fun word32ToWord64X w =
@@ -60,8 +61,8 @@ structure ConvertWord : CONVERT_WORD =
          end
 
       fun word64ToWord8 w = Word8.fromInt (Word64.toInt (Word64.andb (w, 0wxff)))
-      fun word64ToWord31 w = Word31.fromLargeInt (Word64.toLargeInt (Word64.andb (w, 0wx7fffffff)))  (* inefficient! *)
-      fun word64ToWord32 w = Word32.fromLargeInt (Word64.toLargeInt (Word64.andb (w, 0wxffffffff)))  (* inefficient! *)
+      fun word64ToWord31 w = Word31.fromLargeInt (Word64.toLargeInt (Word64.andb (w, 0wx7fffffff)))
+      fun word64ToWord32 w = Word32.fromLargeInt (Word64.toLargeInt (Word64.andb (w, 0wxffffffff)))
       val word64ToIntInf = Word64.toLargeInt
 
 
@@ -71,59 +72,46 @@ structure ConvertWord : CONVERT_WORD =
       val intInfToWord64 = Word64.fromLargeInt
 
 
-      (* This stuff is platform independent, provided the word size in question exists at all. *)
-
-      fun word31ToBytesB w =
-         Bytestring.implode
-         [word31ToWord8 (Word31.andb (0wxff, Word31.>> (w, 0w24))),
-          word31ToWord8 (Word31.andb (0wxff, Word31.>> (w, 0w16))),
-          word31ToWord8 (Word31.andb (0wxff, Word31.>> (w, 0w8))),
-          word31ToWord8 (Word31.andb (0wxff, w))]
-
-      fun word31ToBytesL w =
-         Bytestring.implode
-         [word31ToWord8 (Word31.andb (0wxff, w)),
-          word31ToWord8 (Word31.andb (0wxff, Word31.>> (w, 0w8))),
-          word31ToWord8 (Word31.andb (0wxff, Word31.>> (w, 0w16))),
-          word31ToWord8 (Word31.andb (0wxff, Word31.>> (w, 0w24)))]
-
       fun word32ToBytesB w =
-         Bytestring.implode
-         [word32ToWord8 (Word32.andb (0wxff, Word32.>> (w, 0w24))),
-          word32ToWord8 (Word32.andb (0wxff, Word32.>> (w, 0w16))),
-          word32ToWord8 (Word32.andb (0wxff, Word32.>> (w, 0w8))),
-          word32ToWord8 (Word32.andb (0wxff, w))]
+         let
+            val a = Word8Array.array (4, 0w0)
+         in
+            PackWord32Big.update (a, 0, w);
+            Bytestring.fromWord8Vector (Word8Array.vector a)
+         end
 
       fun word32ToBytesL w =
-         Bytestring.implode
-         [word32ToWord8 (Word32.andb (0wxff, w)),
-          word32ToWord8 (Word32.andb (0wxff, Word32.>> (w, 0w8))),
-          word32ToWord8 (Word32.andb (0wxff, Word32.>> (w, 0w16))),
-          word32ToWord8 (Word32.andb (0wxff, Word32.>> (w, 0w24)))]
+         let
+            val a = Word8Array.array (4, 0w0)
+         in
+            PackWord32Little.update (a, 0, w);
+            Bytestring.fromWord8Vector (Word8Array.vector a)
+         end
+
+      fun word31ToBytesB w =
+         word32ToBytesB (word31ToWord32 w)
+
+      fun word31ToBytesL w =
+         word32ToBytesL (word31ToWord32 w)
 
       fun word64ToBytesB w =
-         Bytestring.implode
-         [word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w56))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w48))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w40))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w32))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w24))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w16))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w8))),
-          word64ToWord8 (Word64.andb (0wxff, w))]
-
+         let
+            val a = Word8Array.array (8, 0w0)
+         in
+            PackWord32Big.update (a, 0, word64ToWord32 (Word64.>> (w, 0w32)));
+            PackWord32Big.update (a, 1, word64ToWord32 w);
+            Bytestring.fromWord8Vector (Word8Array.vector a)
+         end
 
       fun word64ToBytesL w =
-         Bytestring.implode
-         [word64ToWord8 (Word64.andb (0wxff, w)),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w8))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w16))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w24))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w32))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w40))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w48))),
-          word64ToWord8 (Word64.andb (0wxff, Word64.>> (w, 0w56)))]
-
+         let
+            val a = Word8Array.array (8, 0w0)
+         in
+            PackWord32Big.update (a, 1, word64ToWord32 (Word64.>> (w, 0w32)));
+            PackWord32Big.update (a, 0, word64ToWord32 w);
+            Bytestring.fromWord8Vector (Word8Array.vector a)
+         end
+         
 
       exception ConvertWord
 
@@ -131,63 +119,47 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 4 orelse Word8.> (Bytestring.sub (s, 0), 0wx7f) then
             raise ConvertWord
          else
-            Word31.orb (Word31.<< (word8ToWord31 (Bytestring.sub (s, 0)), 0w24),
-                        Word31.orb (Word31.<< (word8ToWord31 (Bytestring.sub (s, 1)), 0w16),
-                                    Word31.orb (Word31.<< (word8ToWord31 (Bytestring.sub (s, 2)), 0w8),
-                                                word8ToWord31 (Bytestring.sub (s, 3)))))
+            word32ToWord31 (PackWord32Big.subVec (Bytestring.toWord8Vector s, 0))
 
       fun bytesToWord31L s =
          if Bytestring.size s <> 4 orelse Word8.> (Bytestring.sub (s, 3), 0wx7f) then
             raise ConvertWord
          else
-            Word31.orb (Word31.<< (word8ToWord31 (Bytestring.sub (s, 3)), 0w24),
-                        Word31.orb (Word31.<< (word8ToWord31 (Bytestring.sub (s, 2)), 0w16),
-                                    Word31.orb (Word31.<< (word8ToWord31 (Bytestring.sub (s, 1)), 0w8),
-                                                word8ToWord31 (Bytestring.sub (s, 0)))))
+            word32ToWord31 (PackWord32Little.subVec (Bytestring.toWord8Vector s, 0))
 
       fun bytesToWord32B s =
          if Bytestring.size s <> 4 then
             raise ConvertWord
          else
-            Word32.orb (Word32.<< (word8ToWord32 (Bytestring.sub (s, 0)), 0w24),
-                        Word32.orb (Word32.<< (word8ToWord32 (Bytestring.sub (s, 1)), 0w16),
-                                    Word32.orb (Word32.<< (word8ToWord32 (Bytestring.sub (s, 2)), 0w8),
-                                                word8ToWord32 (Bytestring.sub (s, 3)))))
+            PackWord32Big.subVec (Bytestring.toWord8Vector s, 0)
 
       fun bytesToWord32L s =
          if Bytestring.size s <> 4 then
             raise ConvertWord
          else
-            Word32.orb (Word32.<< (word8ToWord32 (Bytestring.sub (s, 3)), 0w24),
-                        Word32.orb (Word32.<< (word8ToWord32 (Bytestring.sub (s, 2)), 0w16),
-                                    Word32.orb (Word32.<< (word8ToWord32 (Bytestring.sub (s, 1)), 0w8),
-                                                word8ToWord32 (Bytestring.sub (s, 0)))))
+            PackWord32Little.subVec (Bytestring.toWord8Vector s, 0)
 
       fun bytesToWord64B s =
          if Bytestring.size s <> 8 then
             raise ConvertWord
          else
-            Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 0)), 0w56),
-                        Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 1)), 0w48),
-                                    Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 2)), 0w40),
-                                                Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 3)), 0w32),
-                                                            Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 4)), 0w24),
-                                                                        Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 5)), 0w16),
-                                                                                    Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 6)), 0w8),
-                                                                                                word8ToWord64 (Bytestring.sub (s, 7)))))))))
+            let
+               val v = Bytestring.toWord8Vector s
+            in
+               Word64.orb (Word64.<< (word32ToWord64 (PackWord32Big.subVec (v, 0)), 0w32),
+                           word32ToWord64 (PackWord32Big.subVec (v, 1)))
+            end
 
       fun bytesToWord64L s =
          if Bytestring.size s <> 8 then
             raise ConvertWord
          else
-            Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 7)), 0w56),
-                        Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 6)), 0w48),
-                                    Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 5)), 0w40),
-                                                Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 4)), 0w32),
-                                                            Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 3)), 0w24),
-                                                                        Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 2)), 0w16),
-                                                                                    Word64.orb (Word64.<< (word8ToWord64 (Bytestring.sub (s, 1)), 0w8),
-                                                                                                word8ToWord64 (Bytestring.sub (s, 0)))))))))
+            let
+               val v = Bytestring.toWord8Vector s
+            in
+               Word64.orb (Word64.<< (word32ToWord64 (PackWord32Little.subVec (v, 1)), 0w32),
+                           word32ToWord64 (PackWord32Little.subVec (v, 0)))
+            end
 
 
       (* This stuff depends on the size of Word. *)
