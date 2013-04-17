@@ -9,9 +9,6 @@ structure Bytesubstring :> BYTESUBSTRING =
 
       structure V = Word8VectorSlice
       
-      val tovec = Bytestring.toWord8Vector
-      val fromvec = Bytestring.fromWord8Vector
-
       val size = V.length
       val sub = V.sub
       val isEmpty = V.isEmpty
@@ -22,18 +19,18 @@ structure Bytesubstring :> BYTESUBSTRING =
          let
             val (s', start, len) = V.base s
          in
-            (fromvec s', start, len)
+            (s', start, len)
          end
 
-      fun extract (s, start, leno) = V.slice (tovec s, start, leno)
+      fun extract (s, start, leno) = V.slice (s, start, leno)
 
-      fun substring (s, start, len) = V.slice (tovec s, start, SOME len)
+      fun substring (s, start, len) = V.slice (s, start, SOME len)
 
-      fun full s = V.full (tovec s)
+      fun full s = V.full s
 
-      fun string s = fromvec (V.vector s)
+      fun string s = V.vector s
 
-      fun concat l = fromvec (V.concat l)
+      fun concat l = V.concat l
 
       fun explode s = V.foldr (op ::) nil s
 
@@ -41,19 +38,19 @@ structure Bytesubstring :> BYTESUBSTRING =
          (V.subslice (s, 0, SOME i),
           V.subslice (s, i, NONE))
 
-      fun map f s = fromvec (V.map f s)
+      fun map f s = V.map f s
 
       fun map2 f (s1, s2) =
          if V.length s1 <> V.length s2 then
             raise ListPair.UnequalLengths
          else
-            fromvec (V.mapi (fn (i, b1) => f (b1, V.sub (s2, i))) s1)
+            V.mapi (fn (i, b1) => f (b1, V.sub (s2, i))) s1
 
       fun rev s =
          let
             val len = size s
          in
-            fromvec (Word8Vector.tabulate (size s, (fn i => V.sub (s, len-i-1))))
+            Word8Vector.tabulate (size s, (fn i => V.sub (s, len-i-1)))
          end
 
       fun eq (s1, s2) =

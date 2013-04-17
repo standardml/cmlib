@@ -2,7 +2,7 @@
 signature BYTESTRING =
    sig
 
-      type string
+      type string = Word8Vector.vector
       type byte = Word8.word
       type char = byte
 

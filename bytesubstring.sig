@@ -2,7 +2,7 @@
 signature BYTESUBSTRING =
    sig
 
-      type substring
+      type substring = Word8VectorSlice.slice
       type string = Bytestring.string
       type byte = Word8.word
       type char = byte

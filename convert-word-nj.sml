@@ -107,8 +107,8 @@ structure ConvertWord : CONVERT_WORD =
          let
             val a = Word8Array.array (8, 0w0)
          in
-            PackWord32Big.update (a, 1, word64ToWord32 (Word64.>> (w, 0w32)));
-            PackWord32Big.update (a, 0, word64ToWord32 w);
+            PackWord32Little.update (a, 1, word64ToWord32 (Word64.>> (w, 0w32)));
+            PackWord32Little.update (a, 0, word64ToWord32 w);
             Bytestring.fromWord8Vector (Word8Array.vector a)
          end
          
