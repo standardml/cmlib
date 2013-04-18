@@ -46,6 +46,7 @@ library
         signature SORT
         signature STREAM
         signature STREAMABLE
+        signature MONO_STREAMABLE
 	signature SUM
         signature SUSP
         signature SYMBOL
@@ -64,6 +65,7 @@ library
         structure ArraySequence
         structure Bytestring
         structure Bytesubstring
+        structure BytesubstringMonoStreamable
 	(* Char *)
 	structure CharListDict
 	structure CharListSet
@@ -143,6 +145,7 @@ library
 	structure Sum
         (* Symbol *)
 	structure StringSymbol
+        structure SubstringMonoStreamable
 	structure Symbol
 	structure SymbolListDict
 	structure SymbolListSet
@@ -201,6 +204,7 @@ library
         functor SetHashable
         functor SplayDict
         functor SplaySet
+        functor MonomorphizeStreamable
         functor SymbolFun
         functor SymbolHashableFun
         functor SymbolOrderedFun
@@ -316,6 +320,8 @@ is
         stream-cipher-fun.sml
 	streamable.sig
 	streamable.sml
+        streamable-mono.sig
+        streamable-mono.sml
 	sum.sig
 	sum.sml
 	susp.sig

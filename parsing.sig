@@ -3,7 +3,9 @@ signature PARSING =
    sig
 
       type token
-      type 'a parser = token Stream.stream -> 'a * token Stream.stream
+      structure Streamable : MONO_STREAMABLE where type elem = token
+
+      type 'a parser = Streamable.t -> 'a * Streamable.t
 
       exception SyntaxError
 

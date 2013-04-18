@@ -6,7 +6,7 @@ structure ListStreamable
    struct
 
       type 'a t = 'a list
-      datatype 'a front = Nil | Cons of 'a * 'a list
+      datatype 'a front = Nil | Cons of 'a * 'a t
 
       fun front l =
          (case l of
@@ -25,6 +25,24 @@ structure StreamStreamable
       type 'a t = 'a Stream.stream
       datatype front = datatype Stream.front
       val front = Stream.front
+
+   end
+
+
+structure VectorSliceStreamable
+   :> STREAMABLE
+      where type 'a t = 'a VectorSlice.slice
+   =
+   struct
+
+      type 'a t = 'a VectorSlice.slice
+
+      datatype 'a front = Nil | Cons of 'a * 'a t
+
+      fun front v =
+         (case VectorSlice.getItem v of
+             NONE => Nil
+           | SOME (h, t) => Cons (h, t))
 
    end
 

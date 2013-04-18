@@ -63,6 +63,7 @@ local
         streamable.sml
         iqueue.sig
         iqueue.sml
+        streamable-mono.sig
         parsing.sig
         digital-signature.sig
         ecdsa.sig
@@ -78,6 +79,7 @@ local
         sequence-tree.sml
         bytesubstring.sig
         bytesubstring.sml
+        streamable-mono.sml
         asn1.sig
         der.sml
         ec-coding.sig
@@ -173,6 +175,7 @@ in
         signature SORT
         signature STREAM
         signature STREAMABLE
+        signature MONO_STREAMABLE
 	signature SUM
         signature SUSP
         signature SYMBOL
@@ -191,6 +194,7 @@ in
         structure ArraySequence
         structure Bytestring
         structure Bytesubstring
+        structure BytesubstringMonoStreamable
 	(* Char *)
 	structure CharListDict
 	structure CharListSet
@@ -270,6 +274,7 @@ in
 	structure Sum
         (* Symbol *)
 	structure StringSymbol
+        structure SubstringMonoStreamable
 	structure Symbol
 	structure SymbolListDict
 	structure SymbolListSet
@@ -316,6 +321,7 @@ in
         functor ListHashable
         functor ListOrdered
         functor ListSet
+        functor MonomorphizeStreamable
         functor OFBCipherFun
         functor PairingPQueue
         functor ParseEngineFun

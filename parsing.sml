@@ -1,20 +1,23 @@
 
-functor ParsingFun (type token)
+functor ParsingFun (type token
+                    structure Streamable : MONO_STREAMABLE where type elem = token)
    : PARSING
    =
    struct
    
       type token = token
 
-      type 'a parser = token Stream.stream -> 'a * token Stream.stream
+      structure Streamable = Streamable
+
+      type 'a parser = Streamable.t -> 'a * Streamable.t
 
       exception SyntaxError
 
       fun accept s =
-         (case Stream.front s of
-             Stream.Cons (x, s') =>
+         (case Streamable.front s of
+             Streamable.Cons (x, s') =>
                 (x, s')
-           | Stream.Nil =>
+           | Streamable.Nil =>
                 raise SyntaxError)
 
       fun fail s =
