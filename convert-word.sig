@@ -77,4 +77,13 @@ signature CONVERT_WORD =
       val bytesToWord64B : Bytestring.string -> word64
       val bytesToWord64L : Bytestring.string -> word64
 
+      val bytesToWordSB : Bytesubstring.substring -> word
+      val bytesToWordSL : Bytesubstring.substring -> word
+      val bytesToWord31SB : Bytesubstring.substring -> word31
+      val bytesToWord31SL : Bytesubstring.substring -> word31
+      val bytesToWord32SB : Bytesubstring.substring -> word32
+      val bytesToWord32SL : Bytesubstring.substring -> word32
+      val bytesToWord64SB : Bytesubstring.substring -> word64
+      val bytesToWord64SL : Bytesubstring.substring -> word64
+
    end

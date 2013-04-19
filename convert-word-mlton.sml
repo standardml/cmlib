@@ -90,11 +90,31 @@ structure ConvertWord : CONVERT_WORD =
          else
             word64ToWord31 (PackWord32Big.subVec (Bytestring.toWord8Vector s, 0))
 
+      fun bytesToWord31SB s =
+         if Bytesubstring.size s <> 4 orelse Word8.> (Bytesubstring.sub (s, 0), 0wx7f) then
+            raise ConvertWord
+         else
+            let
+               val (s', i, _) = Word8VectorSlice.base s
+            in
+               word64ToWord31 (PackWord32Big.subVec (Bytestring.toWord8Vector s', i))
+            end
+
       fun bytesToWord31L s =
          if Bytestring.size s <> 4 orelse Word8.> (Bytestring.sub (s, 3), 0wx7f) then
             raise ConvertWord
          else
             word64ToWord31 (PackWord32Little.subVec (Bytestring.toWord8Vector s, 0))
+
+      fun bytesToWord31SL s =
+         if Bytesubstring.size s <> 4 orelse Word8.> (Bytesubstring.sub (s, 3), 0wx7f) then
+            raise ConvertWord
+         else
+            let
+               val (s', i, _) = Word8VectorSlice.base s
+            in
+               word64ToWord31 (PackWord32Little.subVec (Bytestring.toWord8Vector s', i))
+            end
 
       fun bytesToWord32B s =
          if Bytestring.size s <> 4 then
@@ -102,11 +122,31 @@ structure ConvertWord : CONVERT_WORD =
          else
             word64ToWord32 (PackWord32Big.subVec (Bytestring.toWord8Vector s, 0))
 
+      fun bytesToWord32SB s =
+         if Bytesubstring.size s <> 4 then
+            raise ConvertWord
+         else
+            let
+               val (s', i, _) = Word8VectorSlice.base s
+            in
+               word64ToWord32 (PackWord32Big.subVec (Bytestring.toWord8Vector s', i))
+            end
+
       fun bytesToWord32L s =
          if Bytestring.size s <> 4 then
             raise ConvertWord
          else
             word64ToWord32 (PackWord32Little.subVec (Bytestring.toWord8Vector s, 0))
+
+      fun bytesToWord32SL s =
+         if Bytesubstring.size s <> 4 then
+            raise ConvertWord
+         else
+            let
+               val (s', i, _) = Word8VectorSlice.base s
+            in
+               word64ToWord32 (PackWord32Little.subVec (Bytestring.toWord8Vector s', i))
+            end
 
       fun bytesToWord64B s =
          if Bytestring.size s <> 8 then
@@ -114,11 +154,31 @@ structure ConvertWord : CONVERT_WORD =
          else
             PackWord64Big.subVec (Bytestring.toWord8Vector s, 0)
 
+      fun bytesToWord64SB s =
+         if Bytesubstring.size s <> 8 then
+            raise ConvertWord
+         else
+            let
+               val (s', i, _) = Word8VectorSlice.base s
+            in
+               PackWord64Big.subVec (Bytestring.toWord8Vector s', i)
+            end
+
       fun bytesToWord64L s =
          if Bytestring.size s <> 8 then
             raise ConvertWord
          else
             PackWord64Little.subVec (Bytestring.toWord8Vector s, 0)
+
+      fun bytesToWord64SL s =
+         if Bytesubstring.size s <> 8 then
+            raise ConvertWord
+         else
+            let
+               val (s', i, _) = Word8VectorSlice.base s
+            in
+               PackWord64Little.subVec (Bytestring.toWord8Vector s', i)
+            end
 
 
       (* This stuff depends on the size of Word. *)
@@ -143,6 +203,8 @@ structure ConvertWord : CONVERT_WORD =
       val word64ToWordX = word64ToWord32
       val intInfToWord = intInfToWord32
       val bytesToWordB = bytesToWord32B
+      val bytesToWordSB = bytesToWord32SB
       val bytesToWordL = bytesToWord32L
+      val bytesToWordSL = bytesToWord32SL
 
    end

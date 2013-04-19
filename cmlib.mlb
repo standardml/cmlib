@@ -6,6 +6,8 @@ local
         from-string.sml
         bytestring.sig
         bytestring.sml
+        bytesubstring.sig
+        bytesubstring.sml
         random.sig
         convert-intinf.sig
         convert-intinf.sml
@@ -77,8 +79,6 @@ local
         sum.sml
         sequence.sig
         sequence-tree.sml
-        bytesubstring.sig
-        bytesubstring.sml
         streamable-mono.sml
         asn1.sig
         der.sml
