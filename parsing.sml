@@ -33,13 +33,15 @@ functor ParsingFun (type token
          end
 
 
-      fun test f =
-         bind accept 
-         (fn tok => if f tok then return tok else raise SyntaxError)
+      fun require f p =
+         bind p (fn x => if f x then return x else raise SyntaxError)
 
-      fun test_ f =
-         bind accept 
-         (fn tok => if f tok then return () else raise SyntaxError)
+      fun require_ f p =
+         bind p (fn x => if f x then return () else raise SyntaxError)
+
+      fun test f = require f accept
+
+      fun test_ f = require_ f accept
 
       fun wrap f p =
          bind p (fn x => return (f x))

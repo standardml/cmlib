@@ -121,15 +121,7 @@ structure ConvertWord : CONVERT_WORD =
          else
             word32ToWord31 (PackWord32Big.subVec (s, 0))
 
-      fun bytesToWord31SB s =
-         if Bytesubstring.size s <> 4 orelse Word8.> (Bytesubstring.sub (s, 0), 0wx7f) then
-            raise ConvertWord
-         else
-            let
-               val (s', i, _) = Word8VectorSlice.base s
-            in
-               word32ToWord31 (PackWord32Big.subVec (s', i))
-            end
+      fun bytesToWord31SB s = bytesToWord31B (Bytesubstring.string s)
 
       fun bytesToWord31L s =
          if Bytestring.size s <> 4 orelse Word8.> (Bytestring.sub (s, 3), 0wx7f) then
@@ -137,15 +129,7 @@ structure ConvertWord : CONVERT_WORD =
          else
             word32ToWord31 (PackWord32Little.subVec (s, 0))
 
-      fun bytesToWord31SL s =
-         if Bytesubstring.size s <> 4 orelse Word8.> (Bytesubstring.sub (s, 0), 0wx7f) then
-            raise ConvertWord
-         else
-            let
-               val (s', i, _) = Word8VectorSlice.base s
-            in
-               word32ToWord31 (PackWord32Little.subVec (s', i))
-            end
+      fun bytesToWord31SL s = bytesToWord31L (Bytesubstring.string s)
 
       fun bytesToWord32B s =
          if Bytestring.size s <> 4 then
@@ -153,15 +137,7 @@ structure ConvertWord : CONVERT_WORD =
          else
             PackWord32Big.subVec (s, 0)
 
-      fun bytesToWord32SB s =
-         if Bytesubstring.size s <> 4 then
-            raise ConvertWord
-         else
-            let
-               val (s', i, _) = Word8VectorSlice.base s
-            in
-               PackWord32Big.subVec (s', i)
-            end
+      fun bytesToWord32SB s = bytesToWord32B (Bytesubstring.string s)
 
       fun bytesToWord32L s =
          if Bytestring.size s <> 4 then
@@ -169,25 +145,7 @@ structure ConvertWord : CONVERT_WORD =
          else
             PackWord32Little.subVec (s, 0)
 
-      fun bytesToWord32SL s =
-         if Bytesubstring.size s <> 4 then
-            raise ConvertWord
-         else
-            let
-               val (s', i, _) = Word8VectorSlice.base s
-            in
-               PackWord32Little.subVec (s', i)
-            end
-
-      fun bytesToWord32BL s =
-         if Bytesubstring.size s <> 4 then
-            raise ConvertWord
-         else
-            let
-               val (s', i, _) = Word8VectorSlice.base s
-            in
-               PackWord32Little.subVec (s', i)
-            end
+      fun bytesToWord32SL s = bytesToWord32L (Bytesubstring.string s)
 
       fun bytesToWord64B s =
          if Bytestring.size s <> 8 then
@@ -196,16 +154,7 @@ structure ConvertWord : CONVERT_WORD =
             Word64.orb (Word64.<< (word32ToWord64 (PackWord32Big.subVec (s, 0)), 0w32),
                         word32ToWord64 (PackWord32Big.subVec (s, 1)))
 
-      fun bytesToWord64SB s =
-         if Bytesubstring.size s <> 8 then
-            raise ConvertWord
-         else
-            let
-               val (s', i, _) = Word8VectorSlice.base s
-            in
-               Word64.orb (Word64.<< (word32ToWord64 (PackWord32Big.subVec (s', i)), 0w32),
-                           word32ToWord64 (PackWord32Big.subVec (s', i+1)))
-            end
+      fun bytesToWord64SB s = bytesToWord64B (Bytesubstring.string s)        
 
       fun bytesToWord64L s =
          if Bytestring.size s <> 8 then
@@ -214,16 +163,7 @@ structure ConvertWord : CONVERT_WORD =
             Word64.orb (Word64.<< (word32ToWord64 (PackWord32Little.subVec (s, 1)), 0w32),
                         word32ToWord64 (PackWord32Little.subVec (s, 0)))
 
-      fun bytesToWord64SL s =
-         if Bytesubstring.size s <> 8 then
-            raise ConvertWord
-         else
-            let
-               val (s', i, _) = Word8VectorSlice.base s
-            in
-               Word64.orb (Word64.<< (word32ToWord64 (PackWord32Little.subVec (s', i+1)), 0w32),
-                           word32ToWord64 (PackWord32Little.subVec (s', i)))
-            end
+      fun bytesToWord64SL s = bytesToWord64L (Bytesubstring.string s)        
 
 
       (* This stuff depends on the size of Word. *)

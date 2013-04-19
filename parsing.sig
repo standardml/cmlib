@@ -16,6 +16,8 @@ signature PARSING =
 
       val test : (token -> bool) -> token parser
       val test_ : (token -> bool) -> unit parser
+      val require : ('a -> bool) -> 'a parser -> 'a parser
+      val require_ : ('a -> bool) -> 'a parser -> unit parser
       val wrap : ('a -> 'b) -> 'a parser -> 'b parser
       val seq : 'a parser -> 'b parser -> 'b parser
       val first : 'a parser -> 'b parser -> 'a parser
