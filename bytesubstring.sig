@@ -18,6 +18,7 @@ signature BYTESUBSTRING =
       val getc : substring -> (byte * substring) option
       val slice : substring * int * int option -> substring
       val concat : substring list -> string
+      val null : substring
       val explode : substring -> byte list
       val splitAt : substring * int -> substring * substring
       val map : (byte -> byte) -> substring -> string

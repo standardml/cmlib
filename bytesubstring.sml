@@ -9,11 +9,9 @@ structure Bytesubstring :> BYTESUBSTRING =
 
       structure V = Word8VectorSlice
       
-      val size = V.length
       val sub = V.sub
-      val isEmpty = V.isEmpty
-      val getc = V.getItem
-      val slice = V.subslice
+
+      val size = V.length
 
       fun base s =
          let
@@ -30,7 +28,15 @@ structure Bytesubstring :> BYTESUBSTRING =
 
       fun string s = V.vector s
 
+      val isEmpty = V.isEmpty
+
+      val getc = V.getItem
+
+      val slice = V.subslice
+
       fun concat l = V.concat l
+
+      val null = V.full Bytestring.null
 
       fun explode s = V.foldr (op ::) nil s
 
