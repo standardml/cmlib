@@ -24,6 +24,7 @@ library
         signature HASH_INCREMENT
         signature HASH_TABLE
         signature HASHABLE
+        signature IDEQUE
         signature IMPERATIVE_PQUEUE
         signature IQUEUE
         signature LEX_ENGINE
@@ -96,6 +97,7 @@ library
         structure FieldF2m
         structure FieldFp
         structure FromString
+        structure IDeque
 	(* Int *)
 	structure IntListDict
 	structure IntListSet
@@ -263,6 +265,8 @@ is
 	hashable.sml
 	hash-table.sig
 	hash-table.sml
+        ideque.sig
+        ideque.sml
 	iqueue.sig
 	iqueue.sml
 	lex-engine.sig
