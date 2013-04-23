@@ -7,3 +7,4 @@
     mergesort-test.sml
     mergesort-qcheck.sml
     sets-dicts-test.sml
+    quicksort-test.sml
