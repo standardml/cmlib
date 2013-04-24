@@ -1,6 +1,7 @@
 
-functor SplayDict (structure Key : ORDERED)
-   :> DICT where type key = Key.t
+functor SplayRDict (structure Key : ORDERED)
+   :>
+   RDICT where type key = Key.t
    =
    struct
 
@@ -8,36 +9,52 @@ functor SplayDict (structure Key : ORDERED)
 
       open SplayTree
 
-      type 'a dict = int * (key * 'a) tree
+      type 'a dict = (key * 'a) tree
 
       exception Absent
 
-      val empty = (0, Leaf)
+      val empty = Leaf
 
       fun singleton key datum =
-         (1, Node (ref ((key, datum), Leaf, Leaf)))
+         Node (ref ((key, datum), Leaf, Leaf))
 
-      fun insert (n, tree) key datum =
+      fun insert tree key datum =
          (case tree of
              Leaf =>
                 singleton key datum
            | Node root =>
                 let
-                   val (order, node' as (label as (key', _), left, right)) =
+                   val (order, node' as (label, left, right)) =
                       findAndSplay (fn (key', _) => Key.compare (key, key')) root []
                 in
                    (case order of
                        EQUAL =>
-                          (n, Node (ref ((key, datum), left, right)))
+                          Node (ref ((key, datum), left, right))
                      | LESS =>
-                          (n+1,
-                           Node (ref ((key, datum), left, Node (ref (label, Leaf, right)))))
+                          Node (ref ((key, datum), left, Node (ref (label, Leaf, right))))
                      | GREATER =>
-                          (n+1,
-                           Node (ref ((key, datum), Node (ref (label, left, Leaf)), right))))
+                          Node (ref ((key, datum), Node (ref (label, left, Leaf)), right)))
                 end)
 
-      fun remove (dict as (n, tree)) key =
+      fun insert' tree key datum =
+         (case tree of
+             Leaf =>
+                (singleton key datum, false)
+           | Node root =>
+                let
+                   val (order, node' as (label, left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       EQUAL =>
+                          (Node (ref ((key, datum), left, right)), true)
+                     | LESS =>
+                          (Node (ref ((key, datum), left, Node (ref (label, Leaf, right)))), false)
+                     | GREATER =>
+                          (Node (ref ((key, datum), Node (ref (label, left, Leaf)), right)), false))
+                end)
+
+      fun remove tree key =
          (case tree of
              Leaf => empty
            | Node root =>
@@ -47,11 +64,27 @@ functor SplayDict (structure Key : ORDERED)
                 in
                    (case order of
                        EQUAL =>
-                          (n-1, join left right)
-                     | _ => dict)
+                          join left right
+                     | _ => tree)
                 end)
 
-      fun operate (n, tree) key absentf presentf =
+      fun remove' tree key =
+         (case tree of
+             Leaf =>
+                (empty, false)
+           | Node root =>
+                let
+                   val (order, (_, left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       EQUAL =>
+                          (join left right, true)
+                     | _ => 
+                          (tree, false))
+                end)
+
+      fun operate tree key absentf presentf =
          (case tree of
              Leaf =>
                 let
@@ -70,30 +103,28 @@ functor SplayDict (structure Key : ORDERED)
                              val datum = presentf datum'
                           in
                              (SOME datum', datum,
-                              (n, Node (ref ((key, datum), left, right))))
+                              Node (ref ((key, datum), left, right)))
                           end
                      | LESS =>
                           let
                              val datum = absentf ()
                           in
                              (NONE, datum,
-                              (n+1,
-                               Node (ref ((key, datum), left, Node (ref (label, Leaf, right))))))
+                              Node (ref ((key, datum), left, Node (ref (label, Leaf, right)))))
                           end
                      | GREATER =>
                           let
                              val datum = absentf ()
                           in
                              (NONE, datum,
-                              (n+1,
-                               Node (ref ((key, datum), Node (ref (label, left, Leaf)), right))))
+                              Node (ref ((key, datum), Node (ref (label, left, Leaf)), right)))
                           end)
                 end)
 
       fun insertMerge dict key x f =
          #3 (operate dict key (fn () => x) f)
 
-      fun find (n, tree) key =
+      fun find tree key =
          (case tree of
              Leaf => NONE
            | Node root =>
@@ -102,7 +133,7 @@ functor SplayDict (structure Key : ORDERED)
                        SOME datum
                   | _ => NONE))
 
-      fun lookup (n, tree) key =
+      fun lookup tree key =
          (case tree of
              Leaf => raise Absent
            | Node root =>
@@ -112,53 +143,12 @@ functor SplayDict (structure Key : ORDERED)
                   | _ =>
                        raise Absent))
 
-      fun unionMain tree1 tree2 f =
-         (case tree1 of
-             Leaf =>
-                (SplayTree.size tree2, tree2)
-           | Node (ref (label1 as (key1, datum1), left1, right1)) =>
-                (case tree2 of
-                    Leaf =>
-                       (SplayTree.size tree1, tree1)
-                  | Node root2 =>
-                       let
-                          val (order, (label2 as (key2, datum2), left2, right2)) =
-                             findAndSplay (fn (key', _) => Key.compare (key1, key')) root2 []
+      fun isEmpty d =
+         (case d of
+             Leaf => true
+           | Node _ => false)
 
-                          val (left2', right2') =
-                             (case order of
-                                 EQUAL =>
-                                    (left2, right2)
-                               | LESS =>
-                                    (left2, Node (ref (label2, Leaf, right2)))
-                               | GREATER =>
-                                    (Node (ref (label2, left2, Leaf)), right2))
-
-                          val (nleft, left') = unionMain left1 left2' f
-                          val (nright, right') = unionMain right1 right2' f
-                       in
-                          (case order of
-                              EQUAL =>
-                                 (1+nleft+nright,
-                                  Node (ref ((key1, f (key1, datum1, datum2)), left', right')))
-                            | _ =>
-                                 (1+nleft+nright,
-                                  Node (ref (label1, left', right'))))
-                       end))
-
-      fun union (dict1 as (n1, tree1)) (dict2 as (n2, tree2)) f =
-         if n1 = 0 then
-            dict2
-         else if n2 = 0 then
-            dict1
-         else if n1 >= n2 then
-            unionMain tree1 tree2 f
-         else
-            unionMain tree2 tree1 (fn (key, x, y) => f (key, y, x))
-
-      fun isEmpty (n, _) = n = 0
-
-      fun member (n, tree) key =
+      fun member tree key =
          (case tree of
              Leaf => false
            | Node root =>
@@ -167,48 +157,208 @@ functor SplayDict (structure Key : ORDERED)
                        true
                   | _ => false))
 
-      fun size (n, _) = n
-
-      fun foldlMain f x tree =
+      fun foldl f x tree =
          (case tree of
              Leaf => x
            | Node (ref ((key, datum), left, right)) =>
-                foldlMain f (f (key, datum, foldlMain f x left)) right)
+                foldl f (f (key, datum, foldl f x left)) right)
 
-      fun foldrMain f x tree =
+      fun foldr f x tree =
          (case tree of
              Leaf => x
            | Node (ref ((key, datum), left, right)) =>
-                foldrMain f (f (key, datum, foldrMain f x right)) left)
+                foldr f (f (key, datum, foldr f x right)) left)
 
-      fun toList (_, tree) =
-         foldrMain (fn (key, datum, l) => (key, datum) :: l) [] tree
+      fun toList tree =
+         foldr (fn (key, datum, l) => (key, datum) :: l) [] tree
 
-      fun domain (_, tree) =
-         foldrMain (fn (key, _, l) => key :: l) [] tree
+      fun domain tree =
+         foldr (fn (key, _, l) => key :: l) [] tree
 
-      fun foldl f x (_, tree) = foldlMain f x tree
-
-      fun foldr f x (_, tree) = foldrMain f x tree
-
-      fun mapMain f tree =
+      fun map f tree =
          (case tree of
              Leaf => Leaf
            | Node (ref ((key, datum), left, right)) =>
-                Node (ref ((key, f datum), mapMain f left, mapMain f right)))
+                Node (ref ((key, f datum), map f left, map f right)))
 
-      fun map f (n, tree) = (n, mapMain f tree)
-
-      fun appMain f tree =
+      fun app f tree =
          (case tree of
              Leaf => ()
            | Node (ref (label, left, right)) =>
                 (
-                appMain f left;
+                app f left;
                 f label;
-                appMain f right
+                app f right
                 ))
 
-      fun app f (_, tree) = appMain f tree
-         
+
+
+      fun partition tree key =
+         (case tree of
+             Leaf => (empty, NONE, empty)
+           | Node root =>
+                let
+                   val (order, (label as (_, datum), left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       EQUAL =>
+                          (left, SOME datum, right)
+                     | LESS =>
+                          (left, NONE, Node (ref (label, Leaf, right)))
+                     | GREATER =>
+                          (Node (ref (label, left, Leaf)), NONE, right))
+                end)
+
+      fun partitionlt tree key =
+         (case tree of
+             Leaf => (empty, empty)
+           | Node root =>
+                let
+                   val (order, (label, left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       EQUAL =>
+                          (left, Node (ref (label, Leaf, right)))
+                     | LESS =>
+                          (left, Node (ref (label, Leaf, right)))
+                     | GREATER =>
+                          (Node (ref (label, left, Leaf)), right))
+                end)
+
+      fun partitiongt tree key =
+         (case tree of
+             Leaf => (empty, empty)
+           | Node root =>
+                let
+                   val (order, (label, left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       EQUAL =>
+                          (Node (ref (label, left, Leaf)), right)
+                     | LESS =>
+                          (left, Node (ref (label, Leaf, right)))
+                     | GREATER =>
+                          (Node (ref (label, left, Leaf)), right))
+                end)
+
+      fun rangeii tree left right =
+         let
+            val (_, tree') = partitionlt tree left
+            val (tree'', _) = partitiongt tree' right
+         in
+            tree''
+         end
+
+      fun rangeie tree left right =
+         let
+            val (_, tree') = partitionlt tree left
+            val (tree'', _) = partitionlt tree' right
+         in
+            tree''
+         end
+
+      fun rangeei tree left right =
+         let
+            val (_, tree') = partitiongt tree left
+            val (tree'', _) = partitiongt tree' right
+         in
+            tree''
+         end
+
+      fun rangeee tree left right =
+         let
+            val (_, tree') = partitiongt tree left
+            val (tree'', _) = partitionlt tree' right
+         in
+            tree''
+         end
+
+      fun least tree =
+         (case tree of
+             Leaf =>
+                raise Absent
+           | Node root =>
+                let
+                   val ((_, datum), _) = splayMin root
+                in
+                   datum
+                end)
+
+      fun greatest tree =
+         (case tree of
+             Leaf =>
+                raise Absent
+           | Node root =>
+                let
+                   val ((_, datum), _) = splayMax root
+                in
+                   datum
+                end)
+
+      fun leastGt tree key =
+         (case tree of
+             Leaf =>
+                raise Absent
+           | Node root =>
+                let
+                   val (order, ((_, datum), left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       GREATER => datum
+                     | _ => least right)
+                end)
+
+      fun leastGeq tree key =
+         (case tree of
+             Leaf =>
+                raise Absent
+           | Node root =>
+                let
+                   val (order, ((_, datum), left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       LESS => least right
+                     | _ => datum)
+                end)
+
+      fun greatestLt tree key =
+         (case tree of
+             Leaf =>
+                raise Absent
+           | Node root =>
+                let
+                   val (order, ((_, datum), left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       LESS => datum
+                     | _ => greatest left)
+                end)
+
+      fun greatestLeq tree key =
+         (case tree of
+             Leaf =>
+                raise Absent
+           | Node root =>
+                let
+                   val (order, ((_, datum), left, right)) =
+                      findAndSplay (fn (key', _) => Key.compare (key, key')) root []
+                in
+                   (case order of
+                       GREATER => greatest left
+                     | _ => datum)
+                end)
+
    end
+
+
+functor SplayDict (structure Key : ORDERED)
+   :>
+   DICT where type key = Key.t
+   =
+   DictFun (SplayRDict (structure Key = Key))

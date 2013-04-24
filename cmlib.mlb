@@ -29,6 +29,8 @@ local
         ordered.sml
         set-list.sml
         dict.sig
+        dict.sml
+        rdict.sig
         dict-list.sml
         red-black-tree.sml
         set-red-black.sml
@@ -165,6 +167,7 @@ in
         signature PARSING
         signature PARTITION
 	signature POS
+        signature PRE_DICT
         signature PRETTY_PRINT
         signature PQUEUE
         signature PSTREAM
@@ -172,6 +175,7 @@ in
         signature QUEUE
         signature RAND
         signature RANDOM
+        signature RDICT
         signature SEQUENCE
         signature SET
         signature SHARED_SECRET
@@ -308,6 +312,7 @@ in
         functor CFBCipherFun
         functor CTRCipherFun
         functor CoercedStreamable
+        functor DictFun
 	functor DictTable
 	functor DictMultiTable
         functor ECDHFun
@@ -322,6 +327,7 @@ in
         functor LeftistPQueue
         functor LexEngineFun
         functor ListDict
+        functor ListPreDict
         functor ListHashable
         functor ListOrdered
         functor ListSet
@@ -334,9 +340,11 @@ in
         functor RandFromRand32
         functor RandFromRandom
         functor RedBlackDict
+        functor RedBlackPreDict
         functor RedBlackSet
         functor SetHashable
         functor SplayDict
+        functor SplayRDict
         functor SplaySet
         functor SymbolFun
         functor SymbolHashableFun

@@ -1,6 +1,6 @@
 
-functor ListDict (structure Key : ORDERED)
-   :> DICT where type key = Key.t
+functor ListPreDict (structure Key : ORDERED)
+   :> PRE_DICT where type key = Key.t
    =
    struct
 
@@ -27,6 +27,23 @@ functor ListDict (structure Key : ORDERED)
                   | GREATER =>
                        (key', y) :: insert rest key x))
 
+      fun insert' l key x =
+         (case l of
+             [] =>
+                ([(key, x)], false)
+           | (key', y) :: rest =>
+                (case Key.compare (key, key') of
+                    LESS =>
+                       ((key, x) :: l, false)
+                  | EQUAL =>
+                       ((key, x) :: rest, true)
+                  | GREATER =>
+                       let
+                          val (d, present) = insert' rest key x
+                       in
+                          ((key', y) :: d, present)
+                       end))
+
       fun remove l key =
          (case l of
              [] => []
@@ -36,6 +53,20 @@ functor ListDict (structure Key : ORDERED)
                   | EQUAL => rest
                   | GREATER =>
                        (key', y) :: remove rest key))
+
+      fun remove' l key =
+         (case l of
+             [] => ([], false)
+           | (key', y) :: rest =>
+                (case Key.compare (key, key') of
+                    LESS => (l, false)
+                  | EQUAL => (rest, true)
+                  | GREATER =>
+                       let
+                          val (d, present) = remove' rest key
+                       in
+                          ((key', y) :: d, present)
+                       end))
 
       fun operate l key absentf presentf =
          (case l of
@@ -108,23 +139,6 @@ functor ListDict (structure Key : ORDERED)
                   | GREATER =>
                        member rest key))
 
-      val size = length
-
-      fun union l1 l2 f =
-         (case (l1, l2) of
-             ([], _) =>
-                l2
-           | (_, []) => 
-                l1
-           | ((entry1 as (key1, x1)) :: rest1, (entry2 as (key2, x2)) :: rest2) =>
-                (case Key.compare (key1, key2) of
-                    LESS =>
-                       entry1 :: union rest1 l2 f
-                  | GREATER =>
-                       entry2 :: union l1 rest2 f
-                  | EQUAL =>
-                       (key1, f (key1, x1, x2)) :: union rest1 rest2 f))
-
       fun toList l = l
 
       fun domain l = List.map (fn (key, _) => key) l
@@ -138,3 +152,10 @@ functor ListDict (structure Key : ORDERED)
       val app = List.app
 
    end
+
+
+functor ListDict (structure Key : ORDERED)
+   :>
+   DICT where type key = Key.t
+   =
+   DictFun (ListPreDict (structure Key = Key))

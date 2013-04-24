@@ -34,13 +34,15 @@ library
         signature PARSING
         signature PARTITION
 	signature POS
-        signature PRETTY_PRINT
         signature PQUEUE
+        signature PRE_DICT
+        signature PRETTY_PRINT
         signature PSTREAM
         signature PSUSP
         signature QUEUE
         signature RAND
         signature RANDOM
+        signature RDICT
         signature SEQUENCE
         signature SET
         signature SHARED_SECRET
@@ -177,6 +179,7 @@ library
         functor CFBCipherFun
         functor CTRCipherFun
         functor CoercedStreamable
+        functor DictFun
 	functor DictTable
 	functor DictMultiTable
         functor ECDHFun
@@ -191,6 +194,7 @@ library
         functor LeftistPQueue
         functor LexEngineFun
         functor ListDict
+        functor ListPreDict
         functor ListHashable
         functor ListOrdered
         functor ListSet
@@ -202,9 +206,11 @@ library
         functor RandFromRand32
         functor RandFromRandom
         functor RedBlackDict
+        functor RedBlackPreDict
         functor RedBlackSet
         functor SetHashable
         functor SplayDict
+        functor SplayRDict
         functor SplaySet
         functor MonomorphizeStreamable
         functor SymbolFun
@@ -237,6 +243,7 @@ is
         cryptohash.sig
         der.sml
 	dict.sig
+        dict.sml
 	dict-list.sml
         dict-red-black.sml
 	dict-splay.sml
@@ -319,6 +326,7 @@ is
 	splay-tree.sml
         pstream.sig
         pstream.sml
+        rdict.sig
 	stream.sig
 	stream.sml
         stream-cipher-fun.sml

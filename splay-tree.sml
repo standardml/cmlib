@@ -135,6 +135,15 @@ structure SplayTree =
             (label, tree)
          end
 
+      fun splayMax root =
+         let
+            val (_, (label, tree, _)) =
+               findAndSplay (fn _ => GREATER) root []
+               (* must return (GREATER, (label, tree, Leaf)) *)
+         in
+            (label, tree)
+         end
+
       fun join left right =
          (case right of
              Leaf =>
