@@ -40,11 +40,21 @@ structure IDeque :> IDEQUE =
             (f, b)
          end
          
+      fun isEmpty (f, b) =
+         (case !(next f) of
+             End _ => true
+           | _ => false)
+
       fun reset (f, b) =
          (
-         (* disconnect from the previous elements so that a delete cannot reconnect them *)
-         prev (! (next f)) := Null;
-         next (! (prev b)) := Null;
+         if isEmpty (f, b) then
+            ()
+         else
+            (* disconnect from the previous elements so that a delete cannot reconnect them *)
+            (
+            prev (! (next f)) := Null;
+            next (! (prev b)) := Null
+            );
          next f := b;
          prev b := f
          )
@@ -66,11 +76,6 @@ structure IDeque :> IDEQUE =
             prev b := new;
             next curr := new
          end
-
-      fun isEmpty (f, b) =
-         (case !(next f) of
-             End _ => true
-           | _ => false)
 
       exception Empty
 
