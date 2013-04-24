@@ -66,6 +66,8 @@ local
         streamable.sml
         iqueue.sig
         iqueue.sml
+        ideque.sig
+        ideque.sml
         streamable-mono.sig
         parsing.sig
         digital-signature.sig
@@ -154,6 +156,7 @@ in
         signature HASH_INCREMENT
         signature HASH_TABLE
         signature HASHABLE
+        signature IDEQUE
         signature IMPERATIVE_PQUEUE
         signature IQUEUE
         signature LEX_ENGINE
@@ -226,6 +229,7 @@ in
         structure FieldF2m
         structure FieldFp
         structure FromString
+        structure IDeque
 	(* Int *)
 	structure IntListDict
 	structure IntListSet
