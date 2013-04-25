@@ -68,37 +68,44 @@ functor ListPreDict (structure Key : ORDERED)
                           ((key', y) :: d, present)
                        end))
 
-      fun operate l key absentf presentf =
+      fun operate' l key absentf presentf =
          (case l of
              [] =>
-                let
-                   val x = absentf ()
-                in
-                   (NONE, x, [(key, x)])
-                end
+                (case absentf () of
+                    NONE =>
+                       (NONE, NONE, [])
+                  | z as SOME x =>
+                       (NONE, z, [(key, x)]))
            | (key', y) :: rest =>
                 (case Key.compare (key, key') of
                     LESS =>
-                       let
-                          val x = absentf ()
-                       in
-                          (NONE, x, (key, x) :: l)
-                       end
+                       (case absentf () of
+                           NONE =>
+                              (NONE, NONE, l)
+                         | z as SOME x =>
+                              (NONE, z, (key, x) :: l))
                   | EQUAL =>
-                       let
-                          val x = presentf y
-                       in
-                          (SOME y, x, (key, x) :: rest)
-                       end
+                       (case presentf y of
+                           NONE =>
+                              (SOME y, NONE, rest)
+                         | z as SOME x =>
+                              (SOME y, z, (key, x) :: rest))
                   | GREATER =>
                        let
-                          val (ante, post, rest') = operate rest key absentf presentf
+                          val (ante, post, rest') = operate' rest key absentf presentf
                        in
                           (ante, post, (key', y) :: rest')
                        end))
 
+      fun operate dict key absentf presentf =
+         let
+            val (x, y, d) = operate' dict key (SOME o absentf) (SOME o presentf)
+         in
+            (x, valOf y, d)
+         end
+         
       fun insertMerge dict key x f =
-         #3 (operate dict key (fn () => x) f)
+         #3 (operate' dict key (fn () => SOME x) (SOME o f))
 
       fun find l key =
          (case l of

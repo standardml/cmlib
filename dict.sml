@@ -49,19 +49,28 @@ functor DictFun (D : PRE_DICT)
             ((n', d'), present)
          end
 
-      fun operate (n, d) key absentf presentf =
+      fun operate' (n, d) key absentf presentf =
          let
-            val (old, new, d') = D.operate d key absentf presentf
+            val (old, new, d') = D.operate' d key absentf presentf
             val n' =
-               (case old of
-                   NONE => n+1
-                 | SOME _ => n)
+               (case (old, new) of
+                   (NONE, NONE) => n
+                 | (SOME _, NONE) => n-1
+                 | (NONE, SOME _) => n+1
+                 | (SOME _, SOME _) => n)
          in
             (old, new, (n', d'))
          end
 
+      fun operate dict key absentf presentf =
+         let
+            val (x, y, d) = operate' dict key (SOME o absentf) (SOME o presentf)
+         in
+            (x, valOf y, d)
+         end
+         
       fun insertMerge dict key x f =
-         #3 (operate dict key (fn () => x) f)
+         #3 (operate' dict key (fn () => SOME x) (SOME o f))
 
       fun union (dict1 as (n1, d1)) (dict2 as (n2, d2)) f =
          if n1 <= n2 then

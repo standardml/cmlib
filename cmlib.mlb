@@ -200,6 +200,7 @@ in
         structure Arith
         structure ArraySequence
         structure Bytestring
+        structure BytestringHashable
         structure Bytesubstring
         structure BytesubstringMonoStreamable
 	(* Char *)
@@ -294,6 +295,7 @@ in
 	structure SymbolSplaySet
 	structure SymbolSplayDict
         structure Susp
+        structure TimeOrdered
         structure TreeSequence
         structure IUnionFind
 	(* Unit *)
@@ -307,6 +309,8 @@ in
 	structure UnitSplaySet
 	structure UnitSplayDict
         structure Weak
+        structure Word8Hashable
+        structure WordHashable
 
         functor CBCCipherFun
         functor CFBCipherFun

@@ -14,7 +14,7 @@ structure IDeque :> IDEQUE =
 
       type 'a ideque = 'a qbody * 'a qbody
 
-      type idequeNode = unit -> unit
+      type idequeNode = (unit -> unit) * (unit -> bool)
 
       exception Orphan
       
@@ -126,6 +126,13 @@ structure IDeque :> IDEQUE =
          fwd := Null
          )
 
+      fun doOrphan bwd fwd () =
+         (case !bwd of
+             Null => true
+           | _ => (case !fwd of
+                      Null => true
+                    | _ => false))
+
       fun insertFrontNode (f, b) x =
          let
             val curr = ! (next f)
@@ -135,7 +142,7 @@ structure IDeque :> IDEQUE =
          in
             next f := new;
             prev curr := new;
-            doDelete bwd fwd
+            (doDelete bwd fwd, doOrphan bwd fwd)
          end
 
       fun insertBackNode (f, b) x =
@@ -147,11 +154,13 @@ structure IDeque :> IDEQUE =
          in
             prev b := new;
             next curr := new;
-            doDelete bwd fwd
+            (doDelete bwd fwd, doOrphan bwd fwd)
          end
 
-      fun delete f = f ()
+      fun delete (f, _) = f ()
 
-      fun dummy () = raise Orphan
+      fun orphan (_, f) = f ()
+
+      val dummy = ((fn () => raise Orphan), (fn () => true))
 
    end

@@ -20,7 +20,9 @@ signature IDEQUE =
       val insertFrontNode : 'a ideque -> 'a -> idequeNode
       val insertBackNode : 'a ideque -> 'a -> idequeNode
 
+      (* NB: resetting an ideque does not necessarily mark all its elements as orphans. *)
       exception Orphan
       val delete : idequeNode -> unit
       val dummy : idequeNode
+      val orphan : idequeNode -> bool
    end

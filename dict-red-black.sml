@@ -87,25 +87,33 @@ functor RedBlackPreDict (structure Key : ORDERED)
                   | GREATER =>
                        lookup right key))
 
-      fun operate tree key absentf presentf =
+      fun operate' tree key absentf presentf =
          (case search (fn (key', _) => Key.compare (key, key')) tree [] of
              (Leaf, zipper) =>
-                let
-                   val datum = absentf ()
-                in
-                   (NONE, datum,
-                    zipRed ((key, datum), Leaf, Leaf) zipper)
-                end
+                (case absentf () of
+                    NONE =>
+                       (NONE, NONE, tree)
+                  | y as SOME datum =>
+                       (NONE, y,
+                        zipRed ((key, datum), Leaf, Leaf) zipper))
            | (Node (color, (_, datum), left, right), zipper) =>
-                let
-                   val datum' = presentf datum
-                in
-                   (SOME datum, datum',
-                    zip (Node (color, (key, datum'), left, right)) zipper)
-                end)
+                (case presentf datum of
+                    NONE =>
+                       (SOME datum, NONE,
+                        delete color left right zipper)
+                  | y as SOME datum' =>
+                       (SOME datum, y,
+                        zip (Node (color, (key, datum'), left, right)) zipper)))
 
+      fun operate dict key absentf presentf =
+         let
+            val (x, y, d) = operate' dict key (SOME o absentf) (SOME o presentf)
+         in
+            (x, valOf y, d)
+         end
+         
       fun insertMerge dict key x f =
-         #3 (operate dict key (fn () => x) f)
+         #3 (operate' dict key (fn () => SOME x) (SOME o f))
 
       fun foldl f x tree =
          (case tree of

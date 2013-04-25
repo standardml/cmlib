@@ -19,6 +19,7 @@ signature HASH_TABLE =
       val operate : 'a table -> key -> (unit -> 'a) -> ('a -> 'a) -> 'a option * 'a
       val insertMerge : 'a table -> key -> 'a -> ('a -> 'a) -> unit
       val lookupOrInsert : 'a table -> key -> (unit -> 'a) -> 'a
+      val lookupOrInsert' : 'a table -> key -> (unit -> 'a) -> 'a * bool   (* true if already present *)
 
       val toList : 'a table -> (key * 'a) list
       val fold : (key * 'a * 'b -> 'b) -> 'b -> 'a table -> 'b

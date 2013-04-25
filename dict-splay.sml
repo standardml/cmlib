@@ -84,14 +84,14 @@ functor SplayRDict (structure Key : ORDERED)
                           (tree, false))
                 end)
 
-      fun operate tree key absentf presentf =
+      fun operate' tree key absentf presentf =
          (case tree of
              Leaf =>
-                let
-                   val datum = absentf ()
-                in
-                   (NONE, datum, singleton key datum)
-                end
+                (case absentf () of
+                    NONE =>
+                       (NONE, NONE, Leaf)
+                  | y as SOME datum =>
+                       (NONE, y, singleton key datum))
            | Node root =>
                 let
                    val (order, (label as (key', datum'), left, right)) =
@@ -99,30 +99,37 @@ functor SplayRDict (structure Key : ORDERED)
                 in
                    (case order of
                        EQUAL =>
-                          let
-                             val datum = presentf datum'
-                          in
-                             (SOME datum', datum,
-                              Node (ref ((key, datum), left, right)))
-                          end
+                          (case presentf datum' of
+                              NONE =>
+                                 (SOME datum', NONE, join left right)
+                            | y as SOME datum =>
+                                 (SOME datum', y,
+                                  Node (ref ((key, datum), left, right))))
                      | LESS =>
-                          let
-                             val datum = absentf ()
-                          in
-                             (NONE, datum,
-                              Node (ref ((key, datum), left, Node (ref (label, Leaf, right)))))
-                          end
+                          (case absentf () of
+                              NONE =>
+                                 (NONE, NONE, Node (ref (label, left, right)))
+                            | y as SOME datum =>
+                                 (NONE, y,
+                                  Node (ref ((key, datum), left, Node (ref (label, Leaf, right))))))
                      | GREATER =>
-                          let
-                             val datum = absentf ()
-                          in
-                             (NONE, datum,
-                              Node (ref ((key, datum), Node (ref (label, left, Leaf)), right)))
-                          end)
+                          (case absentf () of
+                              NONE =>
+                                 (NONE, NONE, Node (ref (label, left, right)))
+                            | y as SOME datum =>
+                                 (NONE, y,
+                                  Node (ref ((key, datum), Node (ref (label, left, Leaf)), right)))))
                 end)
 
+      fun operate dict key absentf presentf =
+         let
+            val (x, y, d) = operate' dict key (SOME o absentf) (SOME o presentf)
+         in
+            (x, valOf y, d)
+         end
+         
       fun insertMerge dict key x f =
-         #3 (operate dict key (fn () => x) f)
+         #3 (operate' dict key (fn () => SOME x) (SOME o f))
 
       fun find tree key =
          (case tree of

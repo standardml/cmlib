@@ -32,6 +32,18 @@ structure IntInfOrdered
    end
 
 
+structure TimeOrdered
+   :> ORDERED where type t = Time.time
+   =
+   struct
+      type t = Time.time
+
+      val eq : t * t -> bool = op =
+      val compare = Time.compare
+
+   end
+
+
 structure StringOrdered
    :> ORDERED where type t = string
    =

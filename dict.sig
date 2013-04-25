@@ -1,4 +1,5 @@
 
+(* Not the best name for this, but we'll leave DICT for the other one for backwards compatibility. *)
 signature PRE_DICT =
    sig
 
@@ -21,6 +22,13 @@ signature PRE_DICT =
          was absent), the new value, and the new dictionary.
       *)
       val operate : 'a dict -> key -> (unit -> 'a) -> ('a -> 'a) -> 'a option * 'a * 'a dict
+
+      (* (operate' dict key absentf presentf) looks up key in dict.  If key maps to x, it evaluates
+         y = presentf(x).  If key is absent, it evaluates y = absentf ().  If y = NONE, it deletes
+         the entry; if y = SOME z, it inserts or updates the entry with z.  It then returns SOME x
+         (NONE if key was absent), y, and the new dictionary.
+      *)
+      val operate' : 'a dict -> key -> (unit -> 'a option) -> ('a -> 'a option) -> 'a option * 'a option * 'a dict
 
       (* (operate dict key y presentf) looks up key in dict.  If key maps to x, it replaces x with
          (presentf x).  If key is absent, it insert y.  It then returns the new dictionary.

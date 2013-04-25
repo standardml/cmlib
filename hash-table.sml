@@ -267,6 +267,13 @@ functor HashTable (structure Key : HASHABLE)
       fun lookupOrInsert table key datumf =
          #2 (operate table key datumf (fn x => x))
 
+      fun lookupOrInsert' table key datumf =
+         let
+            val (old, datum) = operate table key datumf (fn x => x)
+         in
+            (datum, isSome old)
+         end
+
       fun foldEntry f x entry =
          (case entry of
              Nil => x
