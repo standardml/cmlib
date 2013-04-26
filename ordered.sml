@@ -38,9 +38,8 @@ structure TimeOrdered
    struct
       type t = Time.time
 
-      val eq : t * t -> bool = op =
+      val eq : Time.time * Time.time -> bool = op =
       val compare = Time.compare
-
    end
 
 

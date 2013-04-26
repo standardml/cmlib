@@ -3,10 +3,14 @@ structure ConvertWord : CONVERT_WORD =
    struct
 
       type word = Word.word
+      type wordlg = Word32.word
       type word8 = Word8.word
       type word31 = Word31.word
       type word32 = Word32.word
       type word64 = Word64.word
+
+
+      (* A lot of this could be simpler if LargeWord were the largest word size. *)
 
 
       (* This stuff all depends on the size of LargeWord. *)
@@ -166,7 +170,8 @@ structure ConvertWord : CONVERT_WORD =
       fun bytesToWord64SL s = bytesToWord64L (Bytesubstring.string s)        
 
 
-      (* This stuff depends on the size of Word. *)
+
+      (* This stuff depends on the size of Word/LargeWord. *)
 
       val wordToWord8 = word31ToWord8
       fun wordToWord31 w = w
@@ -191,5 +196,31 @@ structure ConvertWord : CONVERT_WORD =
       val bytesToWordSB = bytesToWord31SB
       val bytesToWordL = bytesToWord31L
       val bytesToWordSL = bytesToWord31SL
+
+      val wordLgToWord = Word.fromLarge
+      val wordLgToWord8 = Word8.fromLarge
+      val wordLgToWord31 = Word31.fromLarge
+      fun wordLgToWord32 w = w
+      fun wordLgToWord32X w = w
+      val wordLgToWord64 = word32ToWord64
+      val wordLgToWord64X = word32ToWord64X
+      val wordLgToIntInf = LargeWord.toLargeInt
+      val wordLgToBytesB = word32ToBytesB
+      val wordLgToBytesL = word32ToBytesL
+
+      val wordToWordLg = Word.toLarge
+      val word8ToWordLg = Word8.toLarge
+      val word8ToWordLgX = Word8.toLargeX
+      val word31ToWordLg = Word31.toLarge
+      val word31ToWordLgX = Word31.toLargeX
+      val word32ToWordLg = Word32.toLarge
+      val word32ToWordLgX = Word32.toLargeX
+      val word64ToWordLg = word64ToWord32
+      val word64ToWordLgX = word64ToWord32
+      val intInfToWordLg = LargeWord.fromLargeInt
+      val bytesToWordLgB = bytesToWord32B
+      val bytesToWordLgSB = bytesToWord32SB
+      val bytesToWordLgL = bytesToWord32L
+      val bytesToWordLgSL = bytesToWord32SL
 
    end
