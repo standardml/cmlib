@@ -110,6 +110,8 @@ functor HashTable (structure Key : HASHABLE)
                           )))
          end
          
+      fun size (ref {residents, ...} : 'a table) = !residents
+
       fun insert (table as ref { residents, size, arr, ... } : 'a table) key datum =
          let
             val hash = Key.hash key

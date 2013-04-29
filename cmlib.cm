@@ -40,6 +40,7 @@ library
         signature PSTREAM
         signature PSUSP
         signature QUEUE
+        signature RAIO
         signature RAND
         signature RANDOM
         signature RDICT
@@ -132,6 +133,7 @@ library
 	structure PStream
 	structure PSusp
 	structure Queue
+        structure RAIO
         structure RehashRandom
         structure RIPEMD160
         structure SHA256
@@ -307,6 +309,8 @@ is
         psusp.sml
 	queue.sig
 	queue.sml
+        raio.sig
+        raio.sml
         rand.sig
         rand-from-rand32.sml
         rand-from-random.sml

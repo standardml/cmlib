@@ -4,6 +4,8 @@ local
    ann "sequenceNonUnit ignore" in
         from-string.sig
         from-string.sml
+        raio.sig
+        raio.sml
         bytestring.sig
         bytestring.sml
         bytesubstring.sig
@@ -173,6 +175,7 @@ in
         signature PSTREAM
         signature PSUSP
         signature QUEUE
+        signature RAIO
         signature RAND
         signature RANDOM
         signature RDICT
@@ -265,6 +268,7 @@ in
 	structure PStream
 	structure PSusp
 	structure Queue
+        structure RAIO
         structure RehashRandom
         structure RIPEMD160
         structure SHA256

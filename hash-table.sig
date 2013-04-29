@@ -10,6 +10,7 @@ signature HASH_TABLE =
       val table : int -> 'a table
       val reset : 'a table -> int -> unit
 
+      val size : 'a table -> int
       val member : 'a table -> key -> bool
       val insert : 'a table -> key -> 'a -> unit
       val remove : 'a table -> key -> unit
