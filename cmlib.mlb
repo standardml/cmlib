@@ -6,8 +6,6 @@ local
         from-string.sml
         bytestring.sig
         bytestring.sml
-        io-util.sig
-        io-util.sml
         bytesubstring.sig
         bytesubstring.sml
         random.sig
@@ -133,6 +131,11 @@ local
         weak.sml
         pos.sig
         pos.sml
+        mini-io.sig
+        seek-io.sig
+        seek-io.sml
+        multi-file-io.sig
+        multi-file-io.sml
    end
 in
         signature ARITH
@@ -161,9 +164,10 @@ in
         signature HASHABLE
         signature IDEQUE
         signature IMPERATIVE_PQUEUE
-        signature IO_UTIL
         signature IQUEUE
         signature LEX_ENGINE
+        signature MINI_IO
+        signature MULTI_FILE_IO
 	signature MULTI_TABLE
         signature ORDERED
         signature PARSE_ENGINE
@@ -179,6 +183,7 @@ in
         signature RAND
         signature RANDOM
         signature RDICT
+        signature SEEK_IO
         signature SEQUENCE
         signature SET
         signature SHARED_SECRET
@@ -202,6 +207,7 @@ in
         structure AESRandom
         structure Arith
         structure ArraySequence
+        structure BinSeekIO
         structure Bytestring
         structure BytestringHashable
         structure Bytesubstring
@@ -256,7 +262,6 @@ in
 	structure IntInfRedBlackDict
 	structure IntInfSplaySet
 	structure IntInfSplayDict
-        structure IOUtil
         structure IQueue
         structure JenkinsHash
         structure ListSequence
@@ -339,6 +344,7 @@ in
         functor ListHashable
         functor ListOrdered
         functor ListSet
+        functor MultiFileIOFun
         functor MonomorphizeStreamable
         functor OFBCipherFun
         functor PairingPQueue
@@ -350,6 +356,7 @@ in
         functor RedBlackDict
         functor RedBlackPreDict
         functor RedBlackSet
+        functor SeekIOFun
         functor SetHashable
         functor SplayDict
         functor SplayRDict

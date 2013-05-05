@@ -26,9 +26,10 @@ library
         signature HASHABLE
         signature IDEQUE
         signature IMPERATIVE_PQUEUE
-        signature IO_UTIL
         signature IQUEUE
         signature LEX_ENGINE
+        signature MINI_IO
+	signature MULTI_FILE_IO
 	signature MULTI_TABLE
         signature ORDERED
         signature PARSE_ENGINE
@@ -44,6 +45,7 @@ library
         signature RAND
         signature RANDOM
         signature RDICT
+        signature SEEK_IO
         signature SEQUENCE
         signature SET
         signature SHARED_SECRET
@@ -67,6 +69,7 @@ library
         structure AESRandom
         structure Arith
         structure ArraySequence
+        structure BinSeekIO
         structure Bytestring
         structure BytestringHashable
         structure Bytesubstring
@@ -121,14 +124,13 @@ library
 	structure IntInfRedBlackDict
 	structure IntInfSplaySet
 	structure IntInfSplayDict
-        structure IOUtil
         structure IQueue
         structure JenkinsHash
         structure ListSequence
         structure ListStreamable
         structure Mergesort
-        structure MTRand
         structure MJHash
+        structure MTRand
 	structure Pos
 	structure PrettyPrint
 	structure PStream
@@ -204,6 +206,7 @@ library
         functor ListHashable
         functor ListOrdered
         functor ListSet
+        functor MultiFileIOFun
         functor OFBCipherFun
         functor PairingPQueue
         functor ParseEngineFun
@@ -214,6 +217,7 @@ library
         functor RedBlackDict
         functor RedBlackPreDict
         functor RedBlackSet
+        functor SeekIOFun
         functor SetHashable
         functor SplayDict
         functor SplayRDict
@@ -278,8 +282,6 @@ is
 	hashable.sml
 	hash-table.sig
 	hash-table.sml
-        io-util.sig
-        io-util.sml
         ideque.sig
         ideque.sml
 	iqueue.sig
@@ -287,6 +289,9 @@ is
 	lex-engine.sig
 	lex-engine.sml
 	mergesort.sml
+        mini-io.sig
+        multi-file-io.sig
+        multi-file-io.sml
 	multi-table.sig
 	multi-table-dict.sml
 	ordered.sig
@@ -320,6 +325,8 @@ is
         random-rehash.sml
 	red-black-tree.sml
         ripemd160.sml
+        seek-io.sig
+        seek-io.sml
         sequence.sig
         sequence-array.sml
         sequence-list.sml
