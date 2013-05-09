@@ -11,6 +11,8 @@ signature FORTUNA =
 
       include RANDOM where type seed = Bytestring.string
 
+      val poolCount : int
+
       (* takes (pool number, entropy) *)
       val addEntropy : int * Bytestring.string -> unit
 

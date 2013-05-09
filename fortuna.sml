@@ -1,6 +1,4 @@
 
-(* Not implementing seed file yet. *)
-
 functor FortunaFun (structure Random : RANDOM where type seed = Bytestring.string)
    :>
    FORTUNA
