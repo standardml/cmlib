@@ -1,5 +1,6 @@
 
-functor EllipticCurveCryptoFun (structure EllipticCurve : ELLIPTIC_CURVE)
+functor EllipticCurveCryptoFun (structure EllipticCurve : ELLIPTIC_CURVE
+                                structure SecureRandom : RANDOM)
    :>
    ELLIPTIC_CURVE_CRYPTO
    where type EC.Field.index = EllipticCurve.Field.index
@@ -8,7 +9,7 @@ functor EllipticCurveCryptoFun (structure EllipticCurve : ELLIPTIC_CURVE)
    struct
 
       structure EC = EllipticCurve
-      structure SecureRand = RandFromRandom (structure Random = AESFortuna)
+      structure R = RandFromRandom (structure Random = SecureRandom)
 
       open IntInf
 
@@ -119,7 +120,7 @@ functor EllipticCurveCryptoFun (structure EllipticCurve : ELLIPTIC_CURVE)
 
       fun newkey ({curve, base, order, ...}:param) =
          let
-            val d = SecureRand.randIntInf (order-1) + 1
+            val d = R.randIntInf (order-1) + 1
          in
             (mult (curve, d, base), d)
          end
@@ -131,5 +132,12 @@ functor EllipticCurveCryptoFun (structure EllipticCurve : ELLIPTIC_CURVE)
    end
 
 
-structure EllipticCurveCryptoFp = EllipticCurveCryptoFun (structure EllipticCurve = EllipticCurveFp)
-structure EllipticCurveCryptoF2m = EllipticCurveCryptoFun (structure EllipticCurve = EllipticCurveF2m)
+structure EllipticCurveCryptoFp =
+   EllipticCurveCryptoFun
+   (structure EllipticCurve = EllipticCurveFp
+    structure SecureRandom = AESFortuna)
+
+structure EllipticCurveCryptoF2m =
+   EllipticCurveCryptoFun
+   (structure EllipticCurve = EllipticCurveF2m
+    structure SecureRandom = AESFortuna)

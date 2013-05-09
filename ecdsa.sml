@@ -1,5 +1,6 @@
 
-functor ECDSAFun (structure EllipticCurveCrypto : ELLIPTIC_CURVE_CRYPTO)
+functor ECDSAFun (structure EllipticCurveCrypto : ELLIPTIC_CURVE_CRYPTO
+                  structure SecureRandom : RANDOM)
    :>
    ECDSA
    where type EC.Field.index = EllipticCurveCrypto.EC.Field.index
@@ -7,7 +8,7 @@ functor ECDSAFun (structure EllipticCurveCrypto : ELLIPTIC_CURVE_CRYPTO)
    =
    struct
 
-      structure SecureRand = RandFromRandom (structure Random = AESFortuna)
+      structure R = RandFromRandom (structure Random = SecureRandom)
 
       open EllipticCurveCrypto
       open IntInf
@@ -27,7 +28,7 @@ functor ECDSAFun (structure EllipticCurveCrypto : ELLIPTIC_CURVE_CRYPTO)
                the hash used to generate the message is weak.
             *)
             val k =
-               xorb (SecureRand.randBits (Int.+ (log2 order, 1)), e) mod (order-1) + 1
+               xorb (R.randBits (Int.+ (log2 order, 1)), e) mod (order-1) + 1
          in
             (case mult (curve, k, base) of
                 NONE =>
@@ -74,5 +75,12 @@ functor ECDSAFun (structure EllipticCurveCrypto : ELLIPTIC_CURVE_CRYPTO)
    end
 
 
-structure ECDSAp = ECDSAFun (structure EllipticCurveCrypto = EllipticCurveCryptoFp)
-structure ECDSA2m = ECDSAFun (structure EllipticCurveCrypto = EllipticCurveCryptoF2m)
+structure ECDSAp =
+   ECDSAFun
+   (structure EllipticCurveCrypto = EllipticCurveCryptoFp
+    structure SecureRandom = AESFortuna)
+
+structure ECDSA2m =
+   ECDSAFun 
+   (structure EllipticCurveCrypto = EllipticCurveCryptoF2m
+    structure SecureRandom = AESFortuna)

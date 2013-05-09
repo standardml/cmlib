@@ -149,7 +149,8 @@ structure FieldF2m
    end
 
 
-structure EllipticCurveF2m
+(* Cryptographic randomness not required. *)
+functor EllipticCurveF2mFun (structure InsecureRand : RAND)
    :>
    ELLIPTIC_CURVE
    where type Field.index = int * IntInf.int
@@ -275,7 +276,9 @@ structure EllipticCurveF2m
          let
             fun loop () =
                let
-                  (* Don't need cryptographic randomness here. *)
+                  (* Don't need cryptographic randomness here. This is just a randomized
+                     algorithm, not key or nonce generation.
+                  *)
                   val t = InsecureRand.randBits m
       
                   fun innerloop (z, w, i) =
@@ -335,3 +338,6 @@ structure EllipticCurveF2m
             handle Arith.NotSquare => NONE
 
    end
+
+
+structure EllipticCurveF2m = EllipticCurveF2mFun (structure InsecureRand = MTRand)

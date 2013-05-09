@@ -1,5 +1,6 @@
 
-structure Arith :> ARITH =
+functor ArithFun (structure Rand : RAND)
+   :> ARITH =
    struct
 
       open IntInf
@@ -132,8 +133,6 @@ structure Arith :> ARITH =
          end
 
 
-      structure R = MTRand
-
       fun isprime x =
          let
             val m = x - 1
@@ -142,7 +141,7 @@ structure Arith :> ARITH =
             (* Miller-Rabin test *)
             fun maybePrime () =
                let
-                  val a = R.randIntInf m + 1
+                  val a = Rand.randIntInf m + 1
                   
                   val atod = powmod (a, d, x)
 
@@ -199,7 +198,7 @@ structure Arith :> ARITH =
 
                          fun loopz () =
                             let
-                               val z = R.randIntInf (p-3) + 2
+                               val z = Rand.randIntInf (p-3) + 2
                             in
                                if legendre (z, p) = p-1 then
                                   z
@@ -242,3 +241,4 @@ structure Arith :> ARITH =
    end
 
 
+structure Arith = ArithFun (structure Rand = MTRand)

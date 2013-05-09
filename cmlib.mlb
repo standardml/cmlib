@@ -321,6 +321,7 @@ in
         structure Word8Hashable
         structure WordHashable
 
+        functor ArithFun
         functor CBCCipherFun
         functor CFBCipherFun
         functor CTRCipherFun
@@ -332,6 +333,7 @@ in
         functor ECDSAFun
         functor EllipticCurveCryptoFun
         functor EllipticCurveDERFun
+        functor EllipticCurveF2mFun
         functor FortunaFun
         functor HashTable
 	functor HashTableTable
