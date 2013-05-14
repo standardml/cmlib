@@ -59,18 +59,15 @@ functor MultiFileIOFun (structure ImpIO
       type 'a multi =
          { master : string,
            closed : bool ref,
-           last : I.int ref,
            curr : 'a ref,
            max : I.int ref,
            pos : I.int ref }
 
       (* Invariants:
          !curr is closed iff !closed
-         !last >= 0
          !max is divisible by pieceSize
          !max-pieceSize <= !pos < !max  orelse  !closed
-         !max <= (!last+1) * pieceSize 
-         all pieces up to !last exist
+         all pieces up to the last one exist
       *)
 
            
@@ -138,7 +135,6 @@ functor MultiFileIOFun (structure ImpIO
          in
             { master = filename,
               closed = ref false,
-              last = ref (lastPiece filename),
               curr = ref s,
               max = ref pieceSize,
               pos = ref zero }
@@ -175,7 +171,6 @@ functor MultiFileIOFun (structure ImpIO
          in
             { master = filename,
               closed = ref false,
-              last = ref n,
               curr = ref s,
               max = ref ((n + one) * pieceSize),
               pos = ref (n * pieceSize + I.fromInt (Position.toInt (fileSize name)))}
@@ -219,15 +214,15 @@ functor MultiFileIOFun (structure ImpIO
             !pos
             
 
-      (* pos invariant may not apply; instead !pos < (!last + 1) * pieceSize *)
-      fun adjustIn ({master, closed, last, curr, pos, max, ...}:instream) =
+      (* pos invariant may not apply *)
+      fun adjustIn ({master, closed, curr, pos, max, ...}:instream) =
          let 
             val () = ImpIO.closeIn (!curr)
             val n = !pos div pieceSize
+            val name = piecename master n
          in
-            if n <= !last then
+            if fileExists name then
                let
-                  val name = piecename master n
                   val s = ImpIO.openIn name
                   val i = Position.fromInt (I.toInt (!pos mod pieceSize))
                in
@@ -247,29 +242,35 @@ functor MultiFileIOFun (structure ImpIO
          end
 
 
-      (* pos invariant may not apply; instead !pos < (!last + 1) * pieceSize *)
-      fun adjustOut ({master, closed, last, curr, pos, max, ...}:outstream) =
+      (* pos invariant may not apply *)
+      exception AdjustOutOfRange
+      fun adjustOut ({master, closed, curr, pos, max, ...}:outstream) allowExtend =
          let 
             val () = ImpIO.closeOut (!curr)
             val n = !pos div pieceSize
             val name = piecename master n
 
             val s =
-               if n <= !last then
+               if fileExists name then
                   ImpIO.openAppend name
+               else if allowExtend then
+                  ImpIO.openOut name
                else
-                  (* by precondition, n = !last+1 *)
-                  let in
-                     last := n;
-                     ImpIO.openOut name
-                  end
+                  raise AdjustOutOfRange
 
             val i = Position.fromInt (I.toInt (!pos mod pieceSize))
          in
             SeekIO.seekOut (s, i);
             curr := s;
-            max := (n + one) * pieceSize
+            max := (n + one) * pieceSize;
+            true
          end
+         handle
+            AdjustOutOfRange =>
+               let in
+                  closed := true;
+                  false
+               end
 
 
       fun input1 (stream as {closed, curr, max, pos, ...}:instream) =
@@ -321,19 +322,20 @@ functor MultiFileIOFun (structure ImpIO
                               closed := true;
                               left
                            end
-                        else if (pos := !max; adjustIn stream) then
-                           let
-                              val rightsz = Int.- (sz, leftsz)
-                              val right = ImpIO.inputN (!curr, rightsz)
-                              val rightszActual = String.size right
-                           in
-                              pos := !pos + I.fromInt rightszActual;
-   
-                              String.^ (left, right)
-                           end
                         else
-                           (* next file didn't exist *)
-                           left
+                           if (pos := !max; adjustIn stream) then
+                              let
+                                 val rightsz = Int.- (sz, leftsz)
+                                 val right = ImpIO.inputN (!curr, rightsz)
+                                 val rightszActual = String.size right
+                              in
+                                 pos := !pos + I.fromInt rightszActual;
+      
+                                 String.^ (left, right)
+                              end
+                           else
+                              (* next file didn't exist *)
+                              left
                      end
                else
                   let
@@ -359,7 +361,7 @@ functor MultiFileIOFun (structure ImpIO
                pos := !pos + one;
 
                if !pos >= !max then
-                  adjustOut stream
+                  (adjustOut stream true; ())
                else
                   ()
             end
@@ -384,7 +386,7 @@ functor MultiFileIOFun (structure ImpIO
                      in
                         ImpIO.output (!curr, left);
                         pos := !max;
-                        adjustOut stream;
+                        (adjustOut stream true; ());
                         let
                            val rightsz = Int.- (sz, leftsz)
                            val right = String.substring (vec, leftsz, rightsz)
@@ -420,7 +422,7 @@ functor MultiFileIOFun (structure ImpIO
             exception OutOfRange
 
 
-            fun seekIn (stream as {master, closed, last, curr, max, pos, ...}:instream, i) =
+            fun seekIn (stream as {master, closed, curr, max, pos, ...}:instream, i) =
                if !closed then
                   raise (IO.Io { name=master, function="seekIn", cause=IO.ClosedStream })
                else if !max > i andalso i >= !max - pieceSize then
@@ -430,21 +432,17 @@ functor MultiFileIOFun (structure ImpIO
                      pos := i
                   end
                else
-                  let 
-                     val n = i div pieceSize
-                  in
-                     if n > !last then
-                        raise (IO.Io { name=master, function="seekIn", cause=OutOfRange })
+                  let in
+                     pos := i;
+
+                     if adjustIn stream then
+                        ()
                      else
-                        let in
-                           pos := i;
-                           adjustIn stream;
-                           ()
-                        end
+                        raise (IO.Io { name=master, function="seekIn", cause=OutOfRange })
                   end
 
                            
-            fun seekOut (stream as {master, closed, last, curr, max, pos, ...}:outstream, i) =
+            fun seekOut (stream as {master, closed, curr, max, pos, ...}:outstream, i) =
                if !closed then
                   raise (IO.Io { name=master, function="seekOut", cause=IO.ClosedStream })
                else if !max > i andalso i >= !max - pieceSize then
@@ -454,19 +452,16 @@ functor MultiFileIOFun (structure ImpIO
                      pos := i
                   end
                else
-                  let 
-                     val n = i div pieceSize
-                  in
-                     if n > !last then
-                        raise (IO.Io { name=master, function="seekOut", cause=OutOfRange })
+                  let in
+                     pos := i;
+
+                     if adjustOut stream false then
+                        ()
                      else
-                        let in
-                           pos := i;
-                           adjustOut stream
-                        end
+                        (* Don't allow seeking to a non-existent piece, to avoid creating holes. *)
+                        raise (IO.Io { name=master, function="seekOut", cause=OutOfRange })
                   end
                            
          end
-
 
    end
