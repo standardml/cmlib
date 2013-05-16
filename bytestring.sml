@@ -20,6 +20,8 @@ structure Bytestring :> BYTESTRING =
       fun extract (s, start, leno) =
          Word8VectorSlice.vector (Word8VectorSlice.slice (s, start, leno))
 
+      fun isEmpty str = V.length str = 0
+
       fun op ^ (s1, s2) = V.concat [s1, s2]
 
       val concat = V.concat

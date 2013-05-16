@@ -11,6 +11,7 @@ signature BYTESTRING =
       val sub : string * int -> byte
       val extract : string * int * int option -> string
       val substring : string * int * int -> string
+      val isEmpty : string -> bool
       val ^ : string * string -> string
       val concat : string list -> string
       val null : string
