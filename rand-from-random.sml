@@ -9,6 +9,9 @@ functor RandFromRandom (structure Random : RANDOM)
       fun randWord8 () =
          hd (Bytestring.explode (Random.random 1))
 
+      fun randBool () =
+         Word8.andb (randWord8 (), 0w1) = 0w0
+
       fun randBits n =
          let
             val h = Word8.andb (Word8.<< (0w1, Word.fromInt (n mod 8)) - 0w1, randWord8 ())

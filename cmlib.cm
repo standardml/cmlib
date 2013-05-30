@@ -136,6 +136,7 @@ library
 	structure PStream
 	structure PSusp
 	structure Queue
+        structure RedBlackTree
         structure RehashRandom
         structure RIPEMD160
         structure SHA256
@@ -314,6 +315,8 @@ is
         pqueue-pairing.sml
         prettyprint.sig
         prettyprint.sml
+        pstream.sig
+        pstream.sml
         psusp.sig
         psusp.sml
 	queue.sig
@@ -325,6 +328,7 @@ is
         random.sig
         random-aes.sml
         random-rehash.sml
+        rdict.sig
 	red-black-tree.sml
         ripemd160.sml
         seek-io.sig
@@ -341,9 +345,6 @@ is
         shared-secret.sig
 	sort.sig
 	splay-tree.sml
-        pstream.sig
-        pstream.sml
-        rdict.sig
 	stream.sig
 	stream.sml
         stream-cipher-fun.sml

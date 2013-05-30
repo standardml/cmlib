@@ -1,7 +1,10 @@
 
 (* Mersenne Twister algorithm *)
 
-structure MTRand =
+structure MTRand 
+   :>
+   RAND where type seed = Word32.word
+   =
    RandFromRand32
    (structure Rand32 =
        struct
@@ -80,4 +83,3 @@ structure MTRand =
              end
     
        end)
-   

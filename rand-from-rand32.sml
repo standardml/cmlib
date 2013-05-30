@@ -1,10 +1,11 @@
 
-functor RandFromRand32 (structure Rand32 : sig
-                                              val randWord32 : unit -> Word32.word
-    
-                                              type seed
-                                              val reseed : seed -> unit
-                                           end)
+functor RandFromRand32 (structure Rand32
+                           : sig
+                                val randWord32 : unit -> Word32.word
+
+                                type seed
+                                val reseed : seed -> unit
+                             end)
    :>
    RAND
    where type seed = Rand32.seed
@@ -12,6 +13,8 @@ functor RandFromRand32 (structure Rand32 : sig
    struct
 
       open Rand32
+
+      fun randBool () = Word32.andb (randWord32 (), 0w1) = 0w0
 
       fun randWord8 () = ConvertWord.word32ToWord8 (randWord32 ())
 
