@@ -111,6 +111,9 @@ functor TestFun (structure Control : COLLECTION
 
       val _ = test 50000
 
+      val () =
+         print (name ^ " test passed\n")
+
    end
 
 

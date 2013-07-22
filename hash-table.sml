@@ -24,7 +24,7 @@ functor HashTable (structure Key : HASHABLE)
 
       exception Absent
 
-      fun resizeLoad n = n div 3 * 4
+      fun resizeLoad n = n div 4 * 3
 
       fun table sz =
          if sz <= 0 then
