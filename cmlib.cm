@@ -136,6 +136,7 @@ library
 	structure PStream
 	structure PSusp
 	structure Queue
+	structure Quicksort
         structure RedBlackTree
         structure RehashRandom
         structure RIPEMD160
@@ -321,6 +322,7 @@ is
         psusp.sml
 	queue.sig
 	queue.sml
+	quicksort.sml
         rand.sig
         rand-from-rand32.sml
         rand-from-random.sml

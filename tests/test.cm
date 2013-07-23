@@ -6,5 +6,7 @@ Group is
 
     mergesort-test.sml
     mergesort-qcheck.sml
+    quicksort-test.sml
     sets-dicts-test.sml
     test-collection.sml
+

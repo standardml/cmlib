@@ -106,6 +106,7 @@ local
         table.sig
         queue.sig
         queue.sml
+        quicksort.sml
         random-rehash.sml
         coord.sig
         coord.sml
@@ -274,6 +275,7 @@ in
 	structure PStream
 	structure PSusp
 	structure Queue
+	structure Quicksort
         structure RehashRandom
         structure RIPEMD160
         structure SHA256
