@@ -23,6 +23,8 @@ local
         hashable.sml
         hash-table.sig
         hash-table.sml
+        hash-table-dataless.sig
+        hash-table-dataless.sml
         symbol.sig
         ordered.sig
         symbol.sml
@@ -150,6 +152,7 @@ in
         signature COORDINATED_STREAM
         signature COROUTINE
         signature CRYPTO_HASH
+        signature DATALESS_HASH_TABLE
         signature DICT
         signature EC_FIELD
         signature ECDH
@@ -328,6 +331,7 @@ in
         functor CFBCipherFun
         functor CTRCipherFun
         functor CoercedStreamable
+        functor DatalessHashTable
         functor DictFun
 	functor DictTable
 	functor DictMultiTable

@@ -17,7 +17,19 @@ signature HASH_TABLE =
       val find : 'a table -> key -> 'a option
       val lookup : 'a table -> key -> 'a
 
+      (* (operate table key absentf presentf) looks up key in table.  If key maps to x, it replaces x with
+         (presentf x).  If key is absent, it inserts absentf ().  It then returns SOME x (NONE if key
+         was absent) and the new value.
+      *)
       val operate : 'a table -> key -> (unit -> 'a) -> ('a -> 'a) -> 'a option * 'a
+
+      (* (operate' dict key absentf presentf) looks up key in dict.  If key maps to x, it evaluates
+         y = presentf(x).  If key is absent, it evaluates y = absentf ().  If y = NONE, it deletes
+         the entry; if y = SOME z, it inserts or updates the entry with z.  It then returns SOME x
+         (NONE if key was absent), and y.
+      *)
+      val operate' : 'a table -> key -> (unit -> 'a option) -> ('a -> 'a option) -> 'a option * 'a option
+
       val insertMerge : 'a table -> key -> 'a -> ('a -> 'a) -> unit
       val lookupOrInsert : 'a table -> key -> (unit -> 'a) -> 'a
       val lookupOrInsert' : 'a table -> key -> (unit -> 'a) -> 'a * bool   (* true if already present *)

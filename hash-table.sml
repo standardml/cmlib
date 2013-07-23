@@ -8,77 +8,92 @@ functor HashTable (structure Key : HASHABLE)
 
       datatype 'a entry =
          Nil
-       | Cons of word * key * 'a ref * 'a entry ref
+       | Cons of word * key * 'a * 'a entry ref
 
-      (* This is a little clumsy, since the first entry in a bucket is modified
-         by updating the array and the remaining entries are modified using by 
-         assigning to a reference, but it's okay because we want to special-case
-         the first entry anyway.
-      *)
+      datatype 'a bucket =
+         Zero
+       | One of key * 'a
+       | Many of 'a entry ref  (* invariant: length >=2 *)
 
       type 'a table =
          { residents : int ref,  (* current number of residents *)
            size : word,
            thresh : int,         (* number of residents at which to resize *)
-           arr : 'a entry array } ref
+           arr : 'a bucket array } ref
 
       exception Absent
 
       fun resizeLoad n = n div 4 * 3
 
-      fun table sz =
+      fun initial sz =
          if sz <= 0 then
             raise (Fail "illegal size")
          else
-            ref { residents = ref 0,
-                  size = Word.fromInt sz,
-                  thresh = resizeLoad sz,
-                  arr = Array.array (sz, Nil) }
+            { residents = ref 0,
+              size = Word.fromInt sz,
+              thresh = resizeLoad sz,
+              arr = Array.array (sz, Zero) }
+
+      fun table sz = ref (initial sz)
 
       fun reset table sz =
-         if sz <= 0 then
-            raise (Fail "illegal size")
-         else
-            table := { residents = ref 0,
-                       size = Word.fromInt sz,
-                       thresh = resizeLoad sz,
-                       arr = Array.array (sz, Nil) }
+         table := initial sz
+
+      fun size (ref { residents, ... } : 'a table) = !residents
 
 
-      fun search hash key curr =
-         (case !curr of
+      fun findEntry lr hash key =
+         (case !lr of
              Nil =>
-                Nil
-           | entry as Cons (hash', key', datumref, next) =>
+                lr
+           | Cons (hash', key', _, rest) =>
                 if hash = hash' andalso Key.eq (key, key') then
-                   (
-                   curr := !next;  (* remove from list *)
-                   entry
-                   )
+                   lr
                 else
-                   search hash key next)
+                   findEntry rest hash key)
+
 
       fun resize (table as ref { residents, size, thresh, arr, ... } : 'a table) =
          if !residents < thresh then
             ()
          else
             let
-               val newsize = 2 * Word.toInt size + 1
+               val newsize = 2 * Word.toInt size
                val newsize' = Word.fromInt newsize
-               val arr' = Array.array (newsize, Nil)
+               val arr' = Array.array (newsize, Zero)
                
-               fun move entry =
-                  (case entry of
+               fun moveInto hash key datum =
+                  let
+                     val n = Word.toInt (hash mod newsize')
+                  in
+                     (case Array.sub (arr', n) of
+                         Zero =>
+                            Array.update (arr', n, One (key, datum))
+                       | One (key', datum') =>
+                            Array.update (arr', n,
+                                          Many (ref (Cons (hash, key, datum,
+                                                           ref (Cons (Key.hash key', key', datum',
+                                                                      ref Nil))))))
+                       | Many lr =>
+                            Array.update (arr', n, Many (ref (Cons (hash, key, datum, lr)))))
+                  end
+
+               fun moveList lr =
+                  (case !lr of
                       Nil => ()
-                    | Cons (hash, _, _, next) =>
-                         let
-                            val entry' = !next
-                            val n = Word.toInt (hash mod newsize')
-                         in
-                            next := Array.sub (arr', n);
-                            Array.update (arr', n, entry);
-                            move entry'
-                         end)
+                    | Cons (hash, key, datum, rest) =>
+                         (
+                         moveInto hash key datum;
+                         moveList rest
+                         ))
+
+               fun move bucket =
+                  (case bucket of
+                      Zero => ()
+                    | One (key, datum) =>
+                         moveInto (Key.hash key) key datum
+                    | Many lr =>
+                         moveList lr)
             in
                (* Move entries to new array. *)
                Array.app move arr;
@@ -89,202 +104,253 @@ functor HashTable (structure Key : HASHABLE)
                           arr = arr' }
             end
 
-      fun member (ref { size, arr, ...} : 'a table) key = 
+
+      fun member (ref { size, arr, ... } : 'a table) key =
          let
             val hash = Key.hash key
             val n = Word.toInt (hash mod size)
-            val bucket = Array.sub (arr, n)
          in
-            (case bucket of
-                Nil => false
-              | Cons (hash', key', _, next) =>
-                   (hash = hash' andalso Key.eq (key, key'))
-                   orelse
-                   (case search hash key next of
+            (case Array.sub (arr, n) of
+                Zero => false
+              | One (key', _) =>
+                   Key.eq (key, key')
+              | Many lr =>
+                   (case !(findEntry lr hash key) of
                        Nil => false
-                     | entry as Cons (_, _, _, next') =>
-                          (
-                          next' := bucket;
-                          Array.update (arr, n, entry);
-                          true
-                          )))
+                     | Cons _ => true))
          end
-         
-      fun size (ref {residents, ...} : 'a table) = !residents
+
 
       fun insert (table as ref { residents, size, arr, ... } : 'a table) key datum =
          let
             val hash = Key.hash key
             val n = Word.toInt (hash mod size)
-            val bucket = Array.sub (arr, n)
          in
-            (case bucket of
-                Nil =>
+            (case Array.sub (arr, n) of
+                Zero =>
                    (
                    Array.update (arr, n,
-                                 Cons (hash, key, ref datum, ref Nil));
+                                 One (key, datum));
                    residents := !residents + 1;
                    resize table
                    )
-              | Cons (hash', key', datumref, next) =>
-                   if hash = hash' andalso Key.eq (key, key') then
-                      datumref := datum
+              | One (key', datum') =>
+                   if Key.eq (key, key') then
+                      Array.update (arr, n, One (key, datum))
                    else
-                      (case search hash key next of
-                          Nil =>
-                             (
-                             Array.update (arr, n,
-                                           Cons (hash, key, ref datum, ref bucket));
-                             residents := !residents + 1;
-                             resize table
-                             )
-                        | entry as Cons (_, _, datumref', next') =>
-                             (
-                             next' := bucket;
-                             Array.update (arr, n, entry);
-                             datumref' := datum
-                             )))
+                      (
+                      Array.update (arr, n,
+                                    Many (ref (Cons (hash, key, datum,
+                                                     ref (Cons (Key.hash key', key', datum',
+                                                                ref Nil))))));
+                      residents := !residents + 1;
+                      resize table
+                      )
+              | Many lr =>
+                   (case findEntry lr hash key of
+                       ref Nil =>
+                          (
+                          Array.update (arr, n,
+                                        Many (ref (Cons (hash, key, datum, lr))));
+                          residents := !residents + 1;
+                          resize table
+                          )
+                     | lr' as ref (Cons (_, _, _, rest)) =>
+                          lr' := Cons (hash, key, datum, rest)))
          end
+
 
       fun remove (table as ref { residents, size, arr, ... } : 'a table) key =
          let
             val hash = Key.hash key
             val n = Word.toInt (hash mod size)
-            val bucket = Array.sub (arr, n)
          in
-            (case bucket of
-                Nil => ()
-              | Cons (hash', key', _, next) =>
-                   if hash = hash' andalso Key.eq (key, key') then
-                      Array.update (arr, n, !next)
-                   else
+            (case Array.sub (arr, n) of
+                Zero => ()
+              | One (key', _) =>
+                   if Key.eq (key, key') then
                       (
-                      search hash key next;
+                      Array.update (arr, n, Zero);
+                      residents := !residents - 1
+                      )
+                   else
                       ()
-                      ))
+              | Many lr =>
+                   (case findEntry lr hash key of
+                       ref Nil => ()
+                     | lr' as ref (Cons (_, _, _, rest)) =>
+                          (
+                          lr' := !rest;
+                          (case !lr of
+                              Cons (_, key', datum', ref Nil) =>
+                                 Array.update (arr, n, One (key', datum'))
+                            | Nil =>
+                                 raise (Fail "invariant")
+                            | _ => ());
+                          residents := !residents - 1
+                          )))
          end
 
-      fun find (table as ref { residents, size, arr, ... } : 'a table) key =
+
+      fun lookup (table as ref { size, arr, ... } : 'a table) key =
          let
             val hash = Key.hash key
             val n = Word.toInt (hash mod size)
-            val bucket = Array.sub (arr, n)
          in
-            (case bucket of
-                Nil => NONE
-              | Cons (hash', key', datumref, next) =>
-                   if hash = hash' andalso Key.eq (key, key') then
-                      SOME (!datumref)
-                   else
-                      (case search hash key next of
-                          Nil => NONE
-                        | entry as Cons (_, _, datumref', next') =>
-                             (
-                             next' := bucket;
-                             Array.update (arr, n, entry);
-                             SOME (!datumref')
-                             )))
-         end
-                      
-      fun lookup (table as ref { residents, size, arr, ... } : 'a table) key =
-         let
-            val hash = Key.hash key
-            val n = Word.toInt (hash mod size)
-            val bucket = Array.sub (arr, n)
-         in
-            (case bucket of
-                Nil =>
+            (case Array.sub (arr, n) of
+                Zero =>
                    raise Absent
-              | Cons (hash', key', datumref, next) =>
-                   if hash = hash' andalso Key.eq (key, key') then
-                      !datumref
+              | One (key', datum) =>
+                   if Key.eq (key, key') then
+                      datum
                    else
-                      (case search hash key next of
-                          Nil =>
-                             raise Absent
-                        | entry as Cons (_, _, datumref', next') =>
-                             (
-                             next' := bucket;
-                             Array.update (arr, n, entry);
-                             !datumref'
-                             )))
+                      raise Absent
+              | Many lr =>
+                   (case findEntry lr hash key of
+                       ref Nil =>
+                          raise Absent
+                     | ref (Cons (_, _, datum, _)) =>
+                          datum))
          end
 
-      fun operate (table as ref { residents, size, arr, ... } : 'a table) key absentf presentf =
+
+      fun find table key =
+         (SOME (lookup table key)
+          handle Absent => NONE)
+
+
+      fun operate' (table as ref { residents, size, arr, ... } : 'a table) key absentf presentf =
          let
             val hash = Key.hash key
             val n = Word.toInt (hash mod size)
-            val bucket = Array.sub (arr, n)
          in
-            (case bucket of
-                Nil =>
+            (case Array.sub (arr, n) of
+                Zero =>
                    let
-                      val datum = absentf ()
+                      val datumo = absentf ()
                    in
-                      Array.update (arr, n,
-                                    Cons (hash, key, ref datum, ref Nil));
-                      residents := !residents + 1;
-                      resize table;
-                      (NONE, datum)
+                      (case datumo of
+                          NONE => ()
+                        | SOME datum =>
+                             (
+                             Array.update (arr, n, One (key, datum));
+                             residents := !residents + 1;
+                             resize table
+                             ));
+                      (NONE, datumo)
                    end
-              | Cons (hash', key', datumref, next) =>
-                   if hash = hash' andalso Key.eq (key, key') then
+              | One (key', datum') =>
+                   if Key.eq (key, key') then
                       let
-                         val datum = !datumref
-                         val datum' = presentf datum
+                         val datumo = presentf datum'
                       in
-                         datumref := datum';
-                         (SOME datum, datum')
+                         (case datumo of
+                             NONE =>
+                                (
+                                Array.update (arr, n, Zero);
+                                residents := !residents - 1
+                                )
+                           | SOME datum =>
+                                Array.update (arr, n, One (key, datum)));
+                         (SOME datum', datumo)
                       end
                    else
-                      (case search hash key next of
-                          Nil =>
-                             let
-                                val datum = absentf ()
-                             in
+                      let
+                         val datumo = absentf ()
+                      in
+                         (case datumo of
+                             NONE =>
+                                ()
+                           | SOME datum =>
+                                (
                                 Array.update (arr, n,
-                                              Cons (hash, key, ref datum, ref bucket));
+                                              Many (ref (Cons (hash, key, datum,
+                                                               ref (Cons (Key.hash key', key', datum',
+                                                                          ref Nil))))));
                                 residents := !residents + 1;
-                                resize table;
-                                (NONE, datum)
-                             end
-                        | entry as Cons (_, _, datumref', next') =>
-                             let
-                                val datum = !datumref'
-                                val datum' = presentf datum
-                             in
-                                next' := bucket;
-                                Array.update (arr, n, entry);
-                                datumref' := datum';
-                                (SOME datum, datum')
-                             end))
+                                resize table
+                                ));
+                         (NONE, datumo)
+                      end
+              | Many lr =>
+                   (case findEntry lr hash key of
+                       ref Nil =>
+                          let
+                             val datumo = absentf ()
+                          in
+                             (case datumo of
+                                 NONE => ()
+                               | SOME datum =>
+                                    (
+                                    Array.update (arr, n,
+                                                  Many (ref (Cons (hash, key, datum, lr))));
+                                    residents := !residents + 1;
+                                    resize table
+                                    ));
+                             (NONE, datumo)
+                          end
+                     | lr' as ref (Cons (_, _, datum', rest)) =>
+                          let
+                             val datumo = presentf datum'
+                          in
+                             (case datumo of
+                                 NONE =>
+                                    (
+                                    lr' := !rest;
+                                    (case !lr of
+                                        Cons (_, key'', datum'', ref Nil) =>
+                                           Array.update (arr, n, One (key'', datum''))
+                                      | Nil =>
+                                           raise (Fail "invariant")
+                                      | _ => ());
+                                    residents := !residents - 1
+                                    )
+                               | SOME datum =>
+                                    lr' := Cons (hash, key, datum, rest));
+                             (SOME datum', datumo)
+                          end))
+         end
+
+
+      fun operate table key absentf presentf =
+         let
+            val (x, y) = operate' table key (SOME o absentf) (SOME o presentf)
+         in
+            (x, valOf y)
          end
 
       fun insertMerge table key x f =
          (
-         operate table key (fn () => x) f;
+         operate' table key (fn () => SOME x) (SOME o f);
          ()
          )
 
       fun lookupOrInsert table key datumf =
-         #2 (operate table key datumf (fn x => x))
+         let
+            val (x, y) = operate' table key (SOME o datumf) (fn x => SOME x)
+         in
+            valOf y
+         end
 
       fun lookupOrInsert' table key datumf =
          let
-            val (old, datum) = operate table key datumf (fn x => x)
+            val (x, y) = operate' table key (SOME o datumf) (fn x => SOME x)
          in
-            (datum, isSome old)
+            (valOf y, isSome x)
          end
+
 
       fun foldEntry f x entry =
          (case entry of
              Nil => x
-           | Cons (_, key, ref datum, ref next) =>
+           | Cons (_, key, datum, ref next) =>
                 foldEntry f (f (key, datum, x)) next)
 
       fun fold f x (ref { arr, ... } : 'a table) =
          Array.foldl
-         (fn (bucket, acc) => foldEntry f acc bucket)
+         (fn (Zero, acc) => acc
+           | (One (key, datum), acc) => f (key, datum, acc)
+           | (Many (ref l), acc) => foldEntry f acc l)
          x
          arr
 
@@ -294,14 +360,17 @@ functor HashTable (structure Key : HASHABLE)
       fun appEntry f entry =
          (case entry of
              Nil => ()
-           | Cons (_, key, ref datum, ref next) =>
+           | Cons (_, key, datum, ref next) =>
                 (
                 f (key, datum);
                 appEntry f next
                 ))
 
       fun app f (ref { arr, ... } : 'a table) =
-         Array.app (appEntry f) arr
-         
+         Array.app 
+         (fn Zero => ()
+           | One (key, datum) => f (key, datum)
+           | Many (ref l) => appEntry f l)
+         arr
 
    end
