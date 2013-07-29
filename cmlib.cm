@@ -44,6 +44,7 @@ library
         signature PSUSP
         signature QUEUE
         signature RAND
+        signature RAND32
         signature RANDOM
         signature RDICT
         signature SEEK_IO
@@ -132,6 +133,7 @@ library
         structure Mergesort
         structure MJHash
         structure MTRand
+        structure MTRand32
 	structure Pos
 	structure PrettyPrint
 	structure PStream
@@ -328,6 +330,7 @@ is
 	queue.sml
 	quicksort.sml
         rand.sig
+        rand32.sig
         rand-from-rand32.sml
         rand-from-random.sml
         rand-mt.sml
