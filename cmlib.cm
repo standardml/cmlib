@@ -128,6 +128,7 @@ library
 	structure IntInfSplayDict
         structure IQueue
         structure JenkinsHash
+        structure Juliasort
         structure ListSequence
         structure ListStreamable
         structure Mergesort
@@ -296,6 +297,7 @@ is
         ideque.sml
 	iqueue.sig
 	iqueue.sml
+        juliasort.sml
 	lex-engine.sig
 	lex-engine.sml
 	mergesort.sml

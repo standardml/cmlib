@@ -97,6 +97,7 @@ local
         pqueue-imperative.sig
         sort.sig
         mergesort.sml
+        juliasort.sml
         sequence-list.sml
         pqueue.sig
         pqueue-lazy-pairing.sml
@@ -270,6 +271,7 @@ in
 	structure IntInfSplayDict
         structure IQueue
         structure JenkinsHash
+        structure Juliasort
         structure ListSequence
         structure ListStreamable
         structure Mergesort
