@@ -14,6 +14,7 @@ local
         convert-word.sig
         convert-word-mlton.sml
         rand.sig
+        rand32.sig
         rand-from-random.sml
         rand-from-rand32.sml
         hash-inc.sig
@@ -182,6 +183,7 @@ in
         signature PSUSP
         signature QUEUE
         signature RAND
+        signature RAND32
         signature RANDOM
         signature RDICT
         signature SEEK_IO
@@ -269,6 +271,7 @@ in
         structure ListStreamable
         structure Mergesort
         structure MTRand
+        structure MTRand32
         structure MJHash
 	structure Pos
 	structure PrettyPrint
