@@ -154,6 +154,14 @@ structure Juliasort :> SORT =
                        mergeBwd f l1 rest2 (x2 :: acc)))
 
 
+      (* takes (if b then increasing else decreasing) inputs, returns the opposite *)
+      fun merge f b l1 l2 =
+         if b then
+            mergeFwd f l1 l2 []
+         else
+            mergeBwd f l1 l2 []
+
+
        (* roundpow p n
           If    p is a power of 2
                 p <= n
@@ -172,9 +180,9 @@ structure Juliasort :> SORT =
           end
 
 
-       (* growFwd f s ssz p u req
+       (* grow f sfwd s ssz p u req
           
-          If    s is sorted
+          If    if sfwd then s is sorted else s is anti-sorted
                 ssz = |s|
                 p is a power of 2
                 p <= ssz  or  u=[]
@@ -187,13 +195,13 @@ structure Juliasort :> SORT =
                 and
                 return (b, l, |l|, u2)
        *)
-       fun growFwd f s ssz p u req =
+       fun grow f sfwd s ssz p u req =
           if req <= ssz then
-             (true, s, ssz, u)
+             (sfwd, s, ssz, u)
           else
              (case u of
                  [] =>
-                    (true, s, ssz, u)
+                    (sfwd, s, ssz, u)
                | h :: rest =>
                     let
                        val (rfwd, r, rsz, x) = getrun f h rest
@@ -201,53 +209,16 @@ structure Juliasort :> SORT =
                        val p' = roundpow p ssz
                        (* p' is the greatest power of 2 <= ssz *)
        
-                       val (tfwd, t, tsz, y) =
-                          if rfwd then
-                             growFwd f r rsz 1 x p'
-                          else
-                             growBwd f r rsz 1 x p'
+                       val (tfwd, t, tsz, y) = grow f rfwd r rsz 1 x p'
 
                        (* tsz >= p' unless u=[], so 2 * p' <= ssz+tsz unless u=[] *)
                     in
-                       if tfwd then
-                          growBwd f (mergeFwd f s t []) (ssz + tsz) (p' + p') y req
+                       if sfwd = tfwd then
+                          grow f (not sfwd) (merge f sfwd s t) (ssz + tsz) (p' + p') y req
+                       else if ssz >= tsz then
+                          grow f tfwd (merge f sfwd s (rev t)) (ssz + tsz) (p' + p') y req
                        else
-                          if ssz >= tsz then
-                             growBwd f (mergeFwd f s (rev t) []) (ssz + tsz) (p' + p') y req
-                          else
-                             growFwd f (mergeBwd f (rev s) t []) (ssz + tsz) (p' + p') y req
-                    end)
-
-       (* as growFwd except s is anti-sorted *)
-       and growBwd f s ssz p u req =
-          if req <= ssz then
-             (false, s, ssz, u)
-          else
-             (case u of
-                 [] =>
-                    (false, s, ssz, u)
-               | h :: rest =>
-                    let
-                       val (rfwd, r, rsz, x) = getrun f h rest
-       
-                       val p' = roundpow p ssz
-                       (* p' is the greatest power of 2 <= ssz *)
-       
-                       val (tfwd, t, tsz, y) =
-                          if rfwd then
-                             growFwd f r rsz 1 x p'
-                          else
-                             growBwd f r rsz 1 x p'
-
-                       (* tsz >= p' unless u=[], so 2 * p' <= ssz+tsz unless u=[] *)
-                    in
-                       if tfwd then
-                          if ssz >= tsz then
-                             growFwd f (mergeBwd f s (rev t) []) (ssz + tsz) (p' + p') y req
-                          else
-                             growBwd f (mergeFwd f (rev s) t []) (ssz + tsz) (p' + p') y req
-                       else
-                          growFwd f (mergeBwd f s t []) (ssz + tsz) (p' + p') y req
+                          grow f sfwd (merge f tfwd (rev s) t) (ssz + tsz) (p' + p') y req
                     end)
 
 
@@ -258,11 +229,7 @@ structure Juliasort :> SORT =
                  let
                     val (rfwd, r, rsz, x) = getrun f h rest
 
-                    val (b, l', _, _) =
-                       if rfwd then
-                          growFwd f r rsz 1 x infinity
-                       else
-                          growBwd f r rsz 1 x infinity
+                    val (b, l', _, _) = grow f rfwd r rsz 1 x infinity
                  in
                     if b then l' else rev l'
                  end)
