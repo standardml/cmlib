@@ -2,16 +2,29 @@
 structure Mergesort :> SORT =
    struct
 
-      (* stable split using the tortoise and hare algorithm: the tortoise
-         moves by ones, the hare by twos, and when the hare gets to the end,
-         the tortoise is halfway.  "collect" collects the front half of the
-         list along the way, and n computes its size. *)
-      fun split n collect tortoise hare =
+      (* split n acc tortoise hare
+
+         If    l = l1 @ tortoise
+               l = l2 @ hare
+               |l1| = n
+               |l2| = 2n
+               acc = rev l1
+         then  l = left @ right
+               |left| = |right|  or  |left| = |right|+1
+               and
+               return (|left|, left, |right|, right)
+      *)
+      fun split n acc tortoise hare =
          (case (tortoise, hare) of
              (x :: tortoise', _ :: _ :: hare') =>
-                split (n+1) (x :: collect) tortoise' hare'
+                split (n+1) (x :: acc) tortoise' hare'
+           | (_, [_] ) =>
+                (n, rev acc, n+1, tortoise)
+           | (_, []) =>
+                (n, rev acc, n, tortoise)
            | _ =>
-                (n, rev collect, tortoise))
+                raise (Fail "precondition"))
+
 
       (* If we know the size to split at, we can do it cheaper. *)
       fun nsplit n collect l =
@@ -62,7 +75,7 @@ structure Mergesort :> SORT =
 
 
       (* n=|l|, returns increasing *)
-      fun nsortFwd f n l =
+      fun sortFwd f n l =
          (case n of
              0 => []
            | 1 => l
@@ -82,11 +95,11 @@ structure Mergesort :> SORT =
                    val j = n - i
                    val (l1, l2) = nsplit i [] l
                 in
-                   mergeBwd f (nsortBwd f i l1) (nsortBwd f j l2) []
+                   mergeBwd f (sortBwd f i l1) (sortBwd f j l2) []
                 end)
 
       (* n=|l|, returns decreasing *)
-      and nsortBwd f n l =
+      and sortBwd f n l =
          (case n of
              0 => []
            | 1 => l
@@ -106,45 +119,15 @@ structure Mergesort :> SORT =
                    val j = n - i
                    val (l1, l2) = nsplit i [] l
                 in
-                   mergeFwd f (nsortFwd f i l1) (nsortFwd f j l2) []
+                   mergeFwd f (sortFwd f i l1) (sortFwd f j l2) []
                 end)
 
-      (* returns increasing *)
-      fun sortFwd f l =
-         (case l of
-             [] => []
-           | [x] => [x]
-           | [x, y] =>
-                (case f (x, y) of
-                    GREATER =>
-                       [y, x]
-                  | _ =>
-                       l)
-           | _ =>
-                let
-                   val (i, l1, l2) = split 0 [] l l
-                in
-                   mergeBwd f (nsortBwd f i l1) (sortBwd f l2) []
-                end)
 
-      (* returns decreasing *)
-      and sortBwd f l =
-         (case l of
-             [] => []
-           | [x] => [x]
-           | [x, y] =>
-                (case f (x, y) of
-                    GREATER =>
-                       l
-                  | _ =>
-                       [y, x])
-           | _ =>
-                let
-                   val (i, l1, l2) = split 0 [] l l
-                in
-                   mergeFwd f (nsortFwd f i l1) (sortFwd f l2) []
-                end)
-
-      val sort = sortFwd
+      fun sort f l =
+         let
+            val (i, l1, j, l2) = split 0 [] l l
+         in
+            mergeBwd f (sortBwd f i l1) (sortBwd f j l2) []
+         end
          
    end
