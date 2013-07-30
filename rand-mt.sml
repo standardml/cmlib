@@ -1,15 +1,7 @@
 
 (* Mersenne Twister algorithm *)
 
-structure MTRand32
-   :>
-   sig
-      val randWord32 : unit -> Word32.word
-
-      type seed
-      val reseed : seed -> unit
-   end
-   =
+structure MTRand32 :> RAND32 where type seed = Word32.word =
    struct
 
       structure A = Array
