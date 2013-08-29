@@ -1,67 +1,33 @@
-(* Based on 210/PRIORITY_QUEUE.sig *)
+(* Imperative Priority Queues with decreaseKey *)
 
-signature IMPERATIVE_PQUEUE =
+signature IPQUEUE =
 sig
 
-  (* This is the abstract type for priority queues. *)
-  structure Key : ORDERED
+  structure Key : ORDERED                          (* contains key type t along with an ordering *)
+  type key = Key.t                         (* the type of keys used as priorities in the ipqueue *)
 
-  (* This indicates that the type of keys in a priority queue has to have type key. *)
-  type key = Key.t
+  type 'a ipqueue        (* imperative priority queues with the above key type and value type 'a *)
+  type 'a t = 'a ipqueue
+  type 'a insertedRef        (* a reference to an inserted element in a ipqueue, for decreaseKey *)
 
-  (* This is the abstract type representing a priority queue with key type
-   * key (see below) and value type 'a. 
-   *)
-  type 'a pq
-  type 'a t = 'a pq
+  exception Empty                                       (* raised by findMin and deleteMin below *)
+  val empty     : unit -> 'a ipqueue                       (* creates a new empty priority queue *)
+  val singleton : key * 'a -> 'a ipqueue     (* creates a new priority queue with one (key, val) *)
 
-  (* A reference to node generated when inserting *)
-  type 'a pqNodeRef
+  val isEmpty   : 'a ipqueue -> bool              (* returns true if the priority queue is empty *)
 
-  (* empty represents the empty collection. *)
-  val empty : unit -> 'a pq
+  val insert    : 'a ipqueue -> (key*'a) -> unit                            (* imperative insert *)
+  val insertRef : 'a ipqueue -> (key*'a) -> 'a insertedRef   (* insert and return an insertedRef *)
 
-  (* Returns true if the priority queue is empty. *)
-  val isEmpty : 'a pq -> bool
+  val meldInto  : 'a ipqueue -> 'a ipqueue -> unit  (* moves all (k,v) in the 2nd ipq to the 1st *)
 
-  (* If k is a value of type key and v is a  value of type 'a, the expression 
-   * singleton (k,v) evaluates to the priority queue including just (k,v).
-   *)
-  val singleton : key * 'a -> 'a pq
+  val findMin   : 'a ipqueue -> (key*'a)   (* find (k,v) with min k in an ipqueue or raise Empty *)
+  val deleteMin : 'a ipqueue -> (key*'a)          (* the same as findMin, but also deletes (k,v) *)
 
-  (* For a a key-value pair (k, v), and a priority queue Q,
-   * insert (k, v) Q modifies Q so that it additionally contains {(k, v)}.  Since
-   *  the priority queue is treated as a multiset, duplicate keys or key-value
-   * pairs are allowed and kept separately.  A node reference is returned that
-   * can be used with decreaseKey.
-   *)
-  val insert : (key*'a) -> 'a pq -> 'a pqNodeRef
+   (* Decrease the key in the insertedRef, which must be from a call to insertRef on the *
+    * ipqueue, or one melded into it, whose element hasn't subsequently been deleted.    *)
+  val decreaseKey : 'a ipqueue -> 'a insertedRef -> key -> unit
 
-  (* Makes one of the two input queues contain the union of two
-   * priority queues, and returns that queue.  Since the priority queue
-   * is treated as a multiset, duplicate keys or key-value pairs are
-   * allowed and kept.  Therefore the size of the result will be the
-   * sum of the sizes of the inputs.
-   *)
-  val meld      : 'a pq -> 'a pq -> 'a pq
+  val keys : 'a ipqueue -> key list    (* sorted keys for debugging, preserves ipqueue structure *)
 
-  (* Given a priority queue findMin Q, if Q is empty it returns 
-   * NONE.   Otherwise it returns SOME(k,v) where (k,v) in Q 
-   * and k is the key of minimum value in Q.  If multiple elements 
-   * have the same minimum valued key, then an arbitrary one is returned. 
-   *)
-  val findMin   : 'a pq -> (key*'a) option
-
-  (* This is the same as findMin but also modifies the priority queue
-   * to remove the (key,value) pair removed (if the input queue is
-   * non-empty)
-   *)
-  val deleteMin : 'a pq -> (key*'a) option
-
-  (* Modifies the key in the 'a pqNodeRef to the value key, which must
-   * be less than its current key.  the pqNodeRef must have been
-   * returned from an insert into the same 'a pq given that hasn't
-   * subsequently been deleted. 
-   *)
-  val decreaseKey : 'a pqNodeRef -> 'a pq -> key -> unit
 end

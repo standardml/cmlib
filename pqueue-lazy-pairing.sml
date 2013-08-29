@@ -10,37 +10,38 @@ struct
   structure Key = Key
   type key = Key.t
 
-  datatype 'a pq = Empty 
-                 | Node of {value: key * 'a, odd: 'a pq, sus: 'a pq Susp.susp} 
-  type 'a t = 'a pq
+  datatype 'a pqueue = EmptQ
+                     | Node of {value: key * 'a, odd: 'a pqueue, sus: 'a pqueue Susp.susp}
+  type 'a t = 'a pqueue
 
   fun cmp((k1,v1),(k2,v2)) = Key.compare(k1,k2)
 
-  exception EMPTY
+  exception Empty
 
-  fun empty() = Empty
-  fun isEmpty Empty = true 
+  fun empty() = EmptQ
+  fun isEmpty EmptQ = true 
     | isEmpty _ = false
 
-  fun singleton(k,v) = Node {value=(k,v), odd=Empty, sus=Susp.delay (fn()=> Empty)}
+  fun singleton(k,v) = Node {value=(k,v), odd=EmptQ, sus=Susp.delay (fn()=> EmptQ)}
 
-  fun meld q Empty = q
-    | meld Empty q = q
+  fun meld q EmptQ = q
+    | meld EmptQ q = q
     | meld (p as Node {value=v1, ... }) (q as Node {value=v2, ... }) = 
         case cmp(v1,v2) of
            LESS => link p q
          | _    => link q p
 
-  and link (Node {value=v, odd=Empty, sus}) c = Node {value=v, odd=c, sus=sus}
+  and link (Node {value=v, odd=EmptQ, sus}) c = Node {value=v, odd=c, sus=sus}
     | link (Node {value=v, odd, sus}) c = 
-         Node {value=v, odd=Empty, sus=Susp.delay(fn()=> meld (meld c odd) (Susp.force sus))  }
+         Node {value=v, odd=EmptQ, sus=Susp.delay(fn()=> meld (meld c odd) (Susp.force sus))  }
+    | link _ _ = raise Match
 
-  fun insert v Q = meld (singleton v) Q
+  fun insert pq v = meld pq (singleton v)
 
-  fun findMin Empty = NONE
-    | findMin (Node {value=v, ...}) = SOME(v)
+  fun findMin EmptQ = raise Empty
+    | findMin (Node {value=v, ...}) = v
 
-  fun deleteMin Empty = (NONE,Empty)
-    | deleteMin (Node {value=v, odd, sus}) = (SOME(v), meld odd (Susp.force sus))
+  fun deleteMin EmptQ = raise Empty
+    | deleteMin (Node {value=v, odd, sus}) = (v, meld odd (Susp.force sus))
 end
 

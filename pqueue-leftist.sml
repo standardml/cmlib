@@ -11,20 +11,20 @@ struct
   structure Key = Key
   type key = Key.t
 
-  datatype 'a pq = Empty 
-                 | Node of {rank : int, value: key * 'a, 
-	                    left : 'a pq, right : 'a pq} 
-  type 'a t = 'a pq
+  datatype 'a pqueue = EmptyQ
+                     | Node of {rank : int, value: key * 'a, 
+	                        left : 'a pqueue, right : 'a pqueue} 
+  type 'a t = 'a pqueue
 
   fun cmp((k1,v1),(k2,v2)) = Key.compare(k1,k2)
 
-  exception EMPTY
+  exception Empty
 
-  fun empty () = Empty
-  fun isEmpty Empty = true 
+  fun empty () = EmptyQ
+  fun isEmpty EmptyQ = true 
     | isEmpty _ = false
 
-  fun rnk Empty = 0
+  fun rnk EmptyQ = 0
     | rnk (Node {rank=r,...}) = r
 
   fun node (v, l, r) =
@@ -34,21 +34,21 @@ struct
     in Node {rank=nr, value=v, left=l, right=r}
     end
 
-  fun singleton(k,v) = Node {rank=1, value=(k,v), left=Empty, right=Empty}
+  fun singleton(k,v) = Node {rank=1, value=(k,v), left=EmptyQ, right=EmptyQ}
 
-  fun meld a Empty = a
-    | meld Empty b = b
+  fun meld a EmptyQ = a
+    | meld EmptyQ b = b
     | meld (n1 as Node {value=v1, left=l1, right=r1, ...})
 	    (n2 as Node {value=v2, left=l2, right=r2, ...}) =
         case cmp(v1, v2) of 
            LESS => node (v1, l1, meld r1 n2)
          | _    => node (v2, l2, meld n1 r2)
 
-  fun insert v Q = meld (singleton v) Q
+  fun insert pq v = meld (singleton v) pq
 
-  fun findMin Empty = NONE
-    | findMin (Node {value=v, ...}) = SOME(v)
+  fun findMin EmptyQ = raise Empty
+    | findMin (Node {value=v, ...}) = v
 
-  fun deleteMin Empty = (NONE,Empty)
-    | deleteMin (Node {value=v, left=l, right=r, ...}) = (SOME(v), meld l r)
+  fun deleteMin EmptyQ = raise Empty
+    | deleteMin (Node {value=v, left=l, right=r, ...}) = (v, meld l r)
 end

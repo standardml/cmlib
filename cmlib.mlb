@@ -169,7 +169,7 @@ in
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
-        signature IMPERATIVE_PQUEUE
+        signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
         signature MINI_IO
@@ -348,7 +348,7 @@ in
         functor FortunaFun
         functor HashTable
 	functor HashTableTable
-        functor ImperativePairingPQueue
+        functor PairingIPQueue
         functor LazyPairingPQueue
         functor LeftistPQueue
         functor LexEngineFun

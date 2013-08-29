@@ -26,7 +26,7 @@ library
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
-        signature IMPERATIVE_PQUEUE
+        signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
         signature MINI_IO
@@ -206,7 +206,6 @@ library
         functor FortunaFun
         functor HashTable
 	functor HashTableTable
-        functor ImperativePairingPQueue
         functor LazyPairingPQueue
         functor LeftistPQueue
         functor LexEngineFun
@@ -217,6 +216,7 @@ library
         functor ListSet
         functor MultiFileIOFun
         functor OFBCipherFun
+        functor PairingIPQueue
         functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun
@@ -318,6 +318,7 @@ is
 	pos.sml
         pqueue.sig
         pqueue-imperative.sig
+        pqueue-imperative-list.sml
         pqueue-imperative-pairing.sml
         pqueue-lazy-pairing.sml
         pqueue-leftist.sml

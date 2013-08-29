@@ -7,4 +7,7 @@
     mergesort-test.sml
     mergesort-qcheck.sml
     quicksort-test.sml
+    pqueue-imperative-list.sml
+    pqueue-imperative-check.sml
+    pq-imp-test.sml
     sets-dicts-test.sml

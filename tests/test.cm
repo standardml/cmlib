@@ -9,4 +9,6 @@ Group is
     quicksort-test.sml
     sets-dicts-test.sml
     test-collection.sml
-
+    pqueue-imperative-list.sml
+    pqueue-imperative-check.sml
+    pq-imp-test.sml
