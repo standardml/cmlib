@@ -295,6 +295,8 @@ is
         hash-table-dataless.sml
         ideque.sig
         ideque.sml
+        ipqueue.sig
+        ipqueue-pairing.sml
 	iqueue.sig
 	iqueue.sml
         juliasort.sml
@@ -317,9 +319,6 @@ is
 	pos.sig
 	pos.sml
         pqueue.sig
-        pqueue-imperative.sig
-        pqueue-imperative-list.sml
-        pqueue-imperative-pairing.sml
         pqueue-lazy-pairing.sml
         pqueue-leftist.sml
         pqueue-pairing.sml
