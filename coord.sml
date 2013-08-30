@@ -12,7 +12,7 @@ structure Coord :> COORD =
          {file = file, char = char + 1, line = line, abs = abs + 1}
    
       fun nextline {file, char, line, abs} = 
-         {file = file, char = 1, line = line + 1, abs = abs}
+         {file = file, char = 1, line = line + 1, abs = abs + 1}
 
       fun file (pos: coord) = #file pos
 

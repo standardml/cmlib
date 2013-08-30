@@ -20,7 +20,7 @@ structure CoordinatedStream
                           else
                              Coord.nextchar coord
                     in
-                       Cons ((x, coord'), coordinate eoln coord' s')
+                       Cons ((x, coord), coordinate eoln coord' s')
                     end))
 
    end
