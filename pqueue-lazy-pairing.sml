@@ -38,8 +38,11 @@ struct
 
   fun insert pq v = meld pq (singleton v)
 
-  fun findMin EmptQ = raise Empty
-    | findMin (Node {value=v, ...}) = v
+  fun findMin EmptQ = NONE
+    | findMin (Node {value=v, ...}) = SOME v
+
+  fun lookupMin EmptQ = raise Empty
+    | lookupMin (Node {value=v, ...}) = v
 
   fun deleteMin EmptQ = raise Empty
     | deleteMin (Node {value=v, odd, sus}) = (v, meld odd (Susp.force sus))

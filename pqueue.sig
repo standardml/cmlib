@@ -18,7 +18,8 @@ sig
   val insert    : 'a pqueue -> (key*'a) -> 'a pqueue                        (* functional insert *)
   val meld      : 'a pqueue -> 'a pqueue -> 'a pqueue                (* copy two queues into one *)
 
-  val findMin   : 'a pqueue -> (key*'a)      (* find (k,v) with min k in a pqueue or raise Empty *)
+  val findMin   : 'a pqueue -> (key*'a) option  (* return SOME (k,v) with min k in a pqueue NONE *)
+  val lookupMin : 'a pqueue -> (key*'a)      (* find (k,v) with min k in a pqueue or raise Empty *)
   val deleteMin : 'a pqueue -> (key*'a) * 'a pqueue   (* same as findMin, but also deletes (k,v) *)
 
 end

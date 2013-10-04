@@ -36,8 +36,11 @@ struct
 
   fun insert pq v = meld (singleton v) pq
 
-  fun findMin EmptQ = raise Empty
-    | findMin (Node {value=v, ...}) = v
+  fun findMin EmptQ = NONE
+    | findMin (Node {value=v, ...}) = SOME v
+
+  fun lookupMin EmptQ = raise Empty
+    | lookupMin (Node {value=v, ...}) = v
 
   (* This is "2-pass" linking, which is the most standard for pairing heaps. *)
   fun mergePairs [] = EmptQ
