@@ -24,6 +24,8 @@ signature DATALESS_HASH_TABLE =
       val lookupOrInsert : table -> key -> key
       val lookupOrInsert' : table -> key -> key * bool   (* true if already present *)
 
+      val swap : table -> key -> key option  (* insert and return old entry, if any *)
+
       val toList : table -> key list
       val fold : (key * 'b -> 'b) -> 'b -> table -> 'b
       val app : (key -> unit) -> table -> unit

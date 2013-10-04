@@ -139,6 +139,8 @@ local
         mini-io.sig
         seek-io.sig
         seek-io.sml
+        io-util.sig
+        io-util.sml
         multi-file-io.sig
         multi-file-io.sml
    end
@@ -170,6 +172,7 @@ in
         signature HASHABLE
         signature IDEQUE
         signature IMPERATIVE_PQUEUE
+        signature IO_UTIL
         signature IQUEUE
         signature LEX_ENGINE
         signature MINI_IO
@@ -214,6 +217,7 @@ in
         structure AESRandom
         structure Arith
         structure ArraySequence
+        structure BinIOUtil
         structure BinSeekIO
         structure Bytestring
         structure BytestringHashable
@@ -314,6 +318,7 @@ in
 	structure SymbolSplaySet
 	structure SymbolSplayDict
         structure Susp
+        structure TextIOUtil
         structure TimeOrdered
         structure TreeSequence
         structure IUnionFind

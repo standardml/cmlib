@@ -121,7 +121,7 @@ functor DatalessHashTable (structure Key : HASHABLE)
          end
 
 
-      fun insert (table as ref { residents, size, arr, ... } : table) key =
+      fun swap (table as ref { residents, size, arr, ... } : table) key =
          let
             val hash = Key.hash key
             val n = Word.toInt (hash mod size)
@@ -131,11 +131,15 @@ functor DatalessHashTable (structure Key : HASHABLE)
                    (
                    Array.update (arr, n, One key);
                    residents := !residents + 1;
-                   resize table
+                   resize table;
+                   NONE
                    )
               | One key' =>
                    if Key.eq (key, key') then
-                      Array.update (arr, n, One key)
+                      (
+                      Array.update (arr, n, One key);
+                      SOME key'
+                      )
                    else
                       (
                       Array.update (arr, n,
@@ -143,7 +147,8 @@ functor DatalessHashTable (structure Key : HASHABLE)
                                                      ref (Cons (Key.hash key', key',
                                                                 ref Nil))))));
                       residents := !residents + 1;
-                      resize table
+                      resize table;
+                      NONE
                       )
               | Many lr =>
                    (case findEntry lr hash key of
@@ -152,11 +157,17 @@ functor DatalessHashTable (structure Key : HASHABLE)
                           Array.update (arr, n,
                                         Many (ref (Cons (hash, key, lr))));
                           residents := !residents + 1;
-                          resize table
+                          resize table;
+                          NONE
                           )
-                     | lr' as ref (Cons (_, _, rest)) =>
-                          lr' := Cons (hash, key, rest)))
+                     | lr' as ref (Cons (_, key', rest)) =>
+                          (
+                          lr' := Cons (hash, key, rest);
+                          SOME key'
+                          )))
          end
+
+      fun insert table key = (swap table key; ())
 
 
       fun remove (table as ref { residents, size, arr, ... } : table) key =
