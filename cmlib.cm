@@ -26,8 +26,8 @@ library
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
-        signature IMPERATIVE_PQUEUE
         signature IO_UTIL
+        signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
         signature MINI_IO
@@ -208,7 +208,6 @@ library
         functor FortunaFun
         functor HashTable
 	functor HashTableTable
-        functor ImperativePairingPQueue
         functor LazyPairingPQueue
         functor LeftistPQueue
         functor LexEngineFun
@@ -219,6 +218,7 @@ library
         functor ListSet
         functor MultiFileIOFun
         functor OFBCipherFun
+        functor PairingIPQueue
         functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun
@@ -297,8 +297,13 @@ is
         hash-table-dataless.sml
         ideque.sig
         ideque.sml
+<<<<<<< HEAD
         io-util.sig
         io-util.sml
+=======
+        ipqueue.sig
+        ipqueue-pairing.sml
+>>>>>>> master
 	iqueue.sig
 	iqueue.sml
         juliasort.sml
@@ -321,8 +326,6 @@ is
 	pos.sig
 	pos.sml
         pqueue.sig
-        pqueue-imperative.sig
-        pqueue-imperative-pairing.sml
         pqueue-lazy-pairing.sml
         pqueue-leftist.sml
         pqueue-pairing.sml

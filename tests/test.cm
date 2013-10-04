@@ -9,4 +9,6 @@ Group is
     quicksort-test.sml
     sets-dicts-test.sml
     test-collection.sml
-
+    ipqueue-list.sml
+    ipqueue-check.sml
+    ipqueue-test.sml

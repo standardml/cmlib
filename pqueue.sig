@@ -1,55 +1,24 @@
-(* Based on 210/PRIORITY_QUEUE.sig *)
+(* Originally based on 210/PRIORITY_QUEUE.sig, since modified to follow cmlib/queue.sig *)
 
 signature PQUEUE =
 sig
 
-  (* This is the abstract type for priority queues. *)
-  structure Key : ORDERED
+  structure Key : ORDERED                          (* contains key type t along with an ordering *)
+  type key = Key.t                         (* the type of keys used as priorities in the ipqueue *)
 
-  (* This indicates that the type of keys in a priority queue has to have type key. *)
-  type key = Key.t
+  type 'a pqueue        (* priority queues with the above key type and value type 'a *)
+  type 'a t = 'a pqueue
 
-  (* This is the abstract type representing a priority queue with key type
-   * key (see below) and value type 'a. 
-   *)
-  type 'a pq
-  type 'a t = 'a pq
+  exception Empty                                       (* raised by findMin and deleteMin below *)
+  val empty     : unit -> 'a pqueue                           (* creates an empty priority queue *)
+  val singleton : key * 'a -> 'a pqueue          (* creates a priority queue with one (key, val) *)
 
-  (* empty represents the empty collection. *)
-  val empty : unit -> 'a pq
+  val isEmpty   : 'a pqueue -> bool               (* returns true if the priority queue is empty *)
 
-  (* Returns true if the priority queue is empty. *)
-  val isEmpty : 'a pq -> bool
+  val insert    : 'a pqueue -> (key*'a) -> 'a pqueue                        (* functional insert *)
+  val meld      : 'a pqueue -> 'a pqueue -> 'a pqueue                (* copy two queues into one *)
 
-  (* If k is a value of type key and v is a  value of type 'a, the expression 
-   * singleton (k,v) evaluates to the priority queue including just (k,v).
-   *)
-  val singleton : key * 'a -> 'a pq
+  val findMin   : 'a pqueue -> (key*'a)      (* find (k,v) with min k in a pqueue or raise Empty *)
+  val deleteMin : 'a pqueue -> (key*'a) * 'a pqueue   (* same as findMin, but also deletes (k,v) *)
 
-  (* For a a key-value pair (k, v), and a priority queue Q,
-   * insert (k, v) Q evaluates to Q Union {(k, v)}.  Since the
-   * priority queue is treated as a multiset, duplicate keys or key-value
-   * pairs are allowed and kept separately.
-   *)
-  val insert : (key*'a) -> 'a pq -> 'a pq
-
-  (* Takes the union of two priority queues.  Since the priority queue
-   * is treated as a multiset, duplicate keys or key-value pairs are 
-   * allowed and kept.  Therefore the size of the result will be the sum
-   * of the sizes of the inputs.
-   *)
-  val meld      : 'a pq -> 'a pq -> 'a pq
-
-  (* Given a priority queue findMin Q, if Q is empty it returns 
-   * NONE.   Otherwise it returns SOME(k,v) where (k,v) in Q 
-   * and $k$ is the key of minimum value in $Q$.  If multiple elements 
-   * have the same minimum valued key, then an arbitrary one is returned. 
-   *)
-  val findMin   : 'a pq -> (key*'a) option
-
-  (* This is the same as findMin but also returns a priority queue
-   * with the returned (key,value) pair removed (if the input queue is
-   * non-empty) or an empty Q (if the input queue is empty).
-   *)
-  val deleteMin : 'a pq -> (key*'a) option * 'a pq
 end

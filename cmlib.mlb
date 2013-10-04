@@ -94,7 +94,7 @@ local
         parsing.sml
         lex-engine.sig
         lex-engine.sml
-        pqueue-imperative.sig
+        ipqueue.sig
         sort.sig
         mergesort.sml
         juliasort.sml
@@ -121,7 +121,7 @@ local
         sequence-array.sml
         partition.sml
         coroutine.sig
-        pqueue-imperative-pairing.sml
+        ipqueue-pairing.sml
         parse-engine.sig
         parse-engine.sml
         cont.sig
@@ -171,8 +171,8 @@ in
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
-        signature IMPERATIVE_PQUEUE
         signature IO_UTIL
+        signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
         signature MINI_IO
@@ -353,7 +353,6 @@ in
         functor FortunaFun
         functor HashTable
 	functor HashTableTable
-        functor ImperativePairingPQueue
         functor LazyPairingPQueue
         functor LeftistPQueue
         functor LexEngineFun
@@ -365,6 +364,7 @@ in
         functor MultiFileIOFun
         functor MonomorphizeStreamable
         functor OFBCipherFun
+        functor PairingIPQueue
         functor PairingPQueue
         functor ParseEngineFun
         functor ParsingFun
