@@ -297,13 +297,10 @@ is
         hash-table-dataless.sml
         ideque.sig
         ideque.sml
-<<<<<<< HEAD
         io-util.sig
         io-util.sml
-=======
         ipqueue.sig
         ipqueue-pairing.sml
->>>>>>> master
 	iqueue.sig
 	iqueue.sml
         juliasort.sml
