@@ -10,6 +10,7 @@ library
 	signature COORD
         signature COORDINATED_STREAM
         signature COROUTINE
+        signature COSTRING
         signature CRYPTO_HASH
         signature DATALESS_HASH_TABLE
         signature DICT
@@ -31,6 +32,9 @@ library
         signature IQUEUE
         signature LEX_ENGINE
         signature MINI_IO
+        signature MINI_STRING
+        signature MONAD
+        signature MONAD_UTIL
 	signature MULTI_FILE_IO
 	signature MULTI_TABLE
         signature ORDERED
@@ -74,8 +78,11 @@ library
         structure ArraySequence
         structure BinSeekIO
         structure Bytestring
+        structure BytestringMiniString
         structure BytestringHashable
         structure Bytesubstring
+        structure BytesubstringCostring
+        structure BytesubstringMiniString
         structure BytesubstringMonoStreamable
 	(* Char *)
 	structure CharListDict
@@ -149,10 +156,11 @@ library
         structure Stream
         structure StreamStreamable
         (* String *)
-	structure StringListDict
-	structure StringListSet
 	structure StringHashable
 	structure StringHashTable
+	structure StringListDict
+	structure StringListSet
+        structure StringMiniString
 	structure StringOrdered
 	structure StringRedBlackSet
 	structure StringRedBlackDict
@@ -161,6 +169,8 @@ library
 	structure Sum
         (* Symbol *)
 	structure StringSymbol
+        structure SubstringCostring
+        structure SubstringMiniString
         structure SubstringMonoStreamable
 	structure Symbol
 	structure SymbolListDict
@@ -196,6 +206,7 @@ library
         functor CFBCipherFun
         functor CTRCipherFun
         functor CoercedStreamable
+        functor CostringFun
         functor DatalessHashTable
         functor DictFun
 	functor DictTable
@@ -216,6 +227,7 @@ library
         functor ListHashable
         functor ListOrdered
         functor ListSet
+        functor MonadUtilFun
         functor MultiFileIOFun
         functor OFBCipherFun
         functor PairingIPQueue
@@ -261,6 +273,8 @@ is
         coord-stream.sml
 	coroutine.sig
 	coroutine.sml
+        costring.sig
+        costring.sml
         cryptohash.sig
         der.sml
 	dict.sig
@@ -308,6 +322,11 @@ is
 	lex-engine.sml
 	mergesort.sml
         mini-io.sig
+        mini-string.sig
+        mini-string.sml
+        monad.sig
+        monad-util.sig
+        monad-util.sml
         multi-file-io.sig
         multi-file-io.sml
 	multi-table.sig

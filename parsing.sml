@@ -10,6 +10,25 @@ functor ParsingFun (type token
       structure Streamable = Streamable
 
       type 'a parser = Streamable.t -> 'a * Streamable.t
+      type 'a m = 'a parser
+
+      fun return x s = (x, s)
+
+      fun bind p1 p2 s =
+         let
+            val (x1, s1) = p1 s
+         in
+            p2 x1 s1
+         end
+
+      fun seq p1 p2 s =
+         let
+            val (_, s1) = p1 s
+         in
+            p2 s1
+         end
+
+
 
       exception SyntaxError
 
@@ -23,14 +42,6 @@ functor ParsingFun (type token
       fun fail s =
          raise SyntaxError
 
-      fun return x s = (x, s)
-
-      fun bind p1 p2 s =
-         let
-            val (x1, s1) = p1 s
-         in
-            p2 x1 s1
-         end
 
 
       fun require f p =
@@ -45,13 +56,6 @@ functor ParsingFun (type token
 
       fun wrap f p =
          bind p (fn x => return (f x))
-
-      fun seq p1 p2 s =
-         let
-            val (_, s1) = p1 s
-         in
-            p2 s1
-         end
 
       fun first p1 p2 s =
          let

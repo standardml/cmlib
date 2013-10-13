@@ -1,4 +1,6 @@
 
+(* A substring-like interface for Word8VectorSlice. *)
+
 signature BYTESUBSTRING =
    sig
 

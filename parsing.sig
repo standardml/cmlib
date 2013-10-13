@@ -7,19 +7,18 @@ signature PARSING =
 
       type 'a parser = Streamable.t -> 'a * Streamable.t
 
+      include MONAD where type 'a m = 'a parser
+
       exception SyntaxError
 
       val accept : token parser
       val fail : 'a parser
-      val return : 'a -> 'a parser
-      val bind : 'a parser -> ('a -> 'b parser) -> 'b parser
 
       val test : (token -> bool) -> token parser
       val test_ : (token -> bool) -> unit parser
       val require : ('a -> bool) -> 'a parser -> 'a parser
       val require_ : ('a -> bool) -> 'a parser -> unit parser
       val wrap : ('a -> 'b) -> 'a parser -> 'b parser
-      val seq : 'a parser -> 'b parser -> 'b parser
       val first : 'a parser -> 'b parser -> 'a parser
       val replace : 'a -> 'b parser -> 'a parser
       val andthen : 'a parser -> 'b parser -> ('a * 'b) parser

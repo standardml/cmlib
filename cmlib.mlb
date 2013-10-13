@@ -26,6 +26,9 @@ local
         hash-table.sml
         hash-table-dataless.sig
         hash-table-dataless.sml
+        monad.sig
+        monad-util.sig
+        monad-util.sml
         symbol.sig
         ordered.sig
         symbol.sml
@@ -63,6 +66,8 @@ local
         ec-fp.sml
         ec-f2m.sml
         ec-crypto.sml
+        mini-string.sig
+        mini-string.sml
         multi-table.sig
         multi-table-dict.sml
         prettyprint.sig
@@ -74,6 +79,8 @@ local
         ideque.sml
         streamable-mono.sig
         parsing.sig
+        costring.sig
+        costring.sml
         digital-signature.sig
         ecdsa.sig
         ecdsa.sml
@@ -176,6 +183,9 @@ in
         signature IQUEUE
         signature LEX_ENGINE
         signature MINI_IO
+        signature MINI_STRING
+        signature MONAD
+        signature MONAD_UTIL
         signature MULTI_FILE_IO
 	signature MULTI_TABLE
         signature ORDERED
@@ -221,7 +231,10 @@ in
         structure BinSeekIO
         structure Bytestring
         structure BytestringHashable
+        structure BytestringMiniString
         structure Bytesubstring
+        structure BytesubstringCostring
+        structure BytesubstringMiniString
         structure BytesubstringMonoStreamable
 	(* Char *)
 	structure CharListDict
@@ -294,15 +307,18 @@ in
         structure Stream
         structure StreamStreamable
         (* String *)
-	structure StringListDict
-	structure StringListSet
 	structure StringHashable
 	structure StringHashTable
+	structure StringListDict
+	structure StringListSet
+        structure StringMiniString
 	structure StringOrdered
 	structure StringRedBlackSet
 	structure StringRedBlackDict
 	structure StringSplaySet
 	structure StringSplayDict
+        structure SubstringCostring
+        structure SubstringMiniString
 	structure Sum
         (* Symbol *)
 	structure StringSymbol
@@ -341,6 +357,7 @@ in
         functor CFBCipherFun
         functor CTRCipherFun
         functor CoercedStreamable
+        functor CostringFun
         functor DatalessHashTable
         functor DictFun
 	functor DictTable
@@ -362,6 +379,7 @@ in
         functor ListOrdered
         functor ListSet
         functor MultiFileIOFun
+        functor MonadUtilFun
         functor MonomorphizeStreamable
         functor OFBCipherFun
         functor PairingIPQueue

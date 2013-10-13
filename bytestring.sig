@@ -1,4 +1,6 @@
 
+(* A string-like interface for Word8Vector. *)
+
 signature BYTESTRING =
    sig
 
