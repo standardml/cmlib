@@ -37,6 +37,8 @@ local
         dict.sig
         dict.sml
         rdict.sig
+        output.sig
+        output.sml
         dict-list.sml
         red-black-tree.sml
         set-red-black.sml
@@ -188,6 +190,7 @@ in
         signature MONAD_UTIL
         signature MULTI_FILE_IO
 	signature MULTI_TABLE
+        signature OUTPUT
         signature ORDERED
         signature PARSE_ENGINE
         signature PARSING
@@ -295,6 +298,7 @@ in
         structure MTRand
         structure MTRand32
         structure MJHash
+        structure Output
 	structure Pos
 	structure PrettyPrint
 	structure PStream
@@ -382,6 +386,7 @@ in
         functor MonadUtilFun
         functor MonomorphizeStreamable
         functor OFBCipherFun
+        functor OutputMonad
         functor PairingIPQueue
         functor PairingPQueue
         functor ParseEngineFun

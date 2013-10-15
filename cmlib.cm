@@ -38,6 +38,7 @@ library
 	signature MULTI_FILE_IO
 	signature MULTI_TABLE
         signature ORDERED
+        signature OUTPUT
         signature PARSE_ENGINE
         signature PARSING
         signature PARTITION
@@ -143,6 +144,7 @@ library
         structure MJHash
         structure MTRand
         structure MTRand32
+        structure Output
 	structure Pos
 	structure PrettyPrint
 	structure PStream
@@ -230,6 +232,7 @@ library
         functor MonadUtilFun
         functor MultiFileIOFun
         functor OFBCipherFun
+        functor OutputMonad
         functor PairingIPQueue
         functor PairingPQueue
         functor ParseEngineFun
@@ -333,6 +336,8 @@ is
 	multi-table-dict.sml
 	ordered.sig
 	ordered.sml
+        output.sig
+        output.sml
 	parse-engine.sig
 	parse-engine.sml
 	parsing.sig
