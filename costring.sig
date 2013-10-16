@@ -15,7 +15,6 @@ signature COSTRING =
 
       val full : string -> costring
       val null : costring
-      val fromStream : string Stream.stream -> costring
 
       val minSize : costring * int -> bool
       val maxSize : costring * int -> bool
@@ -27,5 +26,10 @@ signature COSTRING =
       val splitAt : costring * int -> string * costring
 
       val all : costring -> string
+
+      val fromStream : string Stream.stream -> costring
+
+      (* The costring ends when the function returns a zero-length string. *)
+      val fromProcess : (unit -> string) -> costring
 
    end

@@ -212,6 +212,22 @@ functor CostringFun (structure String : MINI_STRING)
             loop (stm, [str])
          end
 
+
+      fun fromProcess f =
+         let
+            fun read () =
+               let
+                  val str = f ()
+               in
+                  if S.size str = 0 then
+                     NONE
+                  else
+                     SOME str
+               end
+         in
+            fromStream (Stream.fromProcess read)
+         end
+
    end
 
 

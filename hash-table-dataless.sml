@@ -286,6 +286,21 @@ functor DatalessHashTable (structure Key : HASHABLE)
          x
          arr
 
+      fun foldEntryLazy f rem entry =
+         (case entry of
+             Nil => Susp.force rem
+           | Cons (_, key, ref next) =>
+                f (key,
+                   Susp.delay (fn () => foldEntryLazy f rem next)))
+
+      fun foldLazy f x (ref { arr, ... } : table) =
+         ArrayUtil.foldlLazy
+         (fn (Zero, rem) => Susp.force rem
+           | (One key, rem) => f (key, rem)
+           | (Many (ref l), rem) => foldEntryLazy f rem l)
+         x
+         arr
+
       fun toList table =
          fold (fn (key, l) => key :: l) [] table
 

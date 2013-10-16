@@ -28,6 +28,7 @@ signature DATALESS_HASH_TABLE =
 
       val toList : table -> key list
       val fold : (key * 'b -> 'b) -> 'b -> table -> 'b
+      val foldLazy : (key * 'b Susp.susp -> 'b) -> 'b -> table -> 'b
       val app : (key -> unit) -> table -> unit
 
    end

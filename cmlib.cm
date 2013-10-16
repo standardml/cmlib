@@ -1,6 +1,7 @@
 library
 
         signature ARITH
+        signature ARRAY_UTIL
         signature BYTESTRING
         signature BYTESUBSTRING
         signature CIPHER
@@ -31,6 +32,7 @@ library
         signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
+        signature LIST_UTIL
         signature MINI_IO
         signature MINI_STRING
         signature MONAD
@@ -77,6 +79,7 @@ library
         structure AESRandom
         structure Arith
         structure ArraySequence
+        structure ArrayUtil
         structure BinSeekIO
         structure Bytestring
         structure BytestringMiniString
@@ -140,6 +143,7 @@ library
         structure Juliasort
         structure ListSequence
         structure ListStreamable
+        structure ListUtil
         structure Mergesort
         structure MJHash
         structure MTRand
@@ -185,6 +189,7 @@ library
 	structure SymbolSplaySet
 	structure SymbolSplayDict
         structure Susp
+        structure SuspMonad
         structure TextIOUtil
         structure TimeOrdered
         structure TreeSequence
@@ -260,6 +265,8 @@ is
         aes.sml
         arith.sig
         arith.sml
+        array-util.sig
+        array-util.sml
         asn1.sig
         bytestring.sig
         bytestring.sml
@@ -323,6 +330,8 @@ is
         juliasort.sml
 	lex-engine.sig
 	lex-engine.sml
+        list-util.sig
+        list-util.sml
 	mergesort.sml
         mini-io.sig
         mini-string.sig
@@ -394,6 +403,7 @@ is
 	sum.sig
 	sum.sml
 	susp.sig
+        susp-monad.sml
 	symbol.sig
 	symbol.sml
 	table.sig

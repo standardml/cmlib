@@ -9,6 +9,8 @@ local
         bytesubstring.sig
         bytesubstring.sml
         random.sig
+        susp.sig
+        susp.sml
         convert-intinf.sig
         convert-intinf.sml
         convert-word.sig
@@ -20,6 +22,10 @@ local
         hash-inc.sig
         hash-inc.sml
         hashable.sig
+        list-util.sig
+        list-util.sml
+        array-util.sig
+        array-util.sml
         set.sig
         hashable.sml
         hash-table.sig
@@ -49,8 +55,6 @@ local
         defaults.sml
         ec-field.sig
         ec.sig
-        susp.sig
-        susp.sml
         stream.sig
         stream.sml
         cryptohash.sig
@@ -155,6 +159,7 @@ local
    end
 in
         signature ARITH
+        signature ARRAY_UTIL
         signature BYTESTRING
         signature BYTESUBSTRING
         signature CIPHER
@@ -184,6 +189,7 @@ in
         signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
+        signature LIST_UTIL
         signature MINI_IO
         signature MINI_STRING
         signature MONAD
@@ -230,6 +236,7 @@ in
         structure AESRandom
         structure Arith
         structure ArraySequence
+        structure ArrayUtil
         structure BinIOUtil
         structure BinSeekIO
         structure Bytestring
@@ -294,6 +301,7 @@ in
         structure Juliasort
         structure ListSequence
         structure ListStreamable
+        structure ListUtil
         structure Mergesort
         structure MTRand
         structure MTRand32
