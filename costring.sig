@@ -18,6 +18,7 @@ signature COSTRING =
 
       val minSize : costring * int -> bool
       val maxSize : costring * int -> bool
+      val isEmpty : costring -> bool
 
       val getc : costring -> (elem * costring) option
       val sub : costring * int -> elem

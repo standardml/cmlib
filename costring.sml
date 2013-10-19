@@ -71,6 +71,8 @@ functor CostringFun (structure String : MINI_STRING)
                    maxSize (cos, n-sz))
          end
 
+      fun isEmpty cos = maxSize (cos, 0)
+
 
       (* find (str, stm, n)
 
