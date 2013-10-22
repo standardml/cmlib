@@ -321,6 +321,7 @@ is
         hash-table-dataless.sml
         ideque.sig
         ideque.sml
+        io-mini.sig
         io-util.sig
         io-util.sml
         ipqueue.sig
@@ -333,9 +334,6 @@ is
         list-util.sig
         list-util.sml
 	mergesort.sml
-        mini-io.sig
-        mini-string.sig
-        mini-string.sml
         monad.sig
         monad-util.sig
         monad-util.sml
@@ -400,6 +398,8 @@ is
 	streamable.sml
         streamable-mono.sig
         streamable-mono.sml
+        string-mini.sig
+        string-mini.sml
 	sum.sig
 	sum.sml
 	susp.sig

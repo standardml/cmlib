@@ -72,8 +72,8 @@ local
         ec-fp.sml
         ec-f2m.sml
         ec-crypto.sml
-        mini-string.sig
-        mini-string.sml
+        string-mini.sig
+        string-mini.sml
         multi-table.sig
         multi-table-dict.sml
         prettyprint.sig
@@ -149,7 +149,7 @@ local
         weak.sml
         pos.sig
         pos.sml
-        mini-io.sig
+        io-mini.sig
         seek-io.sig
         seek-io.sml
         io-util.sig
