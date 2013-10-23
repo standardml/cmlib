@@ -2,6 +2,7 @@ library
 
         signature ARITH
         signature ARRAY_UTIL
+        signature DATALESS_BRANCHING_TABLE
         signature BYTESTRING
         signature BYTESUBSTRING
         signature CIPHER
@@ -28,6 +29,9 @@ library
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
+        signature IDICT
+        signature DATALESS_IDICT
+        signature MINI_DATALESS_IDICT
         signature IO_UTIL
         signature IPQUEUE
         signature IQUEUE
@@ -209,6 +213,7 @@ library
         structure WordHashable
 
         functor ArithFun
+        functor DatalessBranchingTable
         functor CBCCipherFun
         functor CFBCipherFun
         functor CTRCipherFun
@@ -268,6 +273,8 @@ is
         array-util.sig
         array-util.sml
         asn1.sig
+        branching-table-dataless.sig
+        branching-table-dataless.sml
         bytestring.sig
         bytestring.sml
         bytesubstring.sig
@@ -321,6 +328,9 @@ is
         hash-table-dataless.sml
         ideque.sig
         ideque.sml
+        idict.sig
+        idict-dataless.sig
+        idict-dataless-mini.sig
         io-mini.sig
         io-util.sig
         io-util.sml

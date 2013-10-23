@@ -1,9 +1,12 @@
 
 functor DatalessHashTable (structure Key : HASHABLE)
-   :> DATALESS_HASH_TABLE where type key = Key.t
+   :>
+   DATALESS_HASH_TABLE
+   where type key = Key.t
    =
    struct
 
+      type init = int
       type key = Key.t
 
       datatype entry =

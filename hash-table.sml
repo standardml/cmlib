@@ -4,6 +4,7 @@ functor HashTable (structure Key : HASHABLE)
    =
    struct
 
+      type init = int
       type key = Key.t
 
       datatype 'a entry =

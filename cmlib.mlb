@@ -27,11 +27,16 @@ local
         array-util.sig
         array-util.sml
         set.sig
+        idict.sig
+        idict-dataless.sig
+        idict-dataless-mini.sig
         hashable.sml
         hash-table.sig
         hash-table.sml
         hash-table-dataless.sig
         hash-table-dataless.sml
+        branching-table-dataless.sig
+        branching-table-dataless.sml
         monad.sig
         monad-util.sig
         monad-util.sml
@@ -160,6 +165,7 @@ local
 in
         signature ARITH
         signature ARRAY_UTIL
+        signature DATALESS_BRANCHING_TABLE
         signature BYTESTRING
         signature BYTESUBSTRING
         signature CIPHER
@@ -171,6 +177,7 @@ in
         signature COROUTINE
         signature CRYPTO_HASH
         signature DATALESS_HASH_TABLE
+        signature DATALESS_IDICT
         signature DICT
         signature EC_FIELD
         signature ECDH
@@ -185,15 +192,19 @@ in
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
+        signature IDICT
+        signature IMPERATIVE_UNION_FIND
         signature IO_UTIL
         signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
         signature LIST_UTIL
+        signature MINI_DATALESS_IDICT
         signature MINI_IO
         signature MINI_STRING
         signature MONAD
         signature MONAD_UTIL
+        signature MONO_STREAMABLE
         signature MULTI_FILE_IO
 	signature MULTI_TABLE
         signature OUTPUT
@@ -219,12 +230,10 @@ in
         signature SORT
         signature STREAM
         signature STREAMABLE
-        signature MONO_STREAMABLE
 	signature SUM
         signature SUSP
         signature SYMBOL
 	signature TABLE
-        signature IMPERATIVE_UNION_FIND
         signature WEAK
 
         structure AES
@@ -370,6 +379,7 @@ in
         functor CTRCipherFun
         functor CoercedStreamable
         functor CostringFun
+        functor DatalessBranchingTable
         functor DatalessHashTable
         functor DictFun
 	functor DictTable
