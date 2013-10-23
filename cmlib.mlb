@@ -28,6 +28,7 @@ local
         array-util.sml
         set.sig
         idict.sig
+        idict-mini.sig
         idict-dataless.sig
         idict-dataless-mini.sig
         hashable.sml
@@ -200,6 +201,7 @@ in
         signature LEX_ENGINE
         signature LIST_UTIL
         signature MINI_DATALESS_IDICT
+        signature MINI_IDICT
         signature MINI_IO
         signature MINI_STRING
         signature MONAD

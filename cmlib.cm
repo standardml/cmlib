@@ -15,6 +15,7 @@ library
         signature COSTRING
         signature CRYPTO_HASH
         signature DATALESS_HASH_TABLE
+        signature DATALESS_IDICT
         signature DICT
         signature EC_FIELD
         signature ECDH
@@ -30,13 +31,13 @@ library
         signature HASHABLE
         signature IDEQUE
         signature IDICT
-        signature DATALESS_IDICT
-        signature MINI_DATALESS_IDICT
         signature IO_UTIL
         signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
         signature LIST_UTIL
+        signature MINI_DATALESS_IDICT
+        signature MINI_IDICT
         signature MINI_IO
         signature MINI_STRING
         signature MONAD
@@ -329,6 +330,7 @@ is
         ideque.sig
         ideque.sml
         idict.sig
+        idict-mini.sig
         idict-dataless.sig
         idict-dataless-mini.sig
         io-mini.sig
