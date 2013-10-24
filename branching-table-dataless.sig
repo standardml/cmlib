@@ -10,11 +10,11 @@ signature DATALESS_BRANCHING_TABLE =
       exception Expired
 
       val table : init -> table
+      val null : table
 
       (* Produces a copy that can be modified independently. *)
       val branch : table -> table
 
-      val size : table -> int
       val insert : table -> key -> unit
       val remove : table -> key -> unit
       val find : table -> key -> key option
@@ -26,5 +26,10 @@ signature DATALESS_BRANCHING_TABLE =
          Takes the parent to be the empty table if there is no parent.
       *)
       val foldDiff : (key * 'b -> 'b) -> (key * 'b -> 'b) -> 'b -> table -> 'b
+
+      val expired : table -> bool
+
+      val compact : table -> unit  (* NB: Expires all parents. *)
+      val size : table -> int      (* NB: Expires all parents. *)
 
    end

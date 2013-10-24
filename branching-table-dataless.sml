@@ -1,7 +1,6 @@
 
-functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT
-                                structure Nursery : MINI_IDICT
-                                sharing type Base.key = Nursery.key
+functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT where type init = int
+                                structure Nursery : MINI_IDICT where type key = Base.key
                                 val history : int
                                 val nurseryInit : Nursery.init)
    :>
@@ -26,7 +25,7 @@ functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT
 
 
       type stamp = int
-      val nextStamp = ref 0
+      val nextStamp = ref 2
       fun newStamp () =
          let
             val x = !nextStamp
@@ -57,7 +56,10 @@ functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT
       *)
 
       datatype pretable =
+         (* table, locked, stamp, remembered stamp *)
          BASE of B.table * bool ref * stamp ref * stamp
+
+         (* table, locked, tail *)
        | CONS of entry N.table * bool ref * table
 
       withtype table = pretable ref
@@ -69,6 +71,17 @@ functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT
          in
             ref (BASE (B.table init, ref false, ref stamp, stamp))
          end
+
+
+      val null = ref (BASE (B.table 1, ref true, ref 1, 0))
+
+
+      fun expired table =
+         (case !table of
+             BASE (_, _, stampr, stamp) =>
+                not (!stampr = stamp)
+           | CONS (_, _, rest) =>
+                expired rest)
 
 
       (* precondition: table has at last n CONS cells *)
@@ -83,6 +96,29 @@ functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT
                    drop (n-1) rest)
 
 
+      (* Exactly two tables in the list (counting BASE). *)
+      fun merge table =
+         (case !table of
+             CONS (t, _, ref (BASE (t', locked, stampr, stamp))) =>
+               if !stampr = stamp then
+                  let
+                     val stamp' = newStamp ()
+                  in
+                     stampr := stamp';
+      
+                     N.fold
+                        (fn (_, Insert key, ()) => B.insert t' key
+                          | (key, Delete, ()) => B.remove t' key)
+                        () t ;
+      
+                     table := BASE (t', locked, stampr, stamp')
+                  end
+               else
+                  raise Expired
+           | _ =>
+                raise (Fail "precondition"))
+
+
       fun branch table =
          let in
             (* Lock the table. *)
@@ -92,51 +128,18 @@ functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT
 
             (* If we have history+1 tables in the list (counting BASE), merge the last two. *)
             (case drop (history-1) table of
-                SOME (table' as ref (CONS (t, _, ref (BASE (t', locked, stampr, stamp))))) =>
-                   if !stampr = stamp then
-                      let
-                         val stamp' = newStamp ()
-                      in
-                         stampr := stamp';
-
-                         N.fold
-                            (fn (_, Insert key, ()) => B.insert t' key
-                              | (key, Delete, ()) => B.remove t' key)
-                            () t ;
-
-                         table' := BASE (t', locked, stampr, stamp')
-                      end
-                   else
-                      raise Expired
+                SOME (ref (BASE _)) =>
+                   (* Don't have a full history yet, so nothing to merge. *)
+                   ()
+              | SOME (table' as (ref (CONS _))) =>
+                   (* Since there can't be more than history+1 tables in table, table' has at most 2. *)
+                   merge table'
               | NONE =>
                    (* Don't have a full history yet, so nothing to merge. *)
-                   ()
-              | SOME (ref (BASE _)) =>
-                   (* Don't have a full history yet, so nothing to merge. *)
-                   ()
-              | SOME (ref (CONS (_, _, ref (CONS _)))) =>
-                   (* More than history+1 tables in the list. *)
-                   raise (Fail "invariant"));
-
+                   ());
 
             (* Now cons a new table onto the front. *)
             ref (CONS (N.table nurseryInit, ref false, table))
-         end
-
-
-      fun size table =
-         let
-            fun loop table acc =
-               (case !table of
-                   BASE (t, _, stampr, stamp) =>
-                      if !stampr = stamp then
-                         acc + B.size t
-                      else
-                         raise Expired
-                 | CONS (t, _, rest) =>
-                      loop rest (acc + N.size t))
-         in
-            loop table 0
          end
 
 
@@ -193,17 +196,7 @@ functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT
                 if !locked then
                    raise Locked
                 else
-                   (case find rest key of
-                       NONE =>
-                          (* Not in the tail, so just delete from the head.
-                             This will have no effect if it's not in the head either.
-                          *)
-                          N.remove t key
-                     | SOME _ =>
-                          (* Present in the tail, so mark as Deleted in the head.
-                             If it's present in the head, it will be overwritten.
-                          *)
-                          N.insert t key Delete))
+                   N.insert t key Delete)
 
 
       fun parent table =
@@ -226,5 +219,29 @@ functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT
                    (fn (_, Insert key, acc) => fins (key, acc)
                      | (key, Remove, acc) => fdel (key, acc))
                    x t)
+
+
+      fun compact table =
+         (case !table of
+             BASE _ =>
+                ()
+           | CONS (_, _, rest) =>
+                (
+                compact rest;
+                merge table
+                ))
+
+
+      fun size table =
+         let in
+            compact table;
+
+            (case !table of
+                BASE (t, _, _, _) =>
+                   B.size t
+              | CONS _ =>
+                   (* table has just been compacted *)
+                   raise (Fail "impossible"))
+         end
 
    end
