@@ -1,4 +1,6 @@
 
+(* Warning! This is only sparsely tested. *)
+
 structure DER
    :> 
    ASN1 where type data = Bytestring.string
@@ -697,10 +699,8 @@ structure DER
          let
             val (x, s') = inn (BS.full s)
          in
-            if BS.isEmpty s' then
-               x
-            else
-               error ILLEGAL s'
+            (* Apparently it's okay to have extra junk at the end of the encoding. *)
+            x
          end
 
    end
