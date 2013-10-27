@@ -435,6 +435,53 @@ structure DER
             (Choice [0wx02], out, inn)
          end
 
+
+      val unsigned =
+         let
+            fun out x =
+               if IntInf.>= (x, 0) then
+                  let
+                     val str = C.toBytesB x
+                     val hi = B.sub (str, 0)
+                  in
+                     if Word8.andb (hi, 0wx80) = 0w0 then
+                        let
+                           val sz = B.size str
+                           val (szsz, szcode) = sizeOut sz
+                        in
+                           (sz + szsz + 1,
+                            S.cons (B.str 0wx02, 
+                                    S.append (szcode, S.singleton str)))
+                        end
+                     else
+                        let
+                           val sz = B.size str + 1
+                           val (szsz, szcode) = sizeOut sz
+                        in
+                           (sz + szsz + 1,
+                            S.cons (B.str 0wx02,
+                                    S.append (szcode,
+                                              S.cons (B.str 0wx00,
+                                                      S.singleton str))))
+                        end
+                  end
+               else
+                  raise EncodeError
+
+            fun inn s =
+               let
+                  val (sz, s') = inhead 0wx02 s
+                  
+                  val (front, back) =
+                     BS.splitAt (s', sz)
+                     handle Subscript => error ILLEGAL s
+               in
+                  (C.fromBytesB (BS.string front), back)
+               end
+         in
+            (Choice [0wx02], out, inn)
+         end
+
          
       val bytestring =
          let

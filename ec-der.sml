@@ -27,34 +27,34 @@ functor EllipticCurveDERFun (structure EllipticCurve : ELLIPTIC_CURVE)
 
       val fmtField =
          D.tuple2 (D.objectid,                                                      (* field type *)
-                   D.union (D.integer,                                              (* prime field size *)
-                            D.tuple3 (D.integer,                                    (* m *)
+                   D.union (D.unsigned,                                             (* prime field size *)
+                            D.tuple3 (D.unsigned,                                   (* m *)
                                       D.objectid,                                   (* binary field type *)
                                       D.union (D.null,                              (* "onBasis" ?? *)
-                                               D.union (D.integer,                  (* trinomial k *)
-                                                        D.tuple3 (D.integer,        (* pentanomial k1 *)
-                                                                  D.integer,        (* pentanomial k2 *)
-                                                                  D.integer))))))   (* pentanomial k3 *)
+                                               D.union (D.unsigned,                 (* trinomial k *)
+                                                        D.tuple3 (D.unsigned,       (* pentanomial k1 *)
+                                                                  D.unsigned,       (* pentanomial k2 *)
+                                                                  D.unsigned))))))  (* pentanomial k3 *)
       
       val fmtParams =
          D.union (D.objectid,                                                       (* curve name *)
-                  D.union (D.tuple6 (D.fixed (1, D.integer),                        (* version *)
+                  D.union (D.tuple6 (D.fixed (1, D.unsigned),                       (* version *)
                                      fmtField,                                      (* field *)
                                      D.tuple3 (D.bytestring,                        (* a *)
                                                D.bytestring,                        (* b *)
                                                D.option D.bitstring),               (* seed *)
                                      D.bytestring,                                  (* base *)
-                                     D.integer,                                     (* order *)
-                                     D.option (D.integer)),                         (* cofactor *)
+                                     D.unsigned,                                    (* order *)
+                                     D.option (D.unsigned)),                        (* cofactor *)
                            D.null))                                                 (* "implicitlyCA" ?? *)
       
       val fmtPrivkey = 
-         D.tuple4 (D.fixed (1, D.integer),                                          (* version *)
+         D.tuple4 (D.fixed (1, D.unsigned),                                         (* version *)
                    D.bytestring,                                                    (* privkey *)
                    D.option (D.tag (0w0, fmtParams)),                               (* params *)
                    D.option (D.tag (0w1, D.bitstring)))                             (* pubkey *)
       
-      val fmtSg = D.tuple2 (D.integer, D.integer)
+      val fmtSg = D.tuple2 (D.unsigned, D.unsigned)
 
 
 

@@ -27,7 +27,8 @@ signature ASN1 =
       val union : 'a format * 'b format -> ('a, 'b) Sum.sum format
       val tag : Word8.word * 'a format -> 'a format
 
-      val integer : IntInf.int format 
+      val integer : IntInf.int format
+      val unsigned : IntInf.int format
       val bytestring : Bytestring.string format
       val objectid : int list format
       val null : unit format
