@@ -13,6 +13,7 @@ signature PARSING =
 
       val accept : token parser
       val fail : 'a parser
+      val lazy : (unit -> 'a parser) -> 'a parser
 
       val test : (token -> bool) -> token parser
       val test_ : (token -> bool) -> unit parser

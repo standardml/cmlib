@@ -111,6 +111,8 @@ local
         ec-coding.sig
         ec-der.sml
         parsing.sml
+        arguments.sig
+        arguments.sml
         lex-engine.sig
         lex-engine.sml
         ipqueue.sig
@@ -164,6 +166,7 @@ local
         multi-file-io.sml
    end
 in
+        signature ARGUMENTS
         signature ARITH
         signature ARRAY_UTIL
         signature DATALESS_BRANCHING_TABLE
@@ -245,6 +248,7 @@ in
         structure AESOFB
         structure AESFortuna
         structure AESRandom
+        structure Arguments
         structure Arith
         structure ArraySequence
         structure ArrayUtil

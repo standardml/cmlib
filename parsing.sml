@@ -42,6 +42,8 @@ functor ParsingFun (type token
       fun fail s =
          raise SyntaxError
 
+      fun lazy f s = f () s
+
 
 
       fun require f p =

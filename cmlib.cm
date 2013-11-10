@@ -1,5 +1,6 @@
 library
 
+        signature ARGUMENTS
         signature ARITH
         signature ARRAY_UTIL
         signature DATALESS_BRANCHING_TABLE
@@ -82,6 +83,7 @@ library
         structure AESOFB
         structure AESFortuna
         structure AESRandom
+        structure Arguments
         structure Arith
         structure ArraySequence
         structure ArrayUtil
@@ -269,6 +271,8 @@ library
 is
 
         aes.sml
+        arguments.sig
+        arguments.sml
         arith.sig
         arith.sml
         array-util.sig
