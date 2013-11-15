@@ -64,6 +64,7 @@ local
         stream.sig
         stream.sml
         cryptohash.sig
+        sha1.sml
         sha256.sml
         fortuna.sig
         cipher.sig
@@ -330,6 +331,7 @@ in
 	structure Quicksort
         structure RehashRandom
         structure RIPEMD160
+        structure SHA1
         structure SHA256
         structure Stream
         structure StreamStreamable
