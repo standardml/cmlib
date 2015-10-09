@@ -16,6 +16,9 @@ signature COORD =
       val nextchar : coord -> coord
       val nextline : coord -> coord
 
+      (* Advance past n regular characters. *)
+      val addchar : int -> coord -> coord
+
       (* Filename originally passed to init *)
       val file : coord -> string
 

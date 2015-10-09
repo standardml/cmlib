@@ -14,6 +14,9 @@ structure Coord :> COORD =
       fun nextline {file, char, line, abs} = 
          {file = file, char = 1, line = line + 1, abs = abs}
 
+      fun addchar n {file, char, line, abs} = 
+         {file = file, char = char + n, line = line, abs = abs + n}
+
       fun file (pos: coord) = #file pos
 
       fun abs (pos: coord) = #abs pos
