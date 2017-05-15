@@ -30,7 +30,7 @@ signature PRE_DICT =
       *)
       val operate' : 'a dict -> key -> (unit -> 'a option) -> ('a -> 'a option) -> 'a option * 'a option * 'a dict
 
-      (* (operate dict key y presentf) looks up key in dict.  If key maps to x, it replaces x with
+      (* (insertMerge dict key y presentf) looks up key in dict.  If key maps to x, it replaces x with
          (presentf x).  If key is absent, it insert y.  It then returns the new dictionary.
       *)
       val insertMerge : 'a dict -> key -> 'a -> ('a -> 'a) -> 'a dict
