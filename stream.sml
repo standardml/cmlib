@@ -132,4 +132,9 @@ structure Stream
            | Cons (h, t) =>
                 f (h, Susp.delay (fn () => fold f x t)))
 
+      fun toList s =
+         (case front s of
+             Nil => nil
+           | Cons (h, t) => h :: toList t)
+
    end

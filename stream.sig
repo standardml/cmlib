@@ -30,5 +30,6 @@ signature STREAM =
       val map : ('a -> 'b) -> 'a stream -> 'b stream
       val app : ('a -> unit) -> 'a stream -> unit
       val fold : ('a * 'b Susp.susp -> 'b) -> 'b -> 'a stream -> 'b
+      val toList : 'a stream -> 'a list
 
    end
