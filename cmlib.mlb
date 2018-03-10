@@ -58,6 +58,8 @@ local
         splay-tree.sml
         set-splay.sml
         dict-splay.sml
+        frame-dict.sig
+        frame-dict.sml
         defaults.sml
         ec-field.sig
         ec.sig
@@ -192,6 +194,7 @@ in
         signature ELLIPTIC_CURVE_CRYPTO
         signature ELLIPTIC_CURVE_PARAMS
         signature FORTUNA
+        signature FRAME_DICT
         signature FROM_STRING
         signature HASH_INCREMENT
         signature HASH_TABLE
@@ -210,6 +213,7 @@ in
         signature MINI_STRING
         signature MONAD
         signature MONAD_UTIL
+        signature MONO_LEX_ENGINE
         signature MONO_STREAMABLE
         signature MULTI_FILE_IO
 	signature MULTI_TABLE
@@ -397,6 +401,7 @@ in
         functor EllipticCurveCryptoFun
         functor EllipticCurveDERFun
         functor EllipticCurveF2mFun
+        functor FrameDictFun
         functor FortunaFun
         functor HashTable
 	functor HashTableTable
@@ -410,6 +415,7 @@ in
         functor ListSet
         functor MultiFileIOFun
         functor MonadUtilFun
+        functor MonoLexEngineFun
         functor MonomorphizeStreamable
         functor OFBCipherFun
         functor OutputMonad
