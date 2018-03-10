@@ -12,7 +12,9 @@ signature PRETTY_PRINT =
 
       exception NotInBox
 
-      val makeStream : TextIO.outstream -> int -> ppstream
+      val makeStream       : TextIO.outstream -> int -> ppstream
+      val makeStreamIndent : TextIO.outstream -> int -> int -> ppstream  (* width, indentation *)
+
       val print      : ppstream -> string -> unit
       val tie        : ppstream -> int -> unit   (* non-breakable spaces *)
       val break      : ppstream -> int -> unit

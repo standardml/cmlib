@@ -297,15 +297,15 @@ structure PrettyPrint
             
          end
 
-      fun ppStart iostream width input =
+      fun ppStart iostream width indent input =
          let
             fun ck input2 output2 margin2 =
                (* Trying to close the outer box.  Complain. *)
                raise (Failure (NotInBox,
                                R (fn () =>
-                                     pp (iostream, width, 0, ck, T) NONE input2 output2 margin2)))
+                                     pp (iostream, width, indent, ck, T) NONE input2 output2 margin2)))
          in
-            pp (iostream, width, 0, ck, T) NONE input [] width
+            pp (iostream, width, indent, ck, T) NONE input [] (width-indent)
          end
 
 
@@ -329,13 +329,15 @@ structure PrettyPrint
                   )
          end
 
-      fun makeStream iostream width =
+      fun makeStreamIndent iostream width indent =
          let
             val q = IQueue.iqueue ()
             val input = PStream.fromIqueue q
          in
-            { queue = q, formatter = ref (R (fn () => ppStart iostream width input)) }
+            { queue = q, formatter = ref (R (fn () => ppStart iostream width indent input)) }
          end
+
+      fun makeStream iostream width = makeStreamIndent iostream width 0
 
       fun print st str = send st (Text (STRING str))
 
