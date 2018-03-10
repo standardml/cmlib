@@ -26,6 +26,7 @@ library
         signature ELLIPTIC_CURVE_CRYPTO
         signature ELLIPTIC_CURVE_PARAMS
         signature FORTUNA
+        signature FRAME_DICT
         signature FROM_STRING
         signature HASH_INCREMENT
         signature HASH_TABLE
@@ -234,6 +235,7 @@ library
         functor EllipticCurveDERFun
         functor EllipticCurveF2mFun
         functor FortunaFun
+        functor FrameDictFun
         functor HashTable
 	functor HashTableTable
         functor LazyPairingPQueue
@@ -324,6 +326,8 @@ is
         ecdsa.sml
         fortuna.sig
         fortuna.sml
+        frame-dict.sig
+        frame-dict.sml
         from-string.sig
         from-string.sml
 	hash-inc.sig
