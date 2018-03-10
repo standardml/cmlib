@@ -1,15 +1,14 @@
 
-functor LexEngineFun (structure Streamable : STREAMABLE
-                      type symbol
-                      val ord : symbol -> int)
-   :> LEX_ENGINE 
-      where type 'a Streamable.t = 'a Streamable.t
-      and type symbol = symbol
+functor MonoLexEngineFun (structure Streamable : MONO_STREAMABLE
+                          val ord : Streamable.elem -> int)
+   :> MONO_LEX_ENGINE
+      where type Streamable.t = Streamable.t
+      where type Streamable.elem = Streamable.elem
    =
    struct
 
       structure Streamable = Streamable
-      type symbol = symbol
+      type symbol = Streamable.elem
 
       (* Next state function for 7-bit symbols, with 1-byte results. *)
       fun next7x1 symbolLimit table state symbol =
@@ -112,8 +111,8 @@ functor LexEngineFun (structure Streamable : STREAMABLE
 
       type ('a, 'b) action = { match : symbol list,
                                len : int,
-                               start : symbol Streamable.t,
-                               follow : symbol Streamable.t,
+                               start : Streamable.t,
+                               follow : Streamable.t,
                                self : 'b } -> 'a
 
       type ('a, 'b) table =
@@ -152,5 +151,26 @@ functor LexEngineFun (structure Streamable : STREAMABLE
                  follow = s',
                  self = self }
           end
+
+   end
+
+
+functor LexEngineFun (structure Streamable : STREAMABLE
+                      type symbol
+                      val ord : symbol -> int)
+   :> LEX_ENGINE 
+      where type 'a Streamable.t = 'a Streamable.t
+      and type symbol = symbol
+   =
+   struct
+
+      structure S = Streamable
+      structure S' = MonomorphizeStreamable (structure Streamable = S
+                                             type elem = symbol)
+      structure E = MonoLexEngineFun (structure Streamable = S'
+                                      val ord = ord)
+
+      open E
+      structure Streamable = S
 
    end

@@ -36,6 +36,7 @@ library
         signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
+        signature MONO_LEX_ENGINE
         signature LIST_UTIL
         signature MINI_DATALESS_IDICT
         signature MINI_IDICT
@@ -238,6 +239,7 @@ library
         functor LazyPairingPQueue
         functor LeftistPQueue
         functor LexEngineFun
+        functor MonoLexEngineFun
         functor ListDict
         functor ListPreDict
         functor ListHashable
