@@ -14,13 +14,15 @@ signature FRAME_DICT =
 
       exception Absent
 
-      val create : init -> 'a frame * 'a dict
+      val empty : 'a dict
 
       val insert : 'a dict -> key -> 'a -> 'a dict
       val find : 'a dict -> key -> 'a option
       val lookup : 'a dict -> key -> 'a
 
       val addFrame : 'a dict -> 'a frame * 'a dict
+      val addFrameLarge : init -> 'a dict -> 'a frame * 'a dict
+
       val memberFrame : 'a frame -> key -> bool
       val findFrame : 'a frame -> key -> 'a option
       val insertFrame : 'a frame -> key -> 'a -> unit

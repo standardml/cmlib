@@ -14,26 +14,24 @@ functor FrameDictFun (structure Ordered : ORDERED
       type init = int
       type key = Ordered.t
 
-      datatype 'a pile = Root of 'a T.table | Cons of 'a D.dict ref * 'a pile
+      datatype 'a frame = Table of 'a T.table | Dict of 'a D.dict ref
 
-      datatype 'a frame = RootFrame of 'a T.table | ConsFrame of 'a D.dict ref
-
-      type 'a dict = 'a D.dict * 'a pile
+      type 'a dict = 'a D.dict * 'a frame list
 
       exception Absent
 
-      fun create size =
-         let val t = T.table size
-         in
-            (RootFrame t, (D.empty, Root t))
-         end
+      val empty = (D.empty, [])
 
       fun insert (d, p) key data = (D.insert d key data, p)
 
       fun findPile p key =
          (case p of
-             Root t => T.find t key
-           | Cons (ref d, p') =>
+             nil => NONE
+           | Table t :: p' =>
+                 (case T.find t key of
+                     NONE => findPile p' key
+                   | x as SOME _ => x)
+           | Dict (ref d) :: p' =>
                 (case D.find d key of
                     NONE => findPile p' key
                   | x as SOME _ => x))
@@ -49,32 +47,41 @@ functor FrameDictFun (structure Ordered : ORDERED
            | SOME x => x)
 
       fun addFrame (d, p) =
-         let val r = ref D.empty
+         let val frame = Dict (ref D.empty)
          in
             if D.isEmpty d then
-               (ConsFrame r, (D.empty, Cons (r, p)))
+               (frame, (D.empty, frame :: p))
             else
-               (ConsFrame r, (D.empty, Cons (r, Cons (ref d, p))))
+               (frame, (D.empty, frame :: Dict (ref d) :: p))
+         end
+
+      fun addFrameLarge size (d, p) =
+         let val frame = Table (T.table size)
+         in
+            if D.isEmpty d then
+               (frame, (D.empty, frame :: p))
+            else
+               (frame, (D.empty, frame :: Dict (ref d) :: p))
          end
 
       fun memberFrame frame key =
          (case frame of
-             RootFrame t => T.member t key
-           | ConsFrame (ref d) => D.member d key)
+             Table t => T.member t key
+           | Dict (ref d) => D.member d key)
 
       fun findFrame frame key =
          (case frame of
-             RootFrame t => T.find t key
-           | ConsFrame (ref d) => D.find d key)
+             Table t => T.find t key
+           | Dict (ref d) => D.find d key)
 
       fun insertFrame frame key data =
          (case frame of
-             RootFrame t => T.insert t key data
-           | ConsFrame r => r := D.insert (!r) key data)
+             Table t => T.insert t key data
+           | Dict r => r := D.insert (!r) key data)
 
       fun foldFrame f x frame =
          (case frame of
-             RootFrame t => T.fold f x t
-           | ConsFrame (ref d) => D.foldl f x d)
+             Table t => T.fold f x t
+           | Dict (ref d) => D.foldl f x d)
 
    end
