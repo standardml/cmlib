@@ -3,7 +3,7 @@ structure ConvertWord : CONVERT_WORD =
    struct
 
       type word = Word.word
-      type wordlg = Word32.word
+      type wordlg = LargeWord.word
       type word8 = Word8.word
       type word31 = Word31.word
       type word32 = Word32.word
@@ -17,8 +17,8 @@ structure ConvertWord : CONVERT_WORD =
 
       fun word8ToWord31 w = Word31.fromLarge (Word8.toLarge w)
       fun word8ToWord31X w = Word31.fromLarge (Word8.toLargeX w)
-      val word8ToWord32 = Word8.toLarge
-      val word8ToWord32X = Word8.toLargeX
+      val word8ToWord32 = Word32.fromLarge o Word8.toLarge
+      val word8ToWord32X = Word32.fromLarge o Word8.toLargeX
       fun word8ToWord64 w = Word64.fromInt (Word8.toInt w)
       val word8ToIntInf = Word8.toLargeInt
 
@@ -32,8 +32,8 @@ structure ConvertWord : CONVERT_WORD =
          end
 
       fun word31ToWord8 w = Word8.fromLarge (Word31.toLarge w)
-      val word31ToWord32 = Word31.toLarge
-      val word31ToWord32X = Word31.toLargeX
+      val word31ToWord32 = Word32.fromLarge o Word31.toLarge
+      val word31ToWord32X = Word32.fromLarge o Word31.toLargeX
       val word31ToIntInf = Word31.toLargeInt
 
       fun word31ToWord64 w = 
@@ -50,8 +50,8 @@ structure ConvertWord : CONVERT_WORD =
          end
 
 
-      val word32ToWord8 = Word8.fromLarge
-      val word32ToWord31 = Word31.fromLarge
+      val word32ToWord8 = Word8.fromLarge o Word32.toLarge
+      val word32ToWord31 = Word31.fromLarge o Word32.toLarge
       fun word32ToWord64 w = Word64.fromLargeInt (Word32.toLargeInt w)
       val word32ToIntInf = Word32.toLargeInt
 
@@ -80,7 +80,7 @@ structure ConvertWord : CONVERT_WORD =
          let
             val a = Word8Array.array (4, 0w0)
          in
-            PackWord32Big.update (a, 0, w);
+            PackWord32Big.update (a, 0, Word32.toLargeWord w);
             Bytestring.fromWord8Vector (Word8Array.vector a)
          end
 
@@ -88,7 +88,7 @@ structure ConvertWord : CONVERT_WORD =
          let
             val a = Word8Array.array (4, 0w0)
          in
-            PackWord32Little.update (a, 0, w);
+            PackWord32Little.update (a, 0, Word32.toLargeWord w);
             Bytestring.fromWord8Vector (Word8Array.vector a)
          end
 
@@ -102,8 +102,8 @@ structure ConvertWord : CONVERT_WORD =
          let
             val a = Word8Array.array (8, 0w0)
          in
-            PackWord32Big.update (a, 0, word64ToWord32 (Word64.>> (w, 0w32)));
-            PackWord32Big.update (a, 1, word64ToWord32 w);
+            PackWord32Big.update (a, 0, Word32.toLarge (word64ToWord32 (Word64.>> (w, 0w32))));
+            PackWord32Big.update (a, 1, Word32.toLarge (word64ToWord32 w));
             Bytestring.fromWord8Vector (Word8Array.vector a)
          end
 
@@ -111,8 +111,8 @@ structure ConvertWord : CONVERT_WORD =
          let
             val a = Word8Array.array (8, 0w0)
          in
-            PackWord32Little.update (a, 1, word64ToWord32 (Word64.>> (w, 0w32)));
-            PackWord32Little.update (a, 0, word64ToWord32 w);
+            PackWord32Little.update (a, 1, Word32.toLarge (word64ToWord32 (Word64.>> (w, 0w32))));
+            PackWord32Little.update (a, 0, Word32.toLarge (word64ToWord32 w));
             Bytestring.fromWord8Vector (Word8Array.vector a)
          end
          
@@ -123,7 +123,7 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 4 orelse Word8.> (Bytestring.sub (s, 0), 0wx7f) then
             raise ConvertWord
          else
-            word32ToWord31 (PackWord32Big.subVec (s, 0))
+            word32ToWord31 (Word32.fromLarge (PackWord32Big.subVec (s, 0)))
 
       fun bytesToWord31SB s = bytesToWord31B (Bytesubstring.string s)
 
@@ -131,7 +131,7 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 4 orelse Word8.> (Bytestring.sub (s, 3), 0wx7f) then
             raise ConvertWord
          else
-            word32ToWord31 (PackWord32Little.subVec (s, 0))
+            word32ToWord31 (Word32.fromLarge (PackWord32Little.subVec (s, 0)))
 
       fun bytesToWord31SL s = bytesToWord31L (Bytesubstring.string s)
 
@@ -139,7 +139,7 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 4 then
             raise ConvertWord
          else
-            PackWord32Big.subVec (s, 0)
+            Word32.fromLarge (PackWord32Big.subVec (s, 0))
 
       fun bytesToWord32SB s = bytesToWord32B (Bytesubstring.string s)
 
@@ -147,7 +147,7 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 4 then
             raise ConvertWord
          else
-            PackWord32Little.subVec (s, 0)
+            Word32.fromLarge (PackWord32Little.subVec (s, 0))
 
       fun bytesToWord32SL s = bytesToWord32L (Bytesubstring.string s)
 
@@ -155,8 +155,8 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 8 then
             raise ConvertWord
          else
-            Word64.orb (Word64.<< (word32ToWord64 (PackWord32Big.subVec (s, 0)), 0w32),
-                        word32ToWord64 (PackWord32Big.subVec (s, 1)))
+            Word64.orb (Word64.<< (word32ToWord64 (Word32.fromLarge (PackWord32Big.subVec (s, 0))), 0w32),
+                        word32ToWord64 (Word32.fromLarge (PackWord32Big.subVec (s, 1))))
 
       fun bytesToWord64SB s = bytesToWord64B (Bytesubstring.string s)        
 
@@ -164,8 +164,8 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 8 then
             raise ConvertWord
          else
-            Word64.orb (Word64.<< (word32ToWord64 (PackWord32Little.subVec (s, 1)), 0w32),
-                        word32ToWord64 (PackWord32Little.subVec (s, 0)))
+            Word64.orb (Word64.<< (word32ToWord64 (Word32.fromLarge (PackWord32Little.subVec (s, 1))), 0w32),
+                        word32ToWord64 (Word32.fromLarge (PackWord32Little.subVec (s, 0))))
 
       fun bytesToWord64SL s = bytesToWord64L (Bytesubstring.string s)        
 
@@ -200,13 +200,13 @@ structure ConvertWord : CONVERT_WORD =
       val wordLgToWord = Word.fromLarge
       val wordLgToWord8 = Word8.fromLarge
       val wordLgToWord31 = Word31.fromLarge
-      fun wordLgToWord32 w = w
-      fun wordLgToWord32X w = w
-      val wordLgToWord64 = word32ToWord64
-      val wordLgToWord64X = word32ToWord64X
+      fun wordLgToWord32 w = Word32.fromLarge w
+      fun wordLgToWord32X w = Word32.fromLarge w
+      val wordLgToWord64 = word32ToWord64 o Word32.fromLarge
+      val wordLgToWord64X = word32ToWord64X o Word32.fromLarge
       val wordLgToIntInf = LargeWord.toLargeInt
-      val wordLgToBytesB = word32ToBytesB
-      val wordLgToBytesL = word32ToBytesL
+      val wordLgToBytesB = word32ToBytesB o Word32.fromLarge
+      val wordLgToBytesL = word32ToBytesL o Word32.fromLarge
 
       val wordToWordLg = Word.toLarge
       val word8ToWordLg = Word8.toLarge
@@ -215,12 +215,12 @@ structure ConvertWord : CONVERT_WORD =
       val word31ToWordLgX = Word31.toLargeX
       val word32ToWordLg = Word32.toLarge
       val word32ToWordLgX = Word32.toLargeX
-      val word64ToWordLg = word64ToWord32
-      val word64ToWordLgX = word64ToWord32
+      val word64ToWordLg = Word32.toLarge o word64ToWord32
+      val word64ToWordLgX = Word32.toLarge o word64ToWord32
       val intInfToWordLg = LargeWord.fromLargeInt
-      val bytesToWordLgB = bytesToWord32B
-      val bytesToWordLgSB = bytesToWord32SB
-      val bytesToWordLgL = bytesToWord32L
-      val bytesToWordLgSL = bytesToWord32SL
+      val bytesToWordLgB = Word32.toLarge o bytesToWord32B
+      val bytesToWordLgSB = Word32.toLarge o bytesToWord32SB
+      val bytesToWordLgL = Word32.toLarge o bytesToWord32L
+      val bytesToWordLgSL = Word32.toLarge o bytesToWord32SL
 
    end
