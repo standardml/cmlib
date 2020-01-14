@@ -10,10 +10,15 @@ structure ConvertWord : CONVERT_WORD =
       type word64 = Word64.word
 
 
-      (* A lot of this could be simpler if LargeWord were the largest word size. *)
+      (* A lot of this could be simpler if LargeWord were the largest word size,
+         like the basis documentation states.  Unfortunately, when 32-bit SML/NJ
+         supported 64-bit words, it didn't use Word64 for LargeWord.  Also, Word64
+         didn't implement toLarge and fromLarge, which would have been useful.
 
+         It would make sense to implement a version of this that abandons
+         backward compatibility to 32-bit SML/NJ.
+      *)
 
-      (* This stuff all depends on the size of LargeWord. *)
 
       fun word8ToWord31 w = Word31.fromLarge (Word8.toLarge w)
       fun word8ToWord31X w = Word31.fromLarge (Word8.toLargeX w)
@@ -32,8 +37,8 @@ structure ConvertWord : CONVERT_WORD =
          end
 
       fun word31ToWord8 w = Word8.fromLarge (Word31.toLarge w)
-      val word31ToWord32 = Word32.fromLarge o Word31.toLarge
-      val word31ToWord32X = Word32.fromLarge o Word31.toLargeX
+      fun word31ToWord32 w = Word32.fromLarge (Word31.toLarge w)
+      fun word31ToWord32X w = Word32.fromLarge (Word31.toLargeX w)
       val word31ToIntInf = Word31.toLargeInt
 
       fun word31ToWord64 w = 
@@ -50,8 +55,8 @@ structure ConvertWord : CONVERT_WORD =
          end
 
 
-      val word32ToWord8 = Word8.fromLarge o Word32.toLarge
-      val word32ToWord31 = Word31.fromLarge o Word32.toLarge
+      fun word32ToWord8 w = Word8.fromLarge (Word32.toLarge w)
+      fun word32ToWord31 w = Word31.fromLarge (Word32.toLarge w)
       fun word32ToWord64 w = Word64.fromLargeInt (Word32.toLargeInt w)
       val word32ToIntInf = Word32.toLargeInt
 
@@ -123,7 +128,7 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 4 orelse Word8.> (Bytestring.sub (s, 0), 0wx7f) then
             raise ConvertWord
          else
-            word32ToWord31 (Word32.fromLarge (PackWord32Big.subVec (s, 0)))
+            Word31.fromLarge (PackWord32Big.subVec (s, 0))
 
       fun bytesToWord31SB s = bytesToWord31B (Bytesubstring.string s)
 
@@ -131,7 +136,7 @@ structure ConvertWord : CONVERT_WORD =
          if Bytestring.size s <> 4 orelse Word8.> (Bytestring.sub (s, 3), 0wx7f) then
             raise ConvertWord
          else
-            word32ToWord31 (Word32.fromLarge (PackWord32Little.subVec (s, 0)))
+            Word31.fromLarge (PackWord32Little.subVec (s, 0))
 
       fun bytesToWord31SL s = bytesToWord31L (Bytesubstring.string s)
 
@@ -202,11 +207,11 @@ structure ConvertWord : CONVERT_WORD =
       val wordLgToWord31 = Word31.fromLarge
       fun wordLgToWord32 w = Word32.fromLarge w
       fun wordLgToWord32X w = Word32.fromLarge w
-      val wordLgToWord64 = word32ToWord64 o Word32.fromLarge
-      val wordLgToWord64X = word32ToWord64X o Word32.fromLarge
+      fun wordLgToWord64 w = word32ToWord64 (Word32.fromLarge w)
+      fun wordLgToWord64X w = word32ToWord64X (Word32.fromLarge w)
       val wordLgToIntInf = LargeWord.toLargeInt
-      val wordLgToBytesB = word32ToBytesB o Word32.fromLarge
-      val wordLgToBytesL = word32ToBytesL o Word32.fromLarge
+      fun wordLgToBytesB w = word32ToBytesB (Word32.fromLarge w)
+      fun wordLgToBytesL w = word32ToBytesL (Word32.fromLarge w)
 
       val wordToWordLg = Word.toLarge
       val word8ToWordLg = Word8.toLarge
@@ -215,12 +220,12 @@ structure ConvertWord : CONVERT_WORD =
       val word31ToWordLgX = Word31.toLargeX
       val word32ToWordLg = Word32.toLarge
       val word32ToWordLgX = Word32.toLargeX
-      val word64ToWordLg = Word32.toLarge o word64ToWord32
-      val word64ToWordLgX = Word32.toLarge o word64ToWord32
+      fun word64ToWordLg w = Word32.toLarge (word64ToWord32 w)
+      fun word64ToWordLgX w = Word32.toLarge (word64ToWord32 w)
       val intInfToWordLg = LargeWord.fromLargeInt
-      val bytesToWordLgB = Word32.toLarge o bytesToWord32B
-      val bytesToWordLgSB = Word32.toLarge o bytesToWord32SB
-      val bytesToWordLgL = Word32.toLarge o bytesToWord32L
-      val bytesToWordLgSL = Word32.toLarge o bytesToWord32SL
+      fun bytesToWordLgB w = Word32.toLarge (bytesToWord32B w)
+      fun bytesToWordLgSB w = Word32.toLarge (bytesToWord32SB w)
+      fun bytesToWordLgL w = Word32.toLarge (bytesToWord32L w)
+      fun bytesToWordLgSL w = Word32.toLarge (bytesToWord32SL w)
 
    end
