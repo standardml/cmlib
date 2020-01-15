@@ -441,7 +441,11 @@ is
 
         (* SML/NJ implementations *)
 	cont-nj.sml
+#if SIZE_32=1
         convert-word-nj.sml
+#else
+        convert-word-nj64.sml
+#endif
 	susp-nj.sml
         weak-nj.sml
 

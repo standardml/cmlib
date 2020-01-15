@@ -11,19 +11,17 @@ structure ConvertWord : CONVERT_WORD =
 
 
       (* A lot of this could be simpler if LargeWord were the largest word size,
-         like the basis documentation states.  Unfortunately, when 32-bit SML/NJ
-         supported 64-bit words, it didn't use Word64 for LargeWord.  Also, Word64
-         didn't implement toLarge and fromLarge, which would have been useful.
-
-         It would make sense to implement a version of this that abandons
-         backward compatibility to 32-bit SML/NJ.
+         like the basis documentation states.  Unfortunately, some 32-bit versions
+         of SML/NJ supported 64-bit words, but didn't use Word64 for LargeWord.
+         Also, Word64 didn't implement toLarge and fromLarge, which would have been
+         useful.
       *)
 
 
       fun word8ToWord31 w = Word31.fromLarge (Word8.toLarge w)
       fun word8ToWord31X w = Word31.fromLarge (Word8.toLargeX w)
-      val word8ToWord32 = Word32.fromLarge o Word8.toLarge
-      val word8ToWord32X = Word32.fromLarge o Word8.toLargeX
+      fun word8ToWord32 w = Word32.fromLarge (Word8.toLarge w)
+      fun word8ToWord32X w = Word32.fromLarge (Word8.toLargeX w)
       fun word8ToWord64 w = Word64.fromInt (Word8.toInt w)
       val word8ToIntInf = Word8.toLargeInt
 
