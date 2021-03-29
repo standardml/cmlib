@@ -16,6 +16,13 @@ structure FromString :> FROM_STRING =
       fun scanStringAll scan str = scanSubstringAll scan (Substring.full str)
 
       val toInt = scanStringAll (Int.scan StringCvt.DEC)
+
+      fun toIntM str =
+         if String.size str < 1 orelse String.sub (str, 0) = #"~" then
+            NONE
+         else
+            toInt str
+
       val toWord8 = scanStringAll (Word8.scan StringCvt.DEC)
       val toWord8Hex = scanStringAll (Word8.scan StringCvt.HEX)
 

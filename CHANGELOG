@@ -1,0 +1,7 @@
+
+Incompatible changes since 2.3.0
+
+* Deprecated Coord : COORD because its functionality seems too
+  specialized for a library.  (See issue #3 on Github.)  Also
+  deprecated signatures/modules that depend on Coord:
+  COORDINATED_STREAM, POS, CoordinatedStream, and Pos.

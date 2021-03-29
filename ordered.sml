@@ -38,8 +38,8 @@ structure TimeOrdered
    struct
       type t = Time.time
 
-      val eq : Time.time * Time.time -> bool = op =
       val compare = Time.compare
+      fun eq (t1, t2) = (case compare (t1, t2) of EQUAL => true | _ => false)
    end
 
 
@@ -64,7 +64,26 @@ structure UnitOrdered
    end
 
 
-functor ListOrdered (Ordered : ORDERED)
+functor PairOrdered (structure Ordered1 : ORDERED
+                     structure Ordered2 : ORDERED)
+   :> ORDERED where type t = Ordered1.t * Ordered2.t
+   =
+   struct
+
+      type t = Ordered1.t * Ordered2.t
+
+      fun eq ((x1, x2), (y1, y2)) =
+         Ordered1.eq (x1, y1) andalso Ordered2.eq (x2, y2)
+
+      fun compare ((x1, x2), (y1, y2)) =
+         (case Ordered1.compare (x1, y1) of
+             EQUAL => Ordered2.compare (x2, y2)
+           | ord => ord)
+
+   end
+
+
+functor ListOrdered (structure Ordered : ORDERED)
    :> ORDERED where type t = Ordered.t list
    =
    struct
@@ -81,7 +100,7 @@ functor ListOrdered (Ordered : ORDERED)
    end
 
 
-functor InvertOrdered (Ordered : ORDERED)
+functor InvertOrdered (structure Ordered : ORDERED)
    :> ORDERED where type t = Ordered.t
    =
    struct

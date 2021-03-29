@@ -1,0 +1,47 @@
+
+The following are some policies to maintain a semi-consistent style
+across CMlib:
+
+* Name files using the most-significant designator first, then
+  qualifiers.  Thus dict-red-black.sml, not red-black-dict.sml.
+
+* In identifier names, use English-standard word order.  Thus
+  RedBlackDict, not DictRedBlack.
+
+  (The difference between file names and identifier names is because
+  we want sorted file names to group similar functionality, but
+  sorting is rarely important for identifier names.)
+
+* Camel case is preferred to underscores.  Thus deleteNearLeaf, not
+  delete_near_leaf.  An exception is for all-caps identifiers (mainly
+  signatures) which obviously must use underscores.
+
+* Curried functions are generally preferred to functions taking tupled
+  arguments.
+
+  There are occasions in which exceptions are reasonable, however:
+
+  = One might take arguments in a tuple in order to match the usage in
+    a similar basis function, such as a comparison function.
+
+  = Since SML does not provide a convenient syntax for anonymous
+    curried functions, a function argument of a higher-order function
+    might take its arguments in a tuple.  (For example, the first
+    argument to a fold-like operation.)
+
+* Functor arguments using specification-list notation are preferred to
+  signature notation.  That is, we prefer:
+
+    functor FooFun (structure Bar : BAR) = ...
+
+  to:
+
+    functor FooFun (Bar : BAR) = ...
+
+  Several exceptions are grandfathered in, though.
+
+* Adding an operation to a signature is usually not considered an
+  incompatible change for versioning purposes (even though, strictly
+  speaking, one could write SML code that depends on its absence).
+  However, adding an operation to a type class (e.g., ORDERED or
+  STREAMABLE) is considered an incompatible change.

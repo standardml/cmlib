@@ -8,6 +8,8 @@ local
         bytestring.sml
         bytesubstring.sig
         bytesubstring.sml
+        path.sig
+        path.sml
         random.sig
         susp.sig
         susp.sml
@@ -60,6 +62,8 @@ local
         dict-splay.sml
         frame-dict.sig
         frame-dict.sml
+        command-line.sig
+        command-line.sml
         defaults.sml
         ec-field.sig
         ec.sig
@@ -136,9 +140,6 @@ local
         queue.sml
         quicksort.sml
         random-rehash.sml
-        coord.sig
-        coord.sml
-        coord-stream.sig
         union-find-imperative.sig
         partition.sig
 	ann "nonexhaustiveMatch ignore" in union-find-imperative.sml end
@@ -151,15 +152,12 @@ local
         cont.sig
         cont.sml
         coroutine.sml
-        coord-stream.sml
         pqueue-leftist.sml
         table-hash.sml
         pqueue-pairing.sml
         table-dict.sml
         weak.sig
         weak.sml
-        pos.sig
-        pos.sml
         io-mini.sig
         seek-io.sig
         seek-io.sml
@@ -167,6 +165,13 @@ local
         io-util.sml
         multi-file-io.sig
         multi-file-io.sml
+
+        deprecated/coord.sig
+        deprecated/coord.sml
+        deprecated/coord-stream.sig
+        deprecated/coord-stream.sml
+        deprecated/pos.sig
+        deprecated/pos.sml
    end
 in
         signature ARGUMENTS
@@ -176,11 +181,10 @@ in
         signature BYTESTRING
         signature BYTESUBSTRING
         signature CIPHER
+        signature COMMAND_LINE
         signature CONT
         signature CONVERT_INT_INF
         signature CONVERT_WORD
-	signature COORD
-        signature COORDINATED_STREAM
         signature COROUTINE
         signature CRYPTO_HASH
         signature DATALESS_HASH_TABLE
@@ -222,7 +226,7 @@ in
         signature PARSE_ENGINE
         signature PARSING
         signature PARTITION
-	signature POS
+        signature PATH
         signature PRE_DICT
         signature PRETTY_PRINT
         signature PQUEUE
@@ -266,7 +270,6 @@ in
         structure BytesubstringCostring
         structure BytesubstringMiniString
         structure BytesubstringMonoStreamable
-	(* Char *)
 	structure CharListDict
 	structure CharListSet
 	structure CharHashable
@@ -276,11 +279,10 @@ in
 	structure CharRedBlackDict
 	structure CharSplaySet
 	structure CharSplayDict
+        structure CommandLine
         structure Cont
         structure ConvertIntInf
         structure ConvertWord
-	structure Coord
-        structure CoordinatedStream
         structure Coroutine
         structure ECDERp
         structure ECDER2m
@@ -297,7 +299,6 @@ in
         structure FieldFp
         structure FromString
         structure IDeque
-	(* Int *)
 	structure IntListDict
 	structure IntListSet
 	structure IntHashable
@@ -307,7 +308,6 @@ in
 	structure IntRedBlackDict
 	structure IntSplaySet
 	structure IntSplayDict
-	(* IntInf *)
 	structure IntInfListDict
 	structure IntInfListSet
 	structure IntInfHashable
@@ -327,7 +327,7 @@ in
         structure MTRand32
         structure MJHash
         structure Output
-	structure Pos
+        structure Path
 	structure PrettyPrint
 	structure PStream
 	structure PSusp
@@ -339,7 +339,6 @@ in
         structure SHA256
         structure Stream
         structure StreamStreamable
-        (* String *)
 	structure StringHashable
 	structure StringHashTable
 	structure StringListDict
@@ -353,7 +352,6 @@ in
         structure SubstringCostring
         structure SubstringMiniString
 	structure Sum
-        (* Symbol *)
 	structure StringSymbol
         structure SubstringMonoStreamable
 	structure Symbol
@@ -371,7 +369,6 @@ in
         structure TimeOrdered
         structure TreeSequence
         structure IUnionFind
-	(* Unit *)
 	structure UnitListDict
 	structure UnitListSet
 	structure UnitHashable
@@ -405,6 +402,7 @@ in
         functor FortunaFun
         functor HashTable
 	functor HashTableTable
+        functor InvertOrdered
         functor LazyPairingPQueue
         functor LeftistPQueue
         functor LexEngineFun
@@ -419,6 +417,7 @@ in
         functor MonomorphizeStreamable
         functor OFBCipherFun
         functor OutputMonad
+        functor PairOrdered
         functor PairingIPQueue
         functor PairingPQueue
         functor ParseEngineFun
@@ -437,4 +436,13 @@ in
         functor SymbolFun
         functor SymbolHashableFun
         functor SymbolOrderedFun
+
+        (* deprecated *)
+	signature COORD
+        signature COORDINATED_STREAM
+	signature POS
+	structure Coord
+        structure CoordinatedStream
+	structure Pos
+
 end
