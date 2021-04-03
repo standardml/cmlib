@@ -140,7 +140,7 @@ local
         random-rehash.sml
         union-find-imperative.sig
         partition.sig
-	ann "nonexhaustiveMatch ignore" in union-find-imperative.sml end
+	union-find-imperative.sml
         sequence-array.sml
         partition.sml
         coroutine.sig

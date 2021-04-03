@@ -29,6 +29,8 @@ across CMlib:
     might take its arguments in a tuple.  (For example, the first
     argument to a fold-like operation.)
 
+* Please avoid inexhaustive matches.
+
 * Functor arguments using specification-list notation are preferred to
   signature notation.  That is, we prefer:
 
