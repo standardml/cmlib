@@ -1,4 +1,9 @@
 
+(* Note: this implementation does not backtrack laterally.
+   For example: in seq p1 p2, once p1 matches some input and returns, it will not
+   backtrack into p1 because of a failure in p2.
+*)
+
 functor ParsingFun (type token
                     structure Streamable : MONO_STREAMABLE where type elem = token)
    : PARSING

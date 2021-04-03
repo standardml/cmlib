@@ -51,12 +51,30 @@ structure Stream
       fun fromBytestring str = fromTable Bytestring.sub str 0
 
       fun fromTextInstream ins =
-          fromProcess (fn () => TextIO.input1 ins)
+         lazy
+         (fn () =>
+             (case TextIO.input1 ins of
+                 NONE =>
+                    (
+                    TextIO.closeIn ins;
+                    Nil
+                    )
+
+               | SOME x =>
+                    Cons (x, fromTextInstream ins)))
 
       fun fromBinInstream ins =
-          fromProcess (fn () => BinIO.input1 ins)
+         lazy
+         (fn () =>
+             (case BinIO.input1 ins of
+                 NONE =>
+                    (
+                    BinIO.closeIn ins;
+                    Nil
+                    )
 
-
+               | SOME x =>
+                    Cons (x, fromBinInstream ins)))
 
       fun fix f = f (lazy (fn () => front (fix f)))
 

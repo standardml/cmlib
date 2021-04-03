@@ -14,6 +14,9 @@ Incompatible changes since 2.3.0
   - DictFun is deleted.  Its purpose had been to extend a PRE_DICT to
     a DICT.
 
+* In streams, the fromTextInstream and fromBinInstream now close their
+  input streams when the end of the stream is reached.
+
 * Several table signatures and modules are renamed:
 
     DATALESS_IDICT      -> DATALESS_TABLE
