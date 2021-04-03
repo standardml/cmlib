@@ -1,6 +1,6 @@
 
-functor ListPreDict (structure Key : ORDERED)
-   :> PRE_DICT where type key = Key.t
+functor ListDict (structure Key : ORDERED)
+   :> DICT where type key = Key.t
    =
    struct
 
@@ -12,6 +12,8 @@ functor ListPreDict (structure Key : ORDERED)
       val empty = []
 
       val isEmpty = null
+
+      val size = List.length
 
       fun singleton key x = [(key, x)]
 
@@ -158,11 +160,168 @@ functor ListPreDict (structure Key : ORDERED)
 
       val app = List.app
 
+      fun union l1 l2 merge =
+         (case (l1, l2) of
+             (nil, _) => l2
+
+           | (_, nil) => l1
+
+           | ((key1, x) :: rest1, (key2, y) :: rest2) =>
+                (case Key.compare (key1, key2) of
+                    LESS =>
+                       (key1, x) :: union rest1 l2 merge
+
+                  | EQUAL =>
+                       (key1, merge (key1, x, y)) :: union rest1 rest2 merge
+
+                  | GREATER =>
+                       (key2, y) :: union l1 rest2 merge))
+
+
+      fun split key acc l =
+         (case l of
+             nil =>
+                (acc, NONE, nil)
+
+           | (item as (key', _)) :: rest =>
+                (case Key.compare (key, key') of
+                    LESS =>
+                       (acc, NONE, l)
+
+                  | EQUAL =>
+                       (acc, SOME item, rest)
+
+                  | GREATER =>
+                       split key (item :: acc) rest))
+
+      fun partition l key =
+         (case split key nil l of
+             (leftr, NONE, right) => (rev leftr, NONE, right)
+
+           | (leftr, SOME (_, x), right) => (rev leftr, SOME x, right))
+
+      fun partitionlt l key =
+         (case split key nil l of
+             (leftr, NONE, right) => (rev leftr, right)
+
+           | (leftr, SOME item, right) => (rev leftr, item :: right))
+
+      fun partitiongt l key =
+         (case split key nil l of
+             (leftr, NONE, right) => (rev leftr, right)
+
+           | (leftr, SOME item, right) => (rev (item :: leftr), right))
+
+      fun rangeii tree left right =
+         let
+            val (_, tree') = partitionlt tree left
+            val (tree'', _) = partitiongt tree' right
+         in
+            tree''
+         end
+
+      fun rangeie tree left right =
+         let
+            val (_, tree') = partitionlt tree left
+            val (tree'', _) = partitionlt tree' right
+         in
+            tree''
+         end
+
+      fun rangeei tree left right =
+         let
+            val (_, tree') = partitiongt tree left
+            val (tree'', _) = partitiongt tree' right
+         in
+            tree''
+         end
+
+      fun rangeee tree left right =
+         let
+            val (_, tree') = partitiongt tree left
+            val (tree'', _) = partitionlt tree' right
+         in
+            tree''
+         end
+
+      fun least l =
+         (case l of
+             nil => raise Absent
+
+           | (_, x) :: _ => x)
+
+      fun greatest l =
+         (let
+             val (_, x) = List.last l
+          in
+             x
+          end
+          handle Empty => raise Absent)
+
+      fun leastGt l key =
+         (case l of
+             nil => raise Absent
+
+           | (key', x) :: rest =>
+                (case Key.compare (key', key) of
+                    GREATER => x
+
+                  | _ => leastGt rest key))
+
+      fun leastGeq l key =
+         (case l of
+             nil => raise Absent
+
+           | (key', x) :: rest =>
+                (case Key.compare (key', key) of
+                    LESS => leastGeq rest key
+
+                  | _ => x))
+
+      fun greatestLt l key =
+         let
+            fun loop prev l =
+               (case l of
+                   nil => prev
+
+                 | (key', x) :: rest =>
+                      (case Key.compare (key', key) of
+                          LESS =>
+                             loop x rest
+
+                        | _ => prev))
+         in
+            (case l of
+                nil => raise Absent
+
+              | (key', x) :: rest =>
+                   (case Key.compare (key', key) of
+                       LESS =>
+                          loop x rest
+
+                     | _ => raise Absent))
+         end
+
+      fun greatestLeq l key =
+         let
+            fun loop prev l =
+               (case l of
+                   nil => prev
+
+                 | (key', x) :: rest =>
+                      (case Key.compare (key', key) of
+                          GREATER => prev
+
+                        | _ => loop x rest))
+         in
+            (case l of
+                nil => raise Absent
+
+              | (key', x) :: rest =>
+                   (case Key.compare (key', key) of
+                       GREATER => raise Absent
+
+                     | _ => loop x rest))
+         end
+
    end
-
-
-functor ListDict (structure Key : ORDERED)
-   :>
-   DICT where type key = Key.t
-   =
-   DictFun (ListPreDict (structure Key = Key))

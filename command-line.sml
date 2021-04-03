@@ -119,7 +119,7 @@ structure CommandLine :> COMMAND_LINE =
 
 
       
-      structure D = RedBlackPreDict (structure Key = IntOrdered)
+      structure D = RedBlackDict (structure Key = IntOrdered)
 
       type log = exn D.dict
 

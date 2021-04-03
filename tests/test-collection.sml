@@ -11,7 +11,7 @@ signature COLLECTION =
       val expose : t -> u list
    end
 
-      
+
 functor SetToCollection (Set : SET where type elem = int)
    :>
    COLLECTION
@@ -126,12 +126,12 @@ structure TestRedBlack =
       fun testRedBlackInv tree =
          (case tree of
              Leaf => ()
-           | Node (RED, _, left, right) =>
+           | Node (RED, _, _, left, right) =>
                 (
                 testRedBlackInvRed left;
                 testRedBlackInvRed right
                 )
-           | Node (BLACK, _, left, right) =>
+           | Node (BLACK, _, _, left, right) =>
                 (
                 testRedBlackInv left;
                 testRedBlackInv right
@@ -140,9 +140,9 @@ structure TestRedBlack =
       and testRedBlackInvRed tree =
          (case tree of
              Leaf => ()
-           | Node (RED, _, left, right) =>
+           | Node (RED, _, _, left, right) =>
                 raise (Fail "red-black invariant")
-           | Node (BLACK, _, left, right) =>
+           | Node (BLACK, _, _, left, right) =>
                 (
                 testRedBlackInv left;
                 testRedBlackInv right
@@ -151,7 +151,7 @@ structure TestRedBlack =
       fun testBlackHeightInv tree =
          (case tree of
              Leaf => 0
-           | Node (color, _, left, right) =>
+           | Node (color, _, _, left, right) =>
                 let
                    val m = testBlackHeightInv left
                    val n = testBlackHeightInv right
@@ -164,7 +164,7 @@ structure TestRedBlack =
                       raise (Fail "black-height invariant")
                 end)
 
-      fun testInv (_, tree) =
+      fun testInv tree =
          (
          testBlackHeightInv tree;
          testRedBlackInv tree
@@ -189,7 +189,7 @@ structure RedBlackSetColl =
    SetToCollection (RedBlackSet (structure Elem = IntOrdered))
 
 structure RedBlackDictColl =
-   DictToCollection (SplayDict (structure Key = IntOrdered))
+   DictToCollection (RedBlackDict (structure Key = IntOrdered))
 
 
 structure HashTableColl : COLLECTION =
@@ -227,12 +227,18 @@ structure Test = TestFun (structure Control = ListDictColl
 structure Test = TestFun (structure Control = ListSetColl
                           structure Exper = RedBlackSetColl
                           structure Rand = MTRand
+(*
+                          fun extra s = TestRedBlack.testInv (!s)
+*)
                           fun extra _ = ()
-                          val name = "RedBlackDict")
+                          val name = "RedBlackSet")
 
 structure Test = TestFun (structure Control = ListDictColl
                           structure Exper = RedBlackDictColl
                           structure Rand = MTRand
+(*
+                          fun extra d = TestRedBlack.testInv (!d)
+*)
                           fun extra _ = ()
                           val name = "RedBlackDict")
 

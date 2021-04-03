@@ -1,7 +1,35 @@
 
 Incompatible changes since 2.3.0
 
-* Deprecated Coord : COORD because its functionality seems too
+* The dictionary interfaces have changed:
+
+  - DICT and RDICT are merged into DICT.
+
+  - PRE_DICT is deleted.
+
+  - SplayRDict is replaced by SplayDict.
+
+  - ListPreDict is replaced by ListDict.
+
+  - DictFun is deleted.  Its purpose had been to extend a PRE_DICT to
+    a DICT.
+
+* Deprecated Coord : COORD.  Its functionality was deemed too
   specialized for a library.  (See issue #3 on Github.)  Also
-  deprecated signatures/modules that depend on Coord:
+  deprecated signatures and modules that depend on it:
   COORDINATED_STREAM, POS, CoordinatedStream, and Pos.
+
+Other changes since 2.3.0
+
+* Added CommandLine : COMMAND_LINE.  It provides combinators tailored
+  for parsing command-line arguments.
+
+* The dictionary functors return the new DICT.  They now support
+  efficient size, union, and range searches.
+
+* Added Path : PATH.  It provides utilities for manipulating Unix
+  paths.
+
+* Range operations are added to SET.
+
+* Many other things before we started keeping a change log.

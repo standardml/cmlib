@@ -49,8 +49,6 @@ local
         ordered.sml
         set-list.sml
         dict.sig
-        dict.sml
-        rdict.sig
         output.sig
         output.sml
         dict-list.sml
@@ -227,7 +225,6 @@ in
         signature PARSING
         signature PARTITION
         signature PATH
-        signature PRE_DICT
         signature PRETTY_PRINT
         signature PQUEUE
         signature PSTREAM
@@ -236,7 +233,6 @@ in
         signature RAND
         signature RAND32
         signature RANDOM
-        signature RDICT
         signature SEEK_IO
         signature SEQUENCE
         signature SET
@@ -390,7 +386,6 @@ in
         functor CostringFun
         functor DatalessBranchingTable
         functor DatalessHashTable
-        functor DictFun
 	functor DictTable
 	functor DictMultiTable
         functor ECDHFun
@@ -407,7 +402,6 @@ in
         functor LeftistPQueue
         functor LexEngineFun
         functor ListDict
-        functor ListPreDict
         functor ListHashable
         functor ListOrdered
         functor ListSet
@@ -426,12 +420,10 @@ in
         functor RandFromRand32
         functor RandFromRandom
         functor RedBlackDict
-        functor RedBlackPreDict
         functor RedBlackSet
         functor SeekIOFun
         functor SetHashable
         functor SplayDict
-        functor SplayRDict
         functor SplaySet
         functor SymbolFun
         functor SymbolHashableFun

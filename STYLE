@@ -21,10 +21,10 @@ across CMlib:
 
   There are occasions in which exceptions are reasonable, however:
 
-  = One might take arguments in a tuple in order to match the usage in
+  - One might take arguments in a tuple in order to match the usage in
     a similar basis function, such as a comparison function.
 
-  = Since SML does not provide a convenient syntax for anonymous
+  - Since SML does not provide a convenient syntax for anonymous
     curried functions, a function argument of a higher-order function
     might take its arguments in a tuple.  (For example, the first
     argument to a fold-like operation.)

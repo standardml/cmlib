@@ -1,6 +1,5 @@
 
-(* Not the best name for this, but we'll leave DICT for the other one for backwards compatibility. *)
-signature PRE_DICT =
+signature DICT =
    sig
 
       type key
@@ -17,25 +16,29 @@ signature PRE_DICT =
       val find : 'a dict -> key -> 'a option
       val lookup : 'a dict -> key -> 'a
 
-      (* (operate dict key absentf presentf) looks up key in dict.  If key maps to x, it replaces x with
-         (presentf x).  If key is absent, it inserts absentf ().  It then returns SOME x (NONE if key
-         was absent), the new value, and the new dictionary.
+      (* (operate dict key absentf presentf) looks up key in dict.  If key maps to x,
+         it replaces x with (presentf x).  If key is absent, it inserts absentf ().
+         It then returns SOME x (NONE if key was absent), the new value, and the new
+         dictionary.
       *)
       val operate : 'a dict -> key -> (unit -> 'a) -> ('a -> 'a) -> 'a option * 'a * 'a dict
 
-      (* (operate' dict key absentf presentf) looks up key in dict.  If key maps to x, it evaluates
-         y = presentf(x).  If key is absent, it evaluates y = absentf ().  If y = NONE, it deletes
-         the entry; if y = SOME z, it inserts or updates the entry with z.  It then returns SOME x
-         (NONE if key was absent), y, and the new dictionary.
+      (* (operate' dict key absentf presentf) looks up key in dict.  If key maps to x, 
+         it evaluates y = presentf(x).  If key is absent, it evaluates y = absentf ().  
+         If y = NONE, it deletes the entry; if y = SOME z, it inserts or updates the
+         entry with z.  It then returns SOME x (NONE if key was absent), y, and the new
+         dictionary.
       *)
       val operate' : 'a dict -> key -> (unit -> 'a option) -> ('a -> 'a option) -> 'a option * 'a option * 'a dict
 
-      (* (insertMerge dict key y presentf) looks up key in dict.  If key maps to x, it replaces x with
-         (presentf x).  If key is absent, it insert y.  It then returns the new dictionary.
+      (* (insertMerge dict key y presentf) looks up key in dict.  If key maps to x,
+         it replaces x with (presentf x).  If key is absent, it insert y.  It then
+         returns the new dictionary.
       *)
       val insertMerge : 'a dict -> key -> 'a -> ('a -> 'a) -> 'a dict
 
       val isEmpty : 'a dict -> bool
+      val size : 'a dict -> int
       val member : 'a dict -> key -> bool
 
       val toList : 'a dict -> (key * 'a) list
@@ -45,13 +48,27 @@ signature PRE_DICT =
       val foldr : (key * 'a * 'b -> 'b) -> 'b -> 'a dict -> 'b
       val app : (key * 'a -> unit) -> 'a dict -> unit
 
-   end
-
-
-signature DICT =
-   sig
-      include PRE_DICT
-      val size : 'a dict -> int
+      (* Uses the supplied function to resolve conflicts when the two dictionaries
+         include the same key.
+      *)
       val union : 'a dict -> 'a dict -> (key * 'a * 'a -> 'a) -> 'a dict
-   end
 
+      (* Range searches *)
+
+      val partition : 'a dict -> key -> 'a dict * 'a option * 'a dict
+      val partitionlt : 'a dict -> key -> 'a dict * 'a dict
+      val partitiongt : 'a dict -> key -> 'a dict * 'a dict
+
+      val rangeii : 'a dict -> key -> key -> 'a dict   (* inclusive left, inclusive right *)
+      val rangeie : 'a dict -> key -> key -> 'a dict   (* inclusive left, exclusive right *)
+      val rangeei : 'a dict -> key -> key -> 'a dict   (* exclusive left, inclusive right *)
+      val rangeee : 'a dict -> key -> key -> 'a dict   (* exclusive left, exclusive right *)
+      
+      val least : 'a dict -> 'a
+      val greatest : 'a dict -> 'a
+      val leastGt : 'a dict -> key -> 'a
+      val leastGeq : 'a dict -> key -> 'a
+      val greatestLt : 'a dict -> key -> 'a
+      val greatestLeq : 'a dict -> key -> 'a
+
+   end

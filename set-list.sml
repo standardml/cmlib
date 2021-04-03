@@ -127,4 +127,143 @@ functor ListSet (structure Elem : ORDERED)
       val foldr = List.foldl
       val app = List.app
 
+      fun split key acc l =
+         (case l of
+             nil =>
+                (acc, false, nil)
+
+           | key' :: rest =>
+                (case Elem.compare (key, key') of
+                    LESS =>
+                       (acc, false, l)
+
+                  | EQUAL =>
+                       (acc, true, rest)
+
+                  | GREATER =>
+                       split key (key' :: acc) rest))
+
+      fun partitionlt l key =
+         (case split key nil l of
+             (leftr, false, right) => (rev leftr, right)
+
+           | (leftr, true, right) => (rev leftr, key :: right))
+
+      fun partitiongt l key =
+         (case split key nil l of
+             (leftr, false, right) => (rev leftr, right)
+
+           | (leftr, true, right) => (rev (key :: leftr), right))
+
+      fun rangeii tree left right =
+         let
+            val (_, tree') = partitionlt tree left
+            val (tree'', _) = partitiongt tree' right
+         in
+            tree''
+         end
+
+      fun rangeie tree left right =
+         let
+            val (_, tree') = partitionlt tree left
+            val (tree'', _) = partitionlt tree' right
+         in
+            tree''
+         end
+
+      fun rangeei tree left right =
+         let
+            val (_, tree') = partitiongt tree left
+            val (tree'', _) = partitiongt tree' right
+         in
+            tree''
+         end
+
+      fun rangeee tree left right =
+         let
+            val (_, tree') = partitiongt tree left
+            val (tree'', _) = partitionlt tree' right
+         in
+            tree''
+         end
+
+
+      exception Empty
+
+      fun least l =
+         (case l of
+             nil => raise Empty
+
+           | x :: _ => x)
+
+      fun greatest l =
+         (List.last l
+          handle List.Empty => raise Empty)
+
+      fun leastGt l key =
+         (case l of
+             nil => raise Empty
+
+           | key' :: rest =>
+                (case Elem.compare (key', key) of
+                    GREATER => key'
+
+                  | _ => leastGt rest key))
+
+      fun leastGeq l key =
+         (case l of
+             nil => raise Empty
+
+           | key' :: rest =>
+                (case Elem.compare (key', key) of
+                    LESS => leastGeq rest key
+
+                  | _ => key'))
+
+      fun greatestLt l key =
+         let
+            fun loop prev l =
+               (case l of
+                   nil => prev
+
+                 | key' :: rest =>
+                      (case Elem.compare (key', key) of
+                          LESS =>
+                             loop key' rest
+
+                        | _ => prev))
+         in
+            (case l of
+                nil => raise Empty
+
+              | key' :: rest =>
+                   (case Elem.compare (key', key) of
+                       LESS =>
+                          loop key' rest
+
+                     | _ => raise Empty))
+         end
+
+      fun greatestLeq l key =
+         let
+            fun loop prev l =
+               (case l of
+                   nil => prev
+
+                 | key' :: rest =>
+                      (case Elem.compare (key', key) of
+                          GREATER => prev
+
+                        | _ => loop key' rest))
+         in
+            (case l of
+                nil => raise Empty
+
+              | key' :: rest =>
+                   (case Elem.compare (key', key) of
+                       GREATER => raise Empty
+
+                     | _ => loop key' rest))
+         end
+
    end

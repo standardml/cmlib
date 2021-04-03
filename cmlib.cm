@@ -53,7 +53,6 @@ library
         signature PARTITION
         signature PATH
         signature PQUEUE
-        signature PRE_DICT
         signature PRETTY_PRINT
         signature PSTREAM
         signature PSUSP
@@ -61,7 +60,6 @@ library
         signature RAND
         signature RAND32
         signature RANDOM
-        signature RDICT
         signature SEEK_IO
         signature SEQUENCE
         signature SET
@@ -218,7 +216,6 @@ library
         functor CoercedStreamable
         functor CostringFun
         functor DatalessHashTable
-        functor DictFun
 	functor DictTable
 	functor DictMultiTable
         functor ECDHFun
@@ -236,7 +233,6 @@ library
         functor LexEngineFun
         functor MonoLexEngineFun
         functor ListDict
-        functor ListPreDict
         functor ListHashable
         functor ListOrdered
         functor ListSet
@@ -253,12 +249,10 @@ library
         functor RandFromRand32
         functor RandFromRandom
         functor RedBlackDict
-        functor RedBlackPreDict
         functor RedBlackSet
         functor SeekIOFun
         functor SetHashable
         functor SplayDict
-        functor SplayRDict
         functor SplaySet
         functor MonomorphizeStreamable
         functor SymbolFun
@@ -305,7 +299,6 @@ is
         cryptohash.sig
         der.sml
 	dict.sig
-        dict.sml
 	dict-list.sml
         dict-red-black.sml
 	dict-splay.sml
@@ -397,7 +390,6 @@ is
         random.sig
         random-aes.sml
         random-rehash.sml
-        rdict.sig
 	red-black-tree.sml
         ripemd160.sml
         seek-io.sig

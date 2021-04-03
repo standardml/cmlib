@@ -8,7 +8,7 @@ functor FrameDictFun (structure Ordered : ORDERED
    =
    struct
 
-      structure D = SplayRDict (structure Key = Ordered)
+      structure D = SplayDict (structure Key = Ordered)
       structure T = HashTable (structure Key = Hashable)
       
       type init = int

@@ -8,224 +8,380 @@ functor SplaySet (structure Elem : ORDERED)
 
       open SplayTree
 
-      type set = int * elem tree
+      type set = elem tree
 
-      val empty = (0, Leaf)
+      val empty = Leaf
 
-      fun isEmpty (n, _) = n = 0
+
+      fun isEmpty tree =
+         (case tree of
+             Leaf => true
+           | Node _ => false)
+
 
       fun singleton elem =
-         (1, Node (ref (elem, Leaf, Leaf)))
+         Node (ref (1, elem, Leaf, Leaf))
 
-      fun insert (set as (n, tree)) elem =
+
+      fun insert tree elem =
          (case tree of
              Leaf =>
                 singleton elem
+
            | Node root =>
                 let
-                   val (order, (elem', left, right)) =
+                   val (order, (_, elem', left, right)) =
                       findAndSplay (fn elem' => Elem.compare (elem, elem')) root []
                 in
                    (case order of
-                       EQUAL => set
+                       EQUAL => tree
+
                      | LESS =>
-                          (n+1,
-                           Node (ref (elem, left, Node (ref (elem', Leaf, right)))))
+                           Node' (elem, left, Node' (elem', Leaf, right))
+
                      | GREATER =>
-                          (n+1,
-                           Node (ref (elem, Node (ref (elem', left, Leaf)), right))))
+                           Node' (elem, Node' (elem', left, Leaf), right))
                 end)
 
-      fun remove (set as (n, tree)) elem =
+
+      fun remove tree elem =
          (case tree of
              Leaf =>
                 empty
+
            | Node root =>
                 let
-                   val (order, (_, left, right)) =
+                   val (order, (_, _, left, right)) =
                       findAndSplay (fn elem' => Elem.compare (elem, elem')) root []
                 in
                    (case order of
-                       EQUAL =>
-                          (n-1, join left right)
-                     | _ => set)
+                       EQUAL => join left right
+
+                     | _ => tree)
                 end)
 
-      fun member (_, tree) elem =
+
+      fun member tree elem =
          (case tree of
              Leaf => false
+
            | Node root =>
                 (case findAndSplay (fn elem' => Elem.compare (elem, elem')) root [] of
                     (EQUAL, _) => true
+
                   | _ => false))
 
-      fun unionMain tree1 tree2 =
+
+      fun union tree1 tree2 =
          (case tree1 of
              Leaf =>
-                (SplayTree.size tree2, tree2)
-           | Node (ref (elem1, left1, right1)) =>
+                tree2
+
+           | Node (ref (_, key1, left1, right1)) =>
                 (case tree2 of
                     Leaf =>
-                       (SplayTree.size tree1, tree1)
+                       tree1
+
                   | Node root2 =>
                        let
-                          val (order, left2, right2) =
-                             split (fn elem' => Elem.compare (elem1, elem')) root2
-
-                          val (nleft, left') = unionMain left1 left2
-                          val (nright, right') = unionMain right1 right2
+                          val (left2, _, right2) =
+                             split (fn key2 => Elem.compare (key1, key2)) root2
                        in
-                          (1+nleft+nright,
-                           Node (ref (elem1, left', right')))
+                          Node' (key1, union left1 left2, union right1 right2)
                        end))
 
-      fun union (set1 as (n1, tree1)) (set2 as (n2, tree2)) =
-         if n1 = 0 then
-            set2
-         else if n2 = 0 then
-            set1
-         else if n1 >= n2 then
-            unionMain tree1 tree2
-         else
-            unionMain tree2 tree1
 
-      fun intersectionMain tree1 tree2 =
+      fun intersection tree1 tree2 =
          (case tree1 of
-             Leaf =>
-                (0, Leaf)
-           | Node (ref (elem1, left1, right1)) =>
+             Leaf => 
+                Leaf
+
+           | Node (ref (_, key1, left1, right1)) =>
                 (case tree2 of
                     Leaf =>
-                       (0, Leaf)
+                       Leaf
+
                   | Node root2 =>
                        let
-                          val (order, left2, right2) =
-                             split (fn elem' => Elem.compare (elem1, elem')) root2
+                          val (left2, middle, right2) =
+                             split (fn key2 => Elem.compare (key1, key2)) root2
 
-                          val (nleft, left') = intersectionMain left1 left2
-                          val (nright, right') = intersectionMain right1 right2
+                          val left = intersection left1 left2
+                          val right = intersection right1 right2
                        in
-                          (case order of
-                              EQUAL =>
-                                 (1+nleft+nright,
-                                  Node (ref (elem1, left', right')))
-                            | _ =>
-                                 (nleft+nright, join left' right'))
+                          (case middle of
+                              SOME _ => Node' (key1, left, right)
+
+                            | NONE => join left right)
                        end))
 
-      fun intersection (set1 as (n1, tree1)) (set2 as (n2, tree2)) =
-         if n1 = 0 then
-            (0, Leaf)
-         else if n2 = 0 then
-            (0, Leaf)
-         else if n1 >= n2 then
-            intersectionMain tree1 tree2
-         else
-            intersectionMain tree2 tree1
 
-      fun differenceMain tree1 tree2 =
+      fun difference tree1 tree2 =
          (case tree1 of
-             Leaf =>
-                (0, Leaf)
-           | Node (ref (elem1, left1, right1)) =>
+             Leaf => 
+                Leaf
+
+           | Node (ref (_, key1, left1, right1)) =>
                 (case tree2 of
                     Leaf =>
-                       (SplayTree.size tree1, tree1)
+                       tree1
+
                   | Node root2 =>
                        let
-                          val (order, left2, right2) =
-                             split (fn elem' => Elem.compare (elem1, elem')) root2
+                          val (left2, middle, right2) =
+                             split (fn key2 => Elem.compare (key1, key2)) root2
 
-                          val (nleft, left') = differenceMain left1 left2
-                          val (nright, right') = differenceMain right1 right2
+                          val left = difference left1 left2
+                          val right = difference right1 right2
                        in
-                          (case order of
-                              EQUAL =>
-                                 (nleft+nright, join left' right')
-                            | _ =>
-                                 (1+nleft+nright,
-                                  Node (ref (elem1, left', right'))))
+                          (case middle of
+                              SOME _ => join left right
+
+                            | NONE => Node' (key1, left, right))
                        end))
 
-      fun difference (set1 as (n1, tree1)) (set2 as (n2, tree2)) =
-         if n1 = 0 then
-            (0, Leaf)
-         else if n2 = 0 then
-            set1
-         else
-            differenceMain tree1 tree2
 
-      fun eqMain tree1 tree2 =
-         (case (tree1, tree2) of
-             (Leaf, Leaf) => true
-           | (Leaf, Node _) => false
-           | (Node _, Leaf) => false
-           | (Node (ref (elem1, left1, right1)), Node root2) =>
-                let
-                   val (order, left2, right2) =
-                      split (fn elem' => Elem.compare (elem1, elem')) root2
-                in
-                   (case order of
-                       EQUAL =>
-                          eqMain left1 left2
-                          andalso
-                          eqMain right1 right2
-                     | _ => false)
-                end)
+      datatype q = Nil | E of elem * q | T of set * q
 
-      fun eq ((_, tree1), (_, tree2)) = eqMain tree1 tree2
+      fun eqMain qs1 qs2 =
+         (case (qs1, qs2) of
+             (Nil, Nil) => true
+           | (Nil, E _) => false
+           | (E _, Nil) => false
 
-      fun subsetMain tree1 tree2 =
-         (case (tree1, tree2) of
-             (Leaf, Leaf) => true
-           | (Leaf, Node _) => true
-           | (Node _, Leaf) => false
-           | (Node (ref (elem1, left1, right1)), Node root2) =>
-                let
-                   val (order, left2, right2) =
-                      split (fn elem' => Elem.compare (elem1, elem')) root2
-                in
-                   (case order of
-                       EQUAL =>
-                          subsetMain left1 left2
-                          andalso
-                          subsetMain right1 right2
-                     | _ => false)
-                end)         
+           | (T (Leaf, rest), _) => eqMain rest qs2
 
-      fun subset ((_, tree1), (_, tree2)) = subsetMain tree1 tree2
+           | (_, T (Leaf, rest)) => eqMain qs1 rest
 
-      fun size (n, _) = n
+           | (T (Node (ref (_, elem, left, right)), rest), _) =>
+                eqMain (T (left, E (elem, T (right, rest)))) qs2
 
-      fun foldlMain f x tree =
+           | (_, T (Node (ref (_, elem, left, right)), rest)) =>
+                eqMain qs1 (T (left, E (elem, T (right, rest))))
+
+           | (E (elem1, rest1), E (elem2, rest2)) =>
+                Elem.eq (elem1, elem2) andalso eqMain rest1 rest2)
+
+      fun eq (set1, set2) = eqMain (T (set1, Nil)) (T (set2, Nil))
+
+
+      fun subsetMain qs1 qs2 =
+         (case (qs1, qs2) of
+             (Nil, _) => true
+           | (E _, Nil) => false
+
+           | (T (Leaf, rest), _) => subsetMain rest qs2
+
+           | (_, T (Leaf, rest)) => subsetMain qs1 rest
+
+           | (T (Node (ref (_, elem, left, right)), rest), _) =>
+                subsetMain (T (left, E (elem, T (right, rest)))) qs2
+
+           | (_, T (Node (ref (_, elem, left, right)), rest)) =>
+                subsetMain qs1 (T (left, E (elem, T (right, rest))))
+
+           | (E (elem1, rest1), E (elem2, rest2)) =>
+                (case Elem.compare (elem1, elem2) of
+                    LESS =>
+                       false
+
+                  | EQUAL =>
+                       subsetMain rest1 rest2
+
+                  | GREATER =>
+                       subsetMain qs1 rest2))
+
+      fun subset (set1, set2) = subsetMain (T (set1, Nil)) (T (set2, Nil))
+
+
+      fun foldl f x tree =
          (case tree of
              Leaf => x
-           | Node (ref (elem, left, right)) =>
-                foldlMain f (f (elem, foldlMain f x left)) right)
+           | Node (ref (_, elem, left, right)) =>
+                foldl f (f (elem, foldl f x left)) right)
 
-      fun foldrMain f x tree =
+
+      fun foldr f x tree =
          (case tree of
              Leaf => x
-           | Node (ref (elem, left, right)) =>
-                foldrMain f (f (elem, foldrMain f x right)) left)
+           | Node (ref (_, elem, left, right)) =>
+                foldr f (f (elem, foldr f x right)) left)
 
-      fun toList (_, tree) = foldrMain (op ::) [] tree
 
-      fun foldl f x (_, tree) = foldlMain f x tree
+      fun toList tree = foldr (op ::) [] tree
 
-      fun foldr f x (_, tree) = foldrMain f x tree
-
-      fun appMain f tree =
+      fun app f tree =
          (case tree of
              Leaf => ()
-           | Node (ref (elem, left, right)) =>
+           | Node (ref (_, elem, left, right)) =>
                 (
-                appMain f left;
+                app f left;
                 f elem;
-                appMain f right
+                app f right
                 ))
 
-      fun app f (_, tree) = appMain f tree
-         
-   end
+      fun partitionlt tree key =
+         (case tree of
+             Leaf => (Leaf, Leaf)
 
+           | Node root =>
+                let 
+                   val (left, _, right) = 
+                      split 
+                         (fn key' => 
+                             (case Elem.compare (key, key') of
+                                 GREATER => GREATER
+                               | _ => LESS))
+                         root
+                in
+                   (left, right)
+                end)
+
+
+      fun partitiongt tree key =
+         (case tree of
+             Leaf => (Leaf, Leaf)
+
+           | Node root =>
+                let 
+                   val (left, _, right) = 
+                      split 
+                         (fn key' => 
+                             (case Elem.compare (key, key') of
+                                 LESS => LESS
+                               | _ => GREATER))
+                         root
+                in
+                   (left, right)
+                end)
+
+
+      fun rangeii tree left right =
+         let
+            val (_, tree') = partitionlt tree left
+            val (tree'', _) = partitiongt tree' right
+         in
+            tree''
+         end
+
+
+      fun rangeie tree left right =
+         let
+            val (_, tree') = partitionlt tree left
+            val (tree'', _) = partitionlt tree' right
+         in
+            tree''
+         end
+
+
+      fun rangeei tree left right =
+         let
+            val (_, tree') = partitiongt tree left
+            val (tree'', _) = partitiongt tree' right
+         in
+            tree''
+         end
+
+
+      fun rangeee tree left right =
+         let
+            val (_, tree') = partitiongt tree left
+            val (tree'', _) = partitionlt tree' right
+         in
+            tree''
+         end
+
+
+      exception Empty
+
+
+      fun least tree =
+         (case tree of
+             Leaf =>
+                raise Empty
+
+           | Node root =>
+                let
+                   val (x, _) = splayMin root
+                in
+                   x
+                end)
+
+
+      fun greatest tree =
+         (case tree of
+             Leaf =>
+                raise Empty
+
+           | Node root =>
+                let
+                   val (x, _) = splayMax root
+                in
+                   x
+                end)
+
+
+      fun leastGt tree key =
+         (case tree of
+             Leaf =>
+                raise Empty
+
+           | Node root =>
+                let
+                   val (order, (_, x, left, right)) =
+                      findAndSplay (fn key' => Elem.compare (key, key')) root []
+                in
+                   (case order of
+                       GREATER => x
+                     | _ => least right)
+                end)
+
+
+      fun leastGeq tree key =
+         (case tree of
+             Leaf =>
+                raise Empty
+
+           | Node root =>
+                let
+                   val (order, (_, x, left, right)) =
+                      findAndSplay (fn key' => Elem.compare (key, key')) root []
+                in
+                   (case order of
+                       LESS => least right
+                     | _ => x)
+                end)
+
+
+      fun greatestLt tree key =
+         (case tree of
+             Leaf =>
+                raise Empty
+
+           | Node root =>
+                let
+                   val (order, (_, x, left, right)) =
+                      findAndSplay (fn key' => Elem.compare (key, key')) root []
+                in
+                   (case order of
+                       LESS => x
+                     | _ => greatest left)
+                end)
+
+
+      fun greatestLeq tree key =
+         (case tree of
+             Leaf =>
+                raise Empty
+
+           | Node root =>
+                let
+                   val (order, (_, x, left, right)) =
+                      findAndSplay (fn key' => Elem.compare (key, key')) root []
+                in
+                   (case order of
+                       GREATER => greatest left
+                     | _ => x)
+                end)
+
+   end
