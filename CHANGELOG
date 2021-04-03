@@ -15,7 +15,8 @@ Incompatible changes since 2.3.0
     a DICT.
 
 * In streams, the fromTextInstream and fromBinInstream now close their
-  input streams when the end of the stream is reached.
+  input streams when the end of the stream is reached.  (See issue #5
+  on Github.)
 
 * Several table signatures and modules are renamed:
 
@@ -36,7 +37,8 @@ Incompatible changes since 2.3.0
 Other changes since 2.3.0
 
 * Added CommandLine : COMMAND_LINE.  It provides combinators tailored
-  for parsing command-line arguments.
+  for parsing command-line arguments.  (An alternative to Arguments :
+  ARGUMENTS.)
 
 * The dictionary functors return the new DICT.  They now support
   efficient size, union, and range searches.
