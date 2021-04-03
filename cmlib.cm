@@ -6,6 +6,7 @@ library
         signature DATALESS_BRANCHING_TABLE
         signature BYTESTRING
         signature BYTESUBSTRING
+	signature CHECKPOINT_TABLE
         signature CIPHER
         signature COMMAND_LINE
         signature CONT
@@ -15,7 +16,7 @@ library
         signature COSTRING
         signature CRYPTO_HASH
         signature DATALESS_HASH_TABLE
-        signature DATALESS_IDICT
+        signature DATALESS_TABLE
         signature DICT
         signature EC_FIELD
         signature ECDH
@@ -31,15 +32,14 @@ library
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
-        signature IDICT
         signature IO_UTIL
         signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
         signature MONO_LEX_ENGINE
         signature LIST_UTIL
-        signature MINI_DATALESS_IDICT
-        signature MINI_IDICT
+        signature MINI_DATALESS_TABLE
+        signature MINI_TABLE
         signature MINI_IO
         signature MINI_STRING
         signature MONAD
@@ -216,7 +216,7 @@ library
         functor CoercedStreamable
         functor CostringFun
         functor DatalessHashTable
-	functor DictTable
+	functor DictCheckpointTable
 	functor DictMultiTable
         functor ECDHFun
         functor ECDSAFun
@@ -226,7 +226,7 @@ library
         functor FortunaFun
         functor FrameDictFun
         functor HashTable
-	functor HashTableTable
+	functor HashTableCheckpointTable
         functor InvertOrdered
         functor LazyPairingPQueue
         functor LeftistPQueue
@@ -333,10 +333,6 @@ is
         hash-table-dataless.sml
         ideque.sig
         ideque.sml
-        idict.sig
-        idict-mini.sig
-        idict-dataless.sig
-        idict-dataless-mini.sig
         io-mini.sig
         io-util.sig
         io-util.sml
@@ -423,8 +419,12 @@ is
 	symbol.sig
 	symbol.sml
 	table.sig
-	table-dict.sml
-	table-hash.sml
+	table-checkpoint.sig
+        table-dataless.sig
+        table-dataless-mini.sig
+	table-checkpoint-dict.sml
+	table-checkpoint-hash.sml
+        table-mini.sig
 	union-find-imperative.sig
 	union-find-imperative.sml
         weak.sig

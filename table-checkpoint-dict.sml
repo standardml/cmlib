@@ -1,7 +1,7 @@
 
-functor DictTable (structure Dict : DICT
-                   type value)
-   :> TABLE where type key = Dict.key and type value = value
+functor DictCheckpointTable (structure Dict : DICT
+                             type value)
+   :> CHECKPOINT_TABLE where type key = Dict.key and type value = value
    =
    struct
 

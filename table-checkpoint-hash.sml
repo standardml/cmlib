@@ -1,8 +1,8 @@
 
-functor HashTableTable (structure HashTable : HASH_TABLE
-                        type value
-                        val size : int)
-   :> TABLE where type key = HashTable.key and type value = value
+functor HashTableCheckpointTable (structure HashTable : HASH_TABLE
+                                  type value
+                                  val size : int)
+   :> CHECKPOINT_TABLE where type key = HashTable.key and type value = value
    =
    struct
 

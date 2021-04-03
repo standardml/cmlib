@@ -3,7 +3,7 @@
    is ignored by the hash and eq functions used to construct the table.
 *)
 
-signature DATALESS_IDICT =
+signature DATALESS_TABLE =
    sig
 
       type init

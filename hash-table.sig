@@ -1,4 +1,4 @@
 
 signature HASH_TABLE =
-   IDICT
+   TABLE
    where type init = int

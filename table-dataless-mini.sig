@@ -1,5 +1,5 @@
 
-signature MINI_DATALESS_IDICT =
+signature MINI_DATALESS_TABLE =
    sig
 
       type init

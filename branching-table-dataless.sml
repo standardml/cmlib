@@ -1,6 +1,6 @@
 
-functor DatalessBranchingTable (structure Base : MINI_DATALESS_IDICT where type init = int
-                                structure Nursery : MINI_IDICT where type key = Base.key
+functor DatalessBranchingTable (structure Base : MINI_DATALESS_TABLE where type init = int
+                                structure Nursery : MINI_TABLE where type key = Base.key
                                 val history : int
                                 val nurseryInit : Nursery.init)
    :>

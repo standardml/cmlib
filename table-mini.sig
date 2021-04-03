@@ -1,5 +1,5 @@
 
-signature MINI_IDICT =
+signature MINI_TABLE =
    sig
 
       type init

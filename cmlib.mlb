@@ -29,10 +29,10 @@ local
         array-util.sig
         array-util.sml
         set.sig
-        idict.sig
-        idict-mini.sig
-        idict-dataless.sig
-        idict-dataless-mini.sig
+        table.sig
+        table-mini.sig
+        table-dataless.sig
+        table-dataless-mini.sig
         hashable.sml
         hash-table.sig
         hash-table.sml
@@ -133,7 +133,7 @@ local
         pstream.sml
         prettyprint.sml
         ripemd160.sml
-        table.sig
+        table-checkpoint.sig
         queue.sig
         queue.sml
         quicksort.sml
@@ -151,9 +151,9 @@ local
         cont.sml
         coroutine.sml
         pqueue-leftist.sml
-        table-hash.sml
+        table-checkpoint-hash.sml
         pqueue-pairing.sml
-        table-dict.sml
+        table-checkpoint-dict.sml
         weak.sig
         weak.sml
         io-mini.sig
@@ -178,6 +178,7 @@ in
         signature DATALESS_BRANCHING_TABLE
         signature BYTESTRING
         signature BYTESUBSTRING
+	signature CHECKPOINT_TABLE
         signature CIPHER
         signature COMMAND_LINE
         signature CONT
@@ -186,7 +187,7 @@ in
         signature COROUTINE
         signature CRYPTO_HASH
         signature DATALESS_HASH_TABLE
-        signature DATALESS_IDICT
+        signature DATALESS_TABLE
         signature DICT
         signature EC_FIELD
         signature ECDH
@@ -202,15 +203,14 @@ in
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
-        signature IDICT
         signature IMPERATIVE_UNION_FIND
         signature IO_UTIL
         signature IPQUEUE
         signature IQUEUE
         signature LEX_ENGINE
         signature LIST_UTIL
-        signature MINI_DATALESS_IDICT
-        signature MINI_IDICT
+        signature MINI_DATALESS_TABLE
+        signature MINI_TABLE
         signature MINI_IO
         signature MINI_STRING
         signature MONAD
@@ -386,7 +386,7 @@ in
         functor CostringFun
         functor DatalessBranchingTable
         functor DatalessHashTable
-	functor DictTable
+	functor DictCheckpointTable
 	functor DictMultiTable
         functor ECDHFun
         functor ECDSAFun

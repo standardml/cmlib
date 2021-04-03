@@ -14,6 +14,17 @@ Incompatible changes since 2.3.0
   - DictFun is deleted.  Its purpose had been to extend a PRE_DICT to
     a DICT.
 
+* Several table signatures and modules are renamed:
+
+    DATALESS_IDICT      -> DATALESS_TABLE
+    IDICT               -> TABLE
+    MINI_DATALESS_IDICT -> MINI_DATALESS_TABLE
+    MINI_IDICT          -> MINI_TABLE
+    TABLE               -> CHECKPOINT_TABLE
+
+    DictTable           -> DictCheckpointTable
+    HashTableTable      -> HashTableCheckpointTable
+
 * Deprecated Coord : COORD.  Its functionality was deemed too
   specialized for a library.  (See issue #3 on Github.)  Also
   deprecated signatures and modules that depend on it:
