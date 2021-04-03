@@ -396,7 +396,7 @@ in
         functor FrameDictFun
         functor FortunaFun
         functor HashTable
-	functor HashTableTable
+	functor HashTableCheckpointTable
         functor InvertOrdered
         functor LazyPairingPQueue
         functor LeftistPQueue
