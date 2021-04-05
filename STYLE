@@ -1,25 +1,55 @@
 
-The following are some policies to maintain a semi-consistent style
-across CMlib:
+Code naming conventions
+-----------------------
 
-* Name files using the most-significant designator first, then
-  qualifiers.  Thus dict-red-black.sml, not red-black-dict.sml.
+* Signature names should be in all caps, with underscores separating
+  words.
 
-* In identifier names, use English-standard word order.  Thus
-  RedBlackDict, not DictRedBlack.
+* Structure and functor names should be capitalized, with capitals
+  starting words (a.k.a. camel case).
 
-  (The difference between file names and identifier names is because
-  we want sorted file names to group similar functionality, but
-  sorting is rarely important for identifier names.)
+* Types and terms should begin with a lower-case letter, with capitals
+  starting following words (a.k.a. camel case).
 
-* Camel case is preferred to underscores.  Thus deleteNearLeaf, not
-  delete_near_leaf.  An exception is for all-caps identifiers (mainly
-  signatures) which obviously must use underscores.
+* Constructors should be capitalized, and may (optionally) be all
+  caps.
+
+* Type classes (signatures that indicate operations on existing types,
+  usually to serve as a functor argument) should name the principal
+  type field "t".
+
+* Multiple implementations of an interface should be named such as
+  AdjectiveFoo (or AdjectiveFooFun).  Thus RedBlackDict, not
+  DictRedBlack.
+
+
+File conventions
+----------------
+
+* File names should be in all lower case, with hyphens separating
+  words.
+
+* Files containing only signatures should be named with a ".sig"
+  suffix.  Other files should be named with a ".sml" suffix.
+
+* Multiple implementations of an interface should be given names such
+  as foo-adjective.sml.  Thus, dict-red-black.sml, not
+  red-black-dict.sml.  (Note that this file name convention differs
+  from the structure/functor name convention.  This is to allow
+  multiple implementions to sort together.)
+
+* Type classes should generally be placed in their own files, rather
+  than in the same file as a functor that depends on them.
+
+
+Other conventions
+-----------------
 
 * Curried functions are generally preferred to functions taking tupled
   arguments.
 
-  There are occasions in which exceptions are reasonable, however:
+  There are exceptions in which tuples are reasonable, however.  For
+  example:
 
   - One might take arguments in a tuple in order to match the usage in
     a similar basis function, such as a comparison function.
@@ -46,4 +76,4 @@ across CMlib:
   incompatible change for versioning purposes (even though, strictly
   speaking, one could write SML code that depends on its absence).
   However, adding an operation to a type class (e.g., ORDERED or
-  STREAMABLE) is considered an incompatible change.
+  STREAMABLE) is an incompatible change.
