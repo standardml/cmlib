@@ -1,5 +1,5 @@
 
-Incompatible changes since 2.3.0
+Incompatible changes from 2.3.0 to 3.0.0
 
 * The dictionary interfaces have changed:
 
@@ -34,7 +34,7 @@ Incompatible changes since 2.3.0
   deprecated signatures and modules that depend on it:
   COORDINATED_STREAM, POS, CoordinatedStream, and Pos.
 
-Other changes since 2.3.0
+Other changes from 2.3.0 to 3.0.0
 
 * Added CommandLine : COMMAND_LINE.  It provides combinators tailored
   for parsing command-line arguments.  (An alternative to Arguments :
