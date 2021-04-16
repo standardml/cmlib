@@ -25,6 +25,7 @@ library
         signature ELLIPTIC_CURVE_CODING
         signature ELLIPTIC_CURVE_CRYPTO
         signature ELLIPTIC_CURVE_PARAMS
+        signature FINALLY
         signature FORTUNA
         signature FRAME_DICT
         signature FROM_STRING
@@ -121,6 +122,7 @@ library
         structure EllipticCurveParams
         structure FieldF2m
         structure FieldFp
+        structure Finally
         structure FromString
         structure IDeque
 	structure IntListDict
@@ -317,6 +319,8 @@ is
         ec-params.sml
         ecdsa.sig
         ecdsa.sml
+        finally.sig
+        finally.sml
         fortuna.sig
         fortuna.sml
         frame-dict.sig

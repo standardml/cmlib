@@ -1,4 +1,10 @@
 
+Other changes since 3.0.0
+
+* Added Finally : FINALLY.
+
+-----
+	
 Incompatible changes from 2.3.0 to 3.0.0
 
 * The dictionary interfaces have changed:

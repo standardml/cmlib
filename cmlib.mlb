@@ -118,6 +118,8 @@ local
         parsing.sml
         arguments.sig
         arguments.sml
+        finally.sig
+        finally.sml
         lex-engine.sig
         lex-engine.sml
         ipqueue.sig
@@ -196,6 +198,7 @@ in
         signature ELLIPTIC_CURVE_CODING
         signature ELLIPTIC_CURVE_CRYPTO
         signature ELLIPTIC_CURVE_PARAMS
+        signature FINALLY
         signature FORTUNA
         signature FRAME_DICT
         signature FROM_STRING
@@ -293,6 +296,7 @@ in
         structure EllipticCurveParams
         structure FieldF2m
         structure FieldFp
+        structure Finally
         structure FromString
         structure IDeque
 	structure IntListDict
