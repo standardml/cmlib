@@ -16,11 +16,14 @@ functor HashTable (structure Key : HASHABLE)
        | One of key * 'a
        | Many of 'a entry ref  (* invariant: length >=2 *)
 
-      type 'a table =
-         { residents : int ref,  (* current number of residents *)
-           size : word,
-           thresh : int,         (* number of residents at which to resize *)
-           arr : 'a bucket array } ref
+
+      datatype 'a pretable =
+         T of { residents : int ref,  (* current number of residents *)
+                size : word,
+                thresh : int,         (* number of residents at which to resize *)
+                arr : 'a bucket array }
+
+      type 'a table = 'a pretable ref
 
       exception Absent
 
@@ -30,17 +33,17 @@ functor HashTable (structure Key : HASHABLE)
          if sz <= 0 then
             raise (Fail "illegal size")
          else
-            { residents = ref 0,
-              size = Word.fromInt sz,
-              thresh = resizeLoad sz,
-              arr = Array.array (sz, Zero) }
+            T { residents = ref 0,
+                size = Word.fromInt sz,
+                thresh = resizeLoad sz,
+                arr = Array.array (sz, Zero) }
 
       fun table sz = ref (initial sz)
 
       fun reset table sz =
          table := initial sz
 
-      fun size (ref { residents, ... } : 'a table) = !residents
+      fun size (ref (T { residents, ... })) = !residents
 
 
       fun findEntry lr hash key =
@@ -54,7 +57,7 @@ functor HashTable (structure Key : HASHABLE)
                    findEntry rest hash key)
 
 
-      fun resize (table as ref { residents, size, thresh, arr, ... } : 'a table) =
+      fun resize (table as ref (T { residents, size, thresh, arr, ... })) =
          if !residents < thresh then
             ()
          else
@@ -65,7 +68,7 @@ functor HashTable (structure Key : HASHABLE)
                
                fun moveInto hash key datum =
                   let
-                     val n = Word.toInt (hash mod newsize')
+                     val n = Word.toInt (Word.mod (hash, newsize'))
                   in
                      (case Array.sub (arr', n) of
                          Zero =>
@@ -99,17 +102,17 @@ functor HashTable (structure Key : HASHABLE)
                (* Move entries to new array. *)
                Array.app move arr;
             
-               table := { residents = residents,
-                          size = newsize',
-                          thresh = resizeLoad newsize,
-                          arr = arr' }
+               table := T { residents = residents,
+                            size = newsize',
+                            thresh = resizeLoad newsize,
+                            arr = arr' }
             end
 
 
-      fun member (ref { size, arr, ... } : 'a table) key =
+      fun member (ref (T { size, arr, ... })) key =
          let
             val hash = Key.hash key
-            val n = Word.toInt (hash mod size)
+            val n = Word.toInt (Word.mod (hash, size))
          in
             (case Array.sub (arr, n) of
                 Zero => false
@@ -122,10 +125,10 @@ functor HashTable (structure Key : HASHABLE)
          end
 
 
-      fun insert (table as ref { residents, size, arr, ... } : 'a table) key datum =
+      fun insert (table as ref (T { residents, size, arr, ... })) key datum =
          let
             val hash = Key.hash key
-            val n = Word.toInt (hash mod size)
+            val n = Word.toInt (Word.mod (hash, size))
          in
             (case Array.sub (arr, n) of
                 Zero =>
@@ -161,10 +164,10 @@ functor HashTable (structure Key : HASHABLE)
          end
 
 
-      fun remove (table as ref { residents, size, arr, ... } : 'a table) key =
+      fun remove (table as ref (T { residents, size, arr, ... })) key =
          let
             val hash = Key.hash key
-            val n = Word.toInt (hash mod size)
+            val n = Word.toInt (Word.mod (hash, size))
          in
             (case Array.sub (arr, n) of
                 Zero => ()
@@ -193,10 +196,10 @@ functor HashTable (structure Key : HASHABLE)
          end
 
 
-      fun lookup (table as ref { size, arr, ... } : 'a table) key =
+      fun lookup (table as ref (T { size, arr, ... })) key =
          let
             val hash = Key.hash key
-            val n = Word.toInt (hash mod size)
+            val n = Word.toInt (Word.mod (hash, size))
          in
             (case Array.sub (arr, n) of
                 Zero =>
@@ -220,10 +223,10 @@ functor HashTable (structure Key : HASHABLE)
           handle Absent => NONE)
 
 
-      fun operate' (table as ref { residents, size, arr, ... } : 'a table) key absentf presentf =
+      fun operate' (table as ref (T { residents, size, arr, ... })) key absentf presentf =
          let
             val hash = Key.hash key
-            val n = Word.toInt (hash mod size)
+            val n = Word.toInt (Word.mod (hash, size))
          in
             (case Array.sub (arr, n) of
                 Zero =>
@@ -347,7 +350,7 @@ functor HashTable (structure Key : HASHABLE)
            | Cons (_, key, datum, ref next) =>
                 foldEntry f (f (key, datum, x)) next)
 
-      fun fold f x (ref { arr, ... } : 'a table) =
+      fun fold f x (ref (T { arr, ... })) =
          Array.foldl
          (fn (Zero, acc) => acc
            | (One (key, datum), acc) => f (key, datum, acc)
@@ -367,7 +370,7 @@ functor HashTable (structure Key : HASHABLE)
                 appEntry f next
                 ))
 
-      fun app f (ref { arr, ... } : 'a table) =
+      fun app f (ref (T { arr, ... })) =
          Array.app 
          (fn Zero => ()
            | One (key, datum) => f (key, datum)

@@ -20,6 +20,7 @@ signature PARSING =
       val require : ('a -> bool) -> 'a parser -> 'a parser
       val require_ : ('a -> bool) -> 'a parser -> unit parser
       val wrap : ('a -> 'b) -> 'a parser -> 'b parser
+      val wraptest : (token -> 'a option) -> 'a parser
       val first : 'a parser -> 'b parser -> 'a parser
       val replace : 'a -> 'b parser -> 'a parser
       val andthen : 'a parser -> 'b parser -> ('a * 'b) parser

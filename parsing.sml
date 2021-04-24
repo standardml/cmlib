@@ -64,6 +64,9 @@ functor ParsingFun (type token
       fun wrap f p =
          bind p (fn x => return (f x))
 
+      fun wraptest f =
+         bind accept (fn x => (case f x of SOME y => return y | NONE => raise SyntaxError))
+
       fun first p1 p2 s =
          let
             val (x, s1) = p1 s

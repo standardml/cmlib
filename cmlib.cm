@@ -33,6 +33,7 @@ library
         signature HASH_TABLE
         signature HASHABLE
         signature IDEQUE
+        signature IMPERATIVE_UNION_FIND
         signature IO_UTIL
         signature IPQUEUE
         signature IQUEUE
@@ -73,7 +74,7 @@ library
         signature SUSP
         signature SYMBOL
 	signature TABLE
-        signature IMPERATIVE_UNION_FIND
+        signature TOPOLOGICAL_SORT
         signature WEAK
 
         structure AES
@@ -260,6 +261,7 @@ library
         functor SymbolFun
         functor SymbolHashableFun
         functor SymbolOrderedFun
+        functor TopologicalSort
 
         library(basis.cm)
 
@@ -331,6 +333,7 @@ is
 	hash-inc.sml
 	hashable.sig
 	hashable.sml
+	hashable-2.sml
 	hash-table.sig
 	hash-table.sml
         hash-table-dataless.sig
@@ -359,6 +362,7 @@ is
 	multi-table-dict.sml
 	ordered.sig
 	ordered.sml
+	ordered-2.sml
         output.sig
         output.sml
 	parse-engine.sig
@@ -429,6 +433,8 @@ is
 	table-checkpoint-dict.sml
 	table-checkpoint-hash.sml
         table-mini.sig
+        topological-sort.sig
+        topological-sort.sml
 	union-find-imperative.sig
 	union-find-imperative.sml
         weak.sig

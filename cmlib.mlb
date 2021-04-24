@@ -34,6 +34,7 @@ local
         table-dataless.sig
         table-dataless-mini.sig
         hashable.sml
+        hashable-2.sml
         hash-table.sig
         hash-table.sml
         hash-table-dataless.sig
@@ -47,6 +48,7 @@ local
         ordered.sig
         symbol.sml
         ordered.sml
+        ordered-2.sml
         set-list.sml
         dict.sig
         output.sig
@@ -58,6 +60,8 @@ local
         splay-tree.sml
         set-splay.sml
         dict-splay.sml
+        topological-sort.sig
+        topological-sort.sml
         frame-dict.sig
         frame-dict.sml
         command-line.sig
@@ -247,6 +251,7 @@ in
         signature SUSP
         signature SYMBOL
 	signature TABLE
+        signature TOPOLOGICAL_SORT
         signature WEAK
 
         structure AES
@@ -432,6 +437,7 @@ in
         functor SymbolFun
         functor SymbolHashableFun
         functor SymbolOrderedFun
+        functor TopologicalSort
 
         (* deprecated *)
 	signature COORD

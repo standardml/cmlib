@@ -21,28 +21,6 @@ structure IntOrdered
    end
 
 
-structure IntInfOrdered
-   :> ORDERED where type t = IntInf.int
-   =
-   struct
-      type t = IntInf.int
-      
-      val eq : IntInf.int * IntInf.int -> bool = (op =)  
-      val compare = IntInf.compare
-   end
-
-
-structure TimeOrdered
-   :> ORDERED where type t = Time.time
-   =
-   struct
-      type t = Time.time
-
-      val compare = Time.compare
-      fun eq (t1, t2) = (case compare (t1, t2) of EQUAL => true | _ => false)
-   end
-
-
 structure StringOrdered
    :> ORDERED where type t = string
    =
@@ -93,10 +71,14 @@ functor ListOrdered (structure Ordered : ORDERED)
         | compare (_, []) = GREATER
         | compare ([], _) = LESS
         | compare (x :: xs, y :: ys) =  
-          case Ordered.compare (x, y) of
-             EQUAL => compare (xs, ys)
-           | ord => ord
-      fun eq (xs, ys) = EQUAL = compare (xs, ys)
+             (case Ordered.compare (x, y) of
+                 EQUAL => compare (xs, ys)
+               | ord => ord)
+
+      fun eq (xs, ys) =
+         (case compare (xs, ys) of
+             EQUAL => true
+           | _ => false)
    end
 
 

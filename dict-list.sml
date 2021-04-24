@@ -11,7 +11,7 @@ functor ListDict (structure Key : ORDERED)
 
       val empty = []
 
-      val isEmpty = null
+      val isEmpty = List.null
 
       val size = List.length
 
@@ -107,7 +107,12 @@ functor ListDict (structure Key : ORDERED)
          end
          
       fun insertMerge dict key x f =
-         #3 (operate' dict key (fn () => SOME x) (SOME o f))
+         let
+            val (_, _, z) =
+               operate' dict key (fn () => SOME x) (SOME o f)
+         in
+            z
+         end
 
       fun find l key =
          (case l of
