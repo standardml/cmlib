@@ -164,7 +164,7 @@ functor HashTable (structure Key : HASHABLE)
          end
 
 
-      fun remove (table as ref (T { residents, size, arr, ... })) key =
+      fun remove (ref (T { residents, size, arr, ... })) key =
          let
             val hash = Key.hash key
             val n = Word.toInt (Word.mod (hash, size))
@@ -196,7 +196,7 @@ functor HashTable (structure Key : HASHABLE)
          end
 
 
-      fun lookup (table as ref (T { size, arr, ... })) key =
+      fun lookup (ref (T { size, arr, ... })) key =
          let
             val hash = Key.hash key
             val n = Word.toInt (Word.mod (hash, size))
@@ -324,10 +324,11 @@ functor HashTable (structure Key : HASHABLE)
          end
 
       fun insertMerge table key x f =
-         (
-         operate' table key (fn () => SOME x) (SOME o f);
-         ()
-         )
+         let
+            val _ = operate' table key (fn () => SOME x) (SOME o f)
+         in
+            ()
+         end
 
       fun lookupOrInsert table key datumf =
          let
