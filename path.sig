@@ -26,6 +26,7 @@ signature PATH =
 
       val isAbsolute : string -> bool
       val isRelative : string -> bool
+      val hasPath : string -> bool
 
       (* makeAbsolute path1 path2
        

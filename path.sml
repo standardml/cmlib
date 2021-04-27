@@ -67,6 +67,21 @@ structure Path :> PATH =
          String.sub (path, 0) <> #"/"
          handle Subscript => raise Path
 
+      fun hasPath name =
+         let
+            val len = String.size name
+            
+            fun loop i =
+               if i = len then
+                  false
+               else if String.sub (name, i) = #"/" then
+                  true
+               else
+                  loop (i+1)
+         in
+            loop 0
+         end
+
       fun join path1 path2 =
          String.concat [path1, "/", path2]
 

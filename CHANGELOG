@@ -3,9 +3,11 @@ Other changes since 3.0.0
 
 * Added Finally : FINALLY.
 
+* Added TopologicalSort and TOPOLOGICAL_SORT.
+
 * Added wraptest to PARSING.
 
-* Added TopologicalSort and TOPOLOGICAL_SORT.
+* Added hasPath to PATH.
 
 -----
 	
