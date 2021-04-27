@@ -121,7 +121,11 @@ functor RedBlackDict (structure Key : ORDERED)
          end
          
       fun insertMerge dict key x f =
-         #3 (operate' dict key (fn () => SOME x) (SOME o f))
+         let
+            val (_, _, y) = operate' dict key (fn () => SOME x) (SOME o f)
+         in
+            y
+         end
 
       fun foldl f x tree =
          (case tree of

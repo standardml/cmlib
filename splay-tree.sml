@@ -29,7 +29,7 @@ structure SplayTree =
          (size left + size right + 1, label, left, right)
 
 
-      fun Node' (label, left, right) =
+      fun mknoder (label, left, right) =
          Node (ref (size left + size right + 1, label, left, right))
 
 
@@ -42,7 +42,7 @@ structure SplayTree =
                 (* zig case *)
                 let
                    val right' = 
-                      Node' (label1, right, right1)
+                      mknoder (label1, right, right1)
 
                    val node' = mknode (label, left, right')
                 in
@@ -54,7 +54,7 @@ structure SplayTree =
                 (* zag case *)
                 let
                    val left' =
-                      Node' (label1, left1, left)
+                      mknoder (label1, left1, left)
                       
                    val node' = mknode (label, left', right)
                 in
@@ -66,7 +66,7 @@ structure SplayTree =
                 (* zig-zig case *)
                 let
                    val right' =
-                      Node' (label1, right, Node' (label2, right1, right2))
+                      mknoder (label1, right, mknoder (label2, right1, right2))
 
                    val node' = mknode (label, left, right')
                 in
@@ -78,7 +78,7 @@ structure SplayTree =
                 (* zag-zag case *)
                 let
                    val left' =
-                      Node' (label1, Node' (label2, left2, left1), left)
+                      mknoder (label1, mknoder (label2, left2, left1), left)
 
                    val node' = mknode (label, left', right)
                 in
@@ -89,9 +89,9 @@ structure SplayTree =
            | RIGHT (_, label1, left1) :: LEFT (grandparent, label2, right2) :: rest =>
                 (* zig-zag case *)
                 let
-                   val left' = Node' (label1, left1, left)
+                   val left' = mknoder (label1, left1, left)
 
-                   val right' = Node' (label2, right, right2)
+                   val right' = mknoder (label2, right, right2)
 
                    val node' = mknode (label, left', right')
                 in
@@ -102,9 +102,9 @@ structure SplayTree =
            | LEFT (_, label1, right1) :: RIGHT (grandparent, label2, left2) :: rest =>
                 (* zag-zig case *)
                 let
-                   val left' = Node' (label2, left2, left)
+                   val left' = mknoder (label2, left2, left)
 
-                   val right' = Node' (label1, right, right1)
+                   val right' = mknoder (label1, right, right1)
                    
                    val node' = mknode (label, left', right')
                 in
@@ -145,10 +145,10 @@ structure SplayTree =
                    (left, SOME label, right)
 
               | LESS =>
-                   (left, NONE, Node' (label, Leaf, right))
+                   (left, NONE, mknoder (label, Leaf, right))
 
               | GREATER =>
-                   (Node' (label, left, Leaf), NONE, right))
+                   (mknoder (label, left, Leaf), NONE, right))
          end
 
 
@@ -181,7 +181,7 @@ structure SplayTree =
                 let
                    val (label, right') = splayMin root
                 in
-                   Node' (label, left, right')
+                   mknoder (label, left, right')
                 end)
 
    end

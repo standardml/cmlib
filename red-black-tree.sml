@@ -30,7 +30,7 @@ structure RedBlackTree =
       (* Hopefully this gets inlined.  Doing all the size computations in one place
          makes me much more confident they are done correctly.
       *)
-      fun Node' (color, label, left, right) =
+      fun mknode (color, label, left, right) =
          Node (color, size left + size right + 1, label, left, right)
 
          
@@ -39,10 +39,10 @@ structure RedBlackTree =
              [] => tree
 
            | LEFT (color, label, right) :: rest =>
-                zip (Node' (color, label, tree, right)) rest
+                zip (mknode (color, label, tree, right)) rest
 
            | RIGHT (color, label, left) :: rest =>
-                zip (Node' (color, label, left, tree)) rest)
+                zip (mknode (color, label, left, tree)) rest)
 
 
       (* Precondition:
@@ -52,20 +52,20 @@ structure RedBlackTree =
       fun zipRed (label, left, right) zipper =
          (case zipper of
              [] =>
-                Node' (BLACK, label, left, right)
+                mknode (BLACK, label, left, right)
 
            | LEFT (BLACK, label1, right1) :: rest =>
                 zip
-                   (Node' (BLACK, label1,
-                          Node' (RED, label, left, right),
+                   (mknode (BLACK, label1,
+                          mknode (RED, label, left, right),
                           right1))
                    rest
 
            | RIGHT (BLACK, label1, left1) :: rest =>
                 zip
-                   (Node' (BLACK, label1,
+                   (mknode (BLACK, label1,
                           left1,
-                          Node' (RED, label, left, right)))
+                          mknode (RED, label, left, right)))
                    rest
 
            | LEFT (RED, label1, right1) ::
@@ -73,8 +73,8 @@ structure RedBlackTree =
                 (* Grandparent is BLACK, by red-black invariant. *)
                 zipRed
                    (label2,
-                    Node' (BLACK, label1,
-                          Node' (RED, label, left, right),
+                    mknode (BLACK, label1,
+                          mknode (RED, label, left, right),
                           right1),
                     Node (BLACK, sz3, label3, left3, right3))
                    rest
@@ -85,8 +85,8 @@ structure RedBlackTree =
                 zipRed
                    (label2,
                     Node (BLACK, sz3, label3, left3, right3),
-                    Node' (BLACK, label1,
-                          Node' (RED, label, left, right),
+                    mknode (BLACK, label1,
+                          mknode (RED, label, left, right),
                           right1))
                    rest
 
@@ -95,9 +95,9 @@ structure RedBlackTree =
                 (* Grandparent is BLACK, by red-black invariant. *)
                 zipRed
                    (label2,
-                    Node' (BLACK, label1,
+                    mknode (BLACK, label1,
                           left1,
-                          Node' (RED, label, left, right)),
+                          mknode (RED, label, left, right)),
                     Node (BLACK, sz3, label3, left3, right3))
                    rest
 
@@ -107,56 +107,56 @@ structure RedBlackTree =
                 zipRed
                    (label2,
                     Node (BLACK, sz3, label3, left3, right3),
-                    Node' (BLACK, label1,
+                    mknode (BLACK, label1,
                           left1,
-                          Node' (RED, label, left, right)))
+                          mknode (RED, label, left, right)))
                    rest
 
            | LEFT (RED, label1, right1) ::
              LEFT (_ (* BLACK *), label2, node3) :: rest =>
                 (* Grandparent is BLACK, by red-black invariant. *)
                 zip
-                   (Node' (BLACK, label1,
-                          Node' (RED, label, left, right),
-                          Node' (RED, label2, right1, node3)))
+                   (mknode (BLACK, label1,
+                          mknode (RED, label, left, right),
+                          mknode (RED, label2, right1, node3)))
                    rest
 
            | LEFT (RED, label1, right1) ::
              RIGHT (_ (* BLACK *), label2, node3) :: rest =>
                 (* Grandparent is BLACK, by red-black invariant. *)
                 zip
-                   (Node' (BLACK, label,
-                          Node' (RED, label2, node3, left),
-                          Node' (RED, label1, right, right1)))
+                   (mknode (BLACK, label,
+                          mknode (RED, label2, node3, left),
+                          mknode (RED, label1, right, right1)))
                    rest
 
            | RIGHT (RED, label1, left1) ::
              LEFT (_ (* BLACK *), label2, node3) :: rest =>
                 (* Grandparent is BLACK, by red-black invariant. *)
                 zip
-                   (Node' (BLACK, label,
-                          Node' (RED, label1, left1, left),
-                          Node' (RED, label2, right, node3)))
+                   (mknode (BLACK, label,
+                          mknode (RED, label1, left1, left),
+                          mknode (RED, label2, right, node3)))
                    rest
 
            | RIGHT (RED, label1, left1) ::
              RIGHT (_ (* BLACK *), label2, node3) :: rest =>
                 (* Grandparent is BLACK, by red-black invariant. *)
                 zip
-                   (Node' (BLACK, label1, 
-                          Node' (RED, label2, node3, left1),
-                          Node' (RED, label, left, right)))
+                   (mknode (BLACK, label1, 
+                          mknode (RED, label2, node3, left1),
+                          mknode (RED, label, left, right)))
                    rest
 
            | [LEFT (RED, label1, right1)] =>
-                Node' (BLACK, label1,
-                      Node' (RED, label, left, right),
+                mknode (BLACK, label1,
+                      mknode (RED, label, left, right),
                       right1)
    
            | [RIGHT (RED, label1, left1)] =>
-                Node' (BLACK, label1,
+                mknode (BLACK, label1,
                       left1,
-                      Node' (RED, label, left, right)))
+                      mknode (RED, label, left, right)))
 
 
       (* Precondition:
@@ -174,8 +174,8 @@ structure RedBlackTree =
                                          left2,
                                          Node (RED, sz3, label3, left3, right3))) :: rest =>
                 zip
-                   (Node' (color1, label2,
-                          Node' (BLACK, label1, tree, left2),
+                   (mknode (color1, label2,
+                          mknode (BLACK, label1, tree, left2),
                           Node (BLACK, sz3, label3, left3, right3)))
                    rest
 
@@ -184,9 +184,9 @@ structure RedBlackTree =
                                           right2)) :: rest =>
                 (* Sibling is BLACK by red-black invariant. *)
                 zip
-                   (Node' (color1, label2,
+                   (mknode (color1, label2,
                           Node (BLACK, sz3, label3, left3, right3),
-                          Node' (BLACK, label1, right2, tree)))
+                          mknode (BLACK, label1, right2, tree)))
                    rest
 
 
@@ -196,9 +196,9 @@ structure RedBlackTree =
                                          right2)) :: rest =>
                 (* Sibling is BLACK by red-black invariant. *)
                 zip
-                   (Node' (color1, label3,
-                          Node' (BLACK, label1, tree, left3),
-                          Node' (BLACK, label2, right3, right2)))
+                   (mknode (color1, label3,
+                          mknode (BLACK, label1, tree, left3),
+                          mknode (BLACK, label2, right3, right2)))
                    rest
 
            | RIGHT (color1, label1, Node (_ (* BLACK *), _, label2,
@@ -206,9 +206,9 @@ structure RedBlackTree =
                                          Node (RED, _, label3, left3, right3))) :: rest =>
                 (* Sibling is BLACK by red-black invariant. *)
                 zip
-                   (Node' (color1, label3,
-                          Node' (BLACK, label2, left2, left3),
-                          Node' (BLACK, label1, right3, tree)))
+                   (mknode (color1, label3,
+                          mknode (BLACK, label2, left2, left3),
+                          mknode (BLACK, label1, right3, tree)))
                    rest
 
 
@@ -218,7 +218,7 @@ structure RedBlackTree =
                    Previous cases rule out left2 or right2 being a red node.
                 *)
                 zip
-                   (Node' (BLACK, label1,
+                   (mknode (BLACK, label1,
                           tree,
                           Node (RED, sz2, label2, left2, right2)))
                    rest
@@ -228,7 +228,7 @@ structure RedBlackTree =
                    Previous cases rule out left2 or right2 being a red node.
                 *)
                 zip
-                   (Node' (BLACK, label1,
+                   (mknode (BLACK, label1,
                           Node (RED, sz2, label2, left2, right2),
                           tree))
                    rest
@@ -238,7 +238,7 @@ structure RedBlackTree =
            | LEFT (BLACK, label1, Node (BLACK, sz2, label2, left2, right2)) :: rest =>
                 (* Previous cases rule out left2 or right2 being a red node. *)
                 zipBlack
-                   (Node' (BLACK, label1,
+                   (mknode (BLACK, label1,
                           tree,
                           Node (RED, sz2, label2, left2, right2)))
                    rest
@@ -246,7 +246,7 @@ structure RedBlackTree =
            | RIGHT (BLACK, label1, Node (BLACK, sz2, label2, left2, right2)) :: rest =>
                 (* Previous cases rule out left2 or right2 being a red node. *)
                 zipBlack
-                   (Node' (BLACK, label1,
+                   (mknode (BLACK, label1,
                           Node (RED, sz2, label2, left2, right2),
                           tree))
                    rest
@@ -323,7 +323,7 @@ structure RedBlackTree =
                 (case child of
                     Node (_ (* RED *), _, label, _ (* Leaf *), _ (* Leaf *)) =>
                        (* Must be RED with Leaf children, by black-height invariant. *)
-                       zip (Node' (BLACK, label, Leaf, Leaf)) zipper
+                       zip (mknode (BLACK, label, Leaf, Leaf)) zipper
 
                   | Leaf =>
                        zipBlack Leaf zipper))
@@ -427,7 +427,7 @@ structure RedBlackTree =
             (case Int.compare (lbh, rbh) of
                 EQUAL =>
                    (* It's nice when this happens. *)
-                   Node' (BLACK, label, left, right)
+                   mknode (BLACK, label, left, right)
    
               | GREATER =>
                    let

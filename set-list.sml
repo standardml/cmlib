@@ -197,8 +197,10 @@ functor ListSet (structure Elem : ORDERED)
            | x :: _ => x)
 
       fun greatest l =
-         (List.last l
-          handle List.Empty => raise Empty)
+         (case l of
+             nil => raise Empty
+           | [x] => x
+           | _ :: t => greatest t)
 
       fun leastGt l key =
          (case l of

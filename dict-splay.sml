@@ -32,13 +32,13 @@ functor SplayDict (structure Key : ORDERED)
                 in
                    (case order of
                        EQUAL =>
-                          Node' ((key, datum), left, right)
+                          mknoder ((key, datum), left, right)
 
                      | LESS =>
-                          Node' ((key, datum), left, Node' (label, Leaf, right))
+                          mknoder ((key, datum), left, mknoder (label, Leaf, right))
 
                      | GREATER =>
-                          Node' ((key, datum), Node' (label, left, Leaf), right))
+                          mknoder ((key, datum), mknoder (label, left, Leaf), right))
                 end)
 
 
@@ -54,13 +54,13 @@ functor SplayDict (structure Key : ORDERED)
                 in
                    (case order of
                        EQUAL =>
-                          (Node' ((key, datum), left, right), true)
+                          (mknoder ((key, datum), left, right), true)
 
                      | LESS =>
-                          (Node' ((key, datum), left, Node' (label, Leaf, right)), false)
+                          (mknoder ((key, datum), left, mknoder (label, Leaf, right)), false)
 
                      | GREATER =>
-                          (Node' ((key, datum), Node' (label, left, Leaf), right), false))
+                          (mknoder ((key, datum), mknoder (label, left, Leaf), right), false))
                 end)
 
 
@@ -121,25 +121,25 @@ functor SplayDict (structure Key : ORDERED)
 
                             | y as SOME datum =>
                                  (SOME datum', y,
-                                  Node' ((key, datum), left, right)))
+                                  mknoder ((key, datum), left, right)))
 
                      | LESS =>
                           (case absentf () of
                               NONE =>
-                                 (NONE, NONE, Node' (label, left, right))
+                                 (NONE, NONE, mknoder (label, left, right))
 
                             | y as SOME datum =>
                                  (NONE, y,
-                                  Node' ((key, datum), left, Node' (label, Leaf, right))))
+                                  mknoder ((key, datum), left, mknoder (label, Leaf, right))))
 
                      | GREATER =>
                           (case absentf () of
                               NONE =>
-                                 (NONE, NONE, Node' (label, left, right))
+                                 (NONE, NONE, mknoder (label, left, right))
 
                             | y as SOME datum =>
                                  (NONE, y,
-                                  Node' ((key, datum), Node' (label, left, Leaf), right))))
+                                  mknoder ((key, datum), mknoder (label, left, Leaf), right))))
                 end)
 
 
@@ -152,7 +152,11 @@ functor SplayDict (structure Key : ORDERED)
 
 
       fun insertMerge dict key x f =
-         #3 (operate' dict key (fn () => SOME x) (SOME o f))
+         let
+            val (_, _, y) = operate' dict key (fn () => SOME x) (SOME o f)
+         in
+            y
+         end
 
 
       fun find tree key =
@@ -431,7 +435,7 @@ functor SplayDict (structure Key : ORDERED)
                                  SOME (_, datum2) => (key1, merge (key1, datum1, datum2))
                                | NONE => label1)
                        in
-                          Node' (label, union left1 left2 merge, union right1 right2 merge)
+                          mknoder (label, union left1 left2 merge, union right1 right2 merge)
                        end))
 
    end

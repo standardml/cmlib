@@ -16,13 +16,13 @@ sig
 
   val isEmpty   : 'a ipqueue -> bool              (* returns true if the priority queue is empty *)
 
-  val insert    : 'a ipqueue -> (key*'a) -> unit                            (* imperative insert *)
-  val insertRef : 'a ipqueue -> (key*'a) -> 'a insertedRef   (* insert and return an insertedRef *)
+  val insert    : 'a ipqueue -> (key * 'a) -> unit                            (* imperative insert *)
+  val insertRef : 'a ipqueue -> (key * 'a) -> 'a insertedRef   (* insert and return an insertedRef *)
 
   val meldInto  : 'a ipqueue -> 'a ipqueue -> unit  (* moves all (k,v) in the 2nd ipq to the 1st *)
 
-  val findMin   : 'a ipqueue -> (key*'a)   (* find (k,v) with min k in an ipqueue or raise Empty *)
-  val deleteMin : 'a ipqueue -> (key*'a)          (* the same as findMin, but also deletes (k,v) *)
+  val findMin   : 'a ipqueue -> (key * 'a)   (* find (k,v) with min k in an ipqueue or raise Empty *)
+  val deleteMin : 'a ipqueue -> (key * 'a)          (* the same as findMin, but also deletes (k,v) *)
 
    (* Decrease the key in the insertedRef, which must be from a call to insertRef on the *
     * ipqueue, or one melded into it, whose element hasn't subsequently been deleted.    *)

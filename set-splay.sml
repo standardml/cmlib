@@ -37,10 +37,10 @@ functor SplaySet (structure Elem : ORDERED)
                        EQUAL => tree
 
                      | LESS =>
-                           Node' (elem, left, Node' (elem', Leaf, right))
+                           mknoder (elem, left, mknoder (elem', Leaf, right))
 
                      | GREATER =>
-                           Node' (elem, Node' (elem', left, Leaf), right))
+                           mknoder (elem, mknoder (elem', left, Leaf), right))
                 end)
 
 
@@ -87,7 +87,7 @@ functor SplaySet (structure Elem : ORDERED)
                           val (left2, _, right2) =
                              split (fn key2 => Elem.compare (key1, key2)) root2
                        in
-                          Node' (key1, union left1 left2, union right1 right2)
+                          mknoder (key1, union left1 left2, union right1 right2)
                        end))
 
 
@@ -110,7 +110,7 @@ functor SplaySet (structure Elem : ORDERED)
                           val right = intersection right1 right2
                        in
                           (case middle of
-                              SOME _ => Node' (key1, left, right)
+                              SOME _ => mknoder (key1, left, right)
 
                             | NONE => join left right)
                        end))
@@ -137,7 +137,7 @@ functor SplaySet (structure Elem : ORDERED)
                           (case middle of
                               SOME _ => join left right
 
-                            | NONE => Node' (key1, left, right))
+                            | NONE => mknoder (key1, left, right))
                        end))
 
 

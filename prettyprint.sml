@@ -110,8 +110,8 @@ structure PrettyPrint
            | SOME PStream.Nil =>
                 (* This stream never closes. *)
                 raise (Fail "invariant")
-           | SOME (PStream.Cons p) =>
-                f p)
+           | SOME (PStream.Cons (x, xs)) =>
+                f (x, xs))
 
       fun enqueue iostream bk output text =
          (case bk of
@@ -222,8 +222,8 @@ structure PrettyPrint
                           (* Backtrack *)
                           Option.valOf bk ()
                     end
-               | OpenBox p =>
-                    ppOpenBox env bk input' output margin p (pp env bk)
+               | OpenBox (b, i) =>
+                    ppOpenBox env bk input' output margin (b, i) (pp env bk)
                | CloseBox =>
                     ck input' output margin
                | Flush =>
@@ -312,9 +312,9 @@ structure PrettyPrint
 
       (* Action generator *)
 
-      type ppstream = { queue : action IQueue.iqueue, formatter : routine ref }
+      datatype ppstream = PP of { queue : action IQueue.iqueue, formatter : routine ref }
 
-      fun send ({ queue, formatter, ... }:ppstream) action =
+      fun send (PP { queue, formatter, ... }) action =
          let
             val () = IQueue.insert queue action
 
@@ -334,7 +334,7 @@ structure PrettyPrint
             val q = IQueue.iqueue ()
             val input = PStream.fromIqueue q
          in
-            { queue = q, formatter = ref (R (fn () => ppStart iostream width indent input)) }
+            PP { queue = q, formatter = ref (R (fn () => ppStart iostream width indent input)) }
          end
 
       fun makeStream iostream width = makeStreamIndent iostream width 0

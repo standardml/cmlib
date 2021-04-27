@@ -256,12 +256,10 @@ functor ListDict (structure Key : ORDERED)
            | (_, x) :: _ => x)
 
       fun greatest l =
-         (let
-             val (_, x) = List.last l
-          in
-             x
-          end
-          handle Empty => raise Absent)
+         (case l of
+             nil => raise Absent
+           | [(_, x)] => x
+           | _ :: t => greatest t)
 
       fun leastGt l key =
          (case l of
