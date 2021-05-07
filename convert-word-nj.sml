@@ -23,7 +23,9 @@ structure ConvertWord : CONVERT_WORD =
       fun word8ToWord32 w = Word32.fromLarge (Word8.toLarge w)
       fun word8ToWord32X w = Word32.fromLarge (Word8.toLargeX w)
       fun word8ToWord64 w = Word64.fromInt (Word8.toInt w)
-      val word8ToIntInf = Word8.toLargeInt
+
+      (* Work around SML/NJ bug. *)
+      fun word8ToIntInf w = LargeInt.fromInt (Word8.toInt w)
 
       fun word8ToWord64X w =
          let
