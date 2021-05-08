@@ -1,13 +1,24 @@
 
 Other changes since 3.0.0
 
+* Added ArrayInf : ARRAY_INF.
+
 * Added Finally : FINALLY.
 
-* Added TopologicalSort and TOPOLOGICAL_SORT.
+* Added Pickle : PICKLE.
+
+* Added PICKLEABLE_TYPE, PICKLEABLE_CON, IntPickleable, IntInfPickleable, StringPickleable,
+  DictPickleable, SetPickleable, SymbolPickleable.
+
+* Added TOPOLOGICAL_SORT and TopologicalSort.
+
+* Added revapp to LIST_UTIL.
 
 * Added wraptest to PARSING.
 
 * Added hasPath to PATH.
+
+* Better hash function for IntInf.int.
 
 -----
 	

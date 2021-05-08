@@ -2,6 +2,16 @@
 structure ListUtil :> LIST_UTIL =
    struct
 
+      fun revapp f l =
+         (case l of
+             nil => ()
+
+           | h :: t =>
+                (
+                revapp f t;
+                f h
+                ))
+
       fun foldrLazy f x l =
          (case l of
              [] => x

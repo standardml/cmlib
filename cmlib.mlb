@@ -169,6 +169,12 @@ local
         io-util.sml
         multi-file-io.sig
         multi-file-io.sml
+        array-inf.sig
+        array-inf.sml
+        pickle.sig
+        pickle.sml
+        pickleable.sig
+        pickleable.sml
 
         deprecated/coord.sig
         deprecated/coord.sml
@@ -180,6 +186,7 @@ local
 in
         signature ARGUMENTS
         signature ARITH
+        signature ARRAY_INF
         signature ARRAY_UTIL
         signature DATALESS_BRANCHING_TABLE
         signature BYTESTRING
@@ -232,6 +239,9 @@ in
         signature PARSING
         signature PARTITION
         signature PATH
+        signature PICKLE
+        signature PICKLEABLE_CON
+        signature PICKLEABLE_TYPE
         signature PRETTY_PRINT
         signature PQUEUE
         signature PSTREAM
@@ -264,6 +274,7 @@ in
         structure Arguments
         structure Arith
         structure ArraySequence
+        structure ArrayInf
         structure ArrayUtil
         structure BinIOUtil
         structure BinSeekIO
@@ -309,6 +320,8 @@ in
 	structure IntHashable
 	structure IntHashTable
 	structure IntOrdered
+        structure IntPickleable
+        structure IntInfPickleable
 	structure IntRedBlackSet
 	structure IntRedBlackDict
 	structure IntSplaySet
@@ -333,6 +346,7 @@ in
         structure MJHash
         structure Output
         structure Path
+        structure Pickle
 	structure PrettyPrint
 	structure PStream
 	structure PSusp
@@ -350,6 +364,7 @@ in
 	structure StringListSet
         structure StringMiniString
 	structure StringOrdered
+        structure StringPickleable
 	structure StringRedBlackSet
 	structure StringRedBlackDict
 	structure StringSplaySet
@@ -397,6 +412,7 @@ in
         functor DatalessHashTable
 	functor DictCheckpointTable
 	functor DictMultiTable
+        functor DictPickleable
         functor ECDHFun
         functor ECDSAFun
         functor EllipticCurveCryptoFun
@@ -432,11 +448,13 @@ in
         functor RedBlackSet
         functor SeekIOFun
         functor SetHashable
+        functor SetPickleable
         functor SplayDict
         functor SplaySet
         functor SymbolFun
         functor SymbolHashableFun
         functor SymbolOrderedFun
+        functor SymbolPickleable
         functor TopologicalSort
 
         (* deprecated *)

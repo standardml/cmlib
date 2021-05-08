@@ -6,7 +6,24 @@ structure IntInfHashable
       type t = IntInf.int
 
       val eq : IntInf.int * IntInf.int -> bool = op =
-      val hash = Word.fromLargeInt
+
+      val wordSize = Word.fromInt Word.wordSize
+      val mask = IntInf.<< (1, wordSize) - 1
+
+      fun hashloop n acc =
+         if n = 0 then
+            acc
+         else
+            hashloop 
+               (IntInf.~>> (n, wordSize))
+               (JenkinsHash.hashInc acc (ConvertWord.intInfToWord (IntInf.andb (n, mask))))
+
+      fun hash n =
+         if n >= 0 then
+            hashloop n 0w0
+         else
+            Word.notb (hashloop n 0w0)
+
    end
 
 

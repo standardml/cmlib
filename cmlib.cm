@@ -2,6 +2,7 @@ library
 
         signature ARGUMENTS
         signature ARITH
+        signature ARRAY_INF
         signature ARRAY_UTIL
         signature DATALESS_BRANCHING_TABLE
         signature BYTESTRING
@@ -54,6 +55,9 @@ library
         signature PARSING
         signature PARTITION
         signature PATH
+        signature PICKLE
+        signature PICKLEABLE_CON
+        signature PICKLEABLE_TYPE
         signature PQUEUE
         signature PRETTY_PRINT
         signature PSTREAM
@@ -87,6 +91,7 @@ library
         structure Arguments
         structure Arith
         structure ArraySequence
+        structure ArrayInf
         structure ArrayUtil
         structure BinSeekIO
         structure Bytestring
@@ -131,6 +136,8 @@ library
 	structure IntHashable
 	structure IntHashTable
 	structure IntOrdered
+        structure IntPickleable
+        structure IntInfPickleable
 	structure IntRedBlackSet
 	structure IntRedBlackDict
 	structure IntSplaySet
@@ -155,6 +162,7 @@ library
         structure MTRand32
         structure Output
         structure Path
+        structure Pickle
 	structure PrettyPrint
 	structure PStream
 	structure PSusp
@@ -173,6 +181,7 @@ library
 	structure StringListSet
         structure StringMiniString
 	structure StringOrdered
+        structure StringPickleable
 	structure StringRedBlackSet
 	structure StringRedBlackDict
 	structure StringSplaySet
@@ -221,6 +230,7 @@ library
         functor DatalessHashTable
 	functor DictCheckpointTable
 	functor DictMultiTable
+        functor DictPickleable
         functor ECDHFun
         functor ECDSAFun
         functor EllipticCurveCryptoFun
@@ -255,12 +265,14 @@ library
         functor RedBlackSet
         functor SeekIOFun
         functor SetHashable
+        functor SetPickleable
         functor SplayDict
         functor SplaySet
         functor MonomorphizeStreamable
         functor SymbolFun
         functor SymbolHashableFun
         functor SymbolOrderedFun
+        functor SymbolPickleable
         functor TopologicalSort
 
         library(basis.cm)
@@ -280,6 +292,8 @@ is
         arguments.sml
         arith.sig
         arith.sml
+        array-inf.sig
+        array-inf.sml
         array-util.sig
         array-util.sml
         asn1.sig
@@ -373,6 +387,10 @@ is
 	partition.sml
         path.sig
         path.sml
+        pickle.sig
+        pickle.sml
+        pickleable.sig
+        pickleable.sml
         pqueue.sig
         pqueue-lazy-pairing.sml
         pqueue-leftist.sml
