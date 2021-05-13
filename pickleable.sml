@@ -26,8 +26,8 @@ structure StringPickleable :> PICKLEABLE_TYPE where type t = string =
    end
 
 
-functor DictPickleable (structure Key : PICKLEABLE_TYPE
-                        structure Dict : DICT where type key = Key.t)
+functor DictPickleableFun (structure Key : PICKLEABLE_TYPE
+                           structure Dict : DICT where type key = Key.t)
    :> PICKLEABLE_CON where type 'a t = 'a Dict.dict
    =
    struct
@@ -46,8 +46,8 @@ functor DictPickleable (structure Key : PICKLEABLE_TYPE
    end
 
 
-functor SetPickleable (structure Elem : PICKLEABLE_TYPE
-                       structure Set : SET where type elem = Elem.t)
+functor SetPickleableFun (structure Elem : PICKLEABLE_TYPE
+                          structure Set : SET where type elem = Elem.t)
    :> PICKLEABLE_TYPE where type t = Set.set
    =
    struct
@@ -66,8 +66,8 @@ functor SetPickleable (structure Elem : PICKLEABLE_TYPE
    end
 
 
-functor SymbolPickleable (structure Value : PICKLEABLE_TYPE
-                          structure Symbol : SYMBOL where type value = Value.t)
+functor SymbolPickleableFun (structure Value : PICKLEABLE_TYPE
+                             structure Symbol : SYMBOL where type value = Value.t)
    :> PICKLEABLE_TYPE where type t = Symbol.symbol
    =
    struct

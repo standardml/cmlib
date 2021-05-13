@@ -228,6 +228,13 @@ functor SplayDict (structure Key : ORDERED)
                 Node (ref (sz, (key, f datum), map f left, map f right)))
 
 
+      fun map' f tree =
+         (case tree of
+             Leaf => Leaf
+           | Node (ref (sz, (kd as (key, _)), left, right)) =>
+                Node (ref (sz, (key, f kd), map' f left, map' f right)))
+
+
       fun app f tree =
          (case tree of
              Leaf => ()

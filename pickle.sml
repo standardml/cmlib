@@ -212,7 +212,9 @@ structure Pickle :> PICKLE =
               cleanup =
                  (fn () => (c1 (); c2 ())) }
 
-      fun triple
+      val tuple2 = pair
+
+      fun tuple3
          (PU {pick=p1, unpick=u1, cleanup=c1}) 
          (PU {pick=p2, unpick=u2, cleanup=c2})
          (PU {pick=p3, unpick=u3, cleanup=c3})
@@ -238,7 +240,7 @@ structure Pickle :> PICKLE =
               cleanup =
                  (fn () => (c1 (); c2 (); c3 ())) }
 
-      fun quad
+      fun tuple4
          (PU {pick=p1, unpick=u1, cleanup=c1}) 
          (PU {pick=p2, unpick=u2, cleanup=c2})
          (PU {pick=p3, unpick=u3, cleanup=c3})
@@ -266,6 +268,196 @@ structure Pickle :> PICKLE =
 
               cleanup =
                  (fn () => (c1 (); c2 (); c3 (); c4 ())) }
+
+      fun tuple5
+         (PU {pick=p1, unpick=u1, cleanup=c1}) 
+         (PU {pick=p2, unpick=u2, cleanup=c2})
+         (PU {pick=p3, unpick=u3, cleanup=c3})
+         (PU {pick=p4, unpick=u4, cleanup=c4})
+         (PU {pick=p5, unpick=u5, cleanup=c5})
+         =
+         PU { pick =
+                 (fn outf => fn admf => fn (x, y, z, w, v) =>
+                     (
+                     p1 outf admf x;
+                     p2 outf admf y;
+                     p3 outf admf z;
+                     p4 outf admf w;
+                     p5 outf admf v
+                     )),
+                 
+              unpick =
+                 (fn inf =>
+                     let
+                        val x = u1 inf
+                        val y = u2 inf
+                        val z = u3 inf
+                        val w = u4 inf
+                        val v = u5 inf
+                     in
+                        (x, y, z, w, v)
+                     end),
+
+              cleanup =
+                 (fn () => (c1 (); c2 (); c3 (); c4 (); c5 ())) }
+
+      fun tuple6
+         (PU {pick=p1, unpick=u1, cleanup=c1}) 
+         (PU {pick=p2, unpick=u2, cleanup=c2})
+         (PU {pick=p3, unpick=u3, cleanup=c3})
+         (PU {pick=p4, unpick=u4, cleanup=c4})
+         (PU {pick=p5, unpick=u5, cleanup=c5})
+         (PU {pick=p6, unpick=u6, cleanup=c6})
+         =
+         PU { pick =
+                 (fn outf => fn admf => fn (x, y, z, w, v, u) =>
+                     (
+                     p1 outf admf x;
+                     p2 outf admf y;
+                     p3 outf admf z;
+                     p4 outf admf w;
+                     p5 outf admf v;
+                     p6 outf admf u
+                     )),
+                 
+              unpick =
+                 (fn inf =>
+                     let
+                        val x = u1 inf
+                        val y = u2 inf
+                        val z = u3 inf
+                        val w = u4 inf
+                        val v = u5 inf
+                        val u = u6 inf
+                     in
+                        (x, y, z, w, v, u)
+                     end),
+
+              cleanup =
+                 (fn () => (c1 (); c2 (); c3 (); c4 (); c5 (); c6 ())) }
+
+      fun tuple7
+         (PU {pick=p1, unpick=u1, cleanup=c1}) 
+         (PU {pick=p2, unpick=u2, cleanup=c2})
+         (PU {pick=p3, unpick=u3, cleanup=c3})
+         (PU {pick=p4, unpick=u4, cleanup=c4})
+         (PU {pick=p5, unpick=u5, cleanup=c5})
+         (PU {pick=p6, unpick=u6, cleanup=c6})
+         (PU {pick=p7, unpick=u7, cleanup=c7})
+         =
+         PU { pick =
+                 (fn outf => fn admf => fn (x, y, z, w, v, u, t) =>
+                     (
+                     p1 outf admf x;
+                     p2 outf admf y;
+                     p3 outf admf z;
+                     p4 outf admf w;
+                     p5 outf admf v;
+                     p6 outf admf u;
+                     p7 outf admf t
+                     )),
+                 
+              unpick =
+                 (fn inf =>
+                     let
+                        val x = u1 inf
+                        val y = u2 inf
+                        val z = u3 inf
+                        val w = u4 inf
+                        val v = u5 inf
+                        val u = u6 inf
+                        val t = u7 inf
+                     in
+                        (x, y, z, w, v, u, t)
+                     end),
+
+              cleanup =
+                 (fn () => (c1 (); c2 (); c3 (); c4 (); c5 (); c6 (); c7 ())) }
+
+      fun tuple8
+         (PU {pick=p1, unpick=u1, cleanup=c1}) 
+         (PU {pick=p2, unpick=u2, cleanup=c2})
+         (PU {pick=p3, unpick=u3, cleanup=c3})
+         (PU {pick=p4, unpick=u4, cleanup=c4})
+         (PU {pick=p5, unpick=u5, cleanup=c5})
+         (PU {pick=p6, unpick=u6, cleanup=c6})
+         (PU {pick=p7, unpick=u7, cleanup=c7})
+         (PU {pick=p8, unpick=u8, cleanup=c8})
+         =
+         PU { pick =
+                 (fn outf => fn admf => fn (x, y, z, w, v, u, t, s) =>
+                     (
+                     p1 outf admf x;
+                     p2 outf admf y;
+                     p3 outf admf z;
+                     p4 outf admf w;
+                     p5 outf admf v;
+                     p6 outf admf u;
+                     p7 outf admf t;
+                     p8 outf admf s
+                     )),
+                 
+              unpick =
+                 (fn inf =>
+                     let
+                        val x = u1 inf
+                        val y = u2 inf
+                        val z = u3 inf
+                        val w = u4 inf
+                        val v = u5 inf
+                        val u = u6 inf
+                        val t = u7 inf
+                        val s = u8 inf
+                     in
+                        (x, y, z, w, v, u, t, s)
+                     end),
+
+              cleanup =
+                 (fn () => (c1 (); c2 (); c3 (); c4 (); c5 (); c6 (); c7 (); c8 ())) }
+
+      fun tuple9
+         (PU {pick=p1, unpick=u1, cleanup=c1}) 
+         (PU {pick=p2, unpick=u2, cleanup=c2})
+         (PU {pick=p3, unpick=u3, cleanup=c3})
+         (PU {pick=p4, unpick=u4, cleanup=c4})
+         (PU {pick=p5, unpick=u5, cleanup=c5})
+         (PU {pick=p6, unpick=u6, cleanup=c6})
+         (PU {pick=p7, unpick=u7, cleanup=c7})
+         (PU {pick=p8, unpick=u8, cleanup=c8})
+         (PU {pick=p9, unpick=u9, cleanup=c9})
+         =
+         PU { pick =
+                 (fn outf => fn admf => fn (x, y, z, w, v, u, t, s, r) =>
+                     (
+                     p1 outf admf x;
+                     p2 outf admf y;
+                     p3 outf admf z;
+                     p4 outf admf w;
+                     p5 outf admf v;
+                     p6 outf admf u;
+                     p7 outf admf t;
+                     p8 outf admf s;
+                     p9 outf admf r
+                     )),
+                 
+              unpick =
+                 (fn inf =>
+                     let
+                        val x = u1 inf
+                        val y = u2 inf
+                        val z = u3 inf
+                        val w = u4 inf
+                        val v = u5 inf
+                        val u = u6 inf
+                        val t = u7 inf
+                        val s = u8 inf
+                        val r = u9 inf
+                     in
+                        (x, y, z, w, v, u, t, s, r)
+                     end),
+
+              cleanup =
+                 (fn () => (c1 (); c2 (); c3 (); c4 (); c5 (); c6 (); c7 (); c8 (); c9 ())) }
 
       fun pList (p : consumer -> consumer -> 'a -> unit) outf admf l =
          (
@@ -380,6 +572,11 @@ structure Pickle :> PICKLE =
       fun const x =
          PU { pick    = (fn _ => fn _ => fn _ => ()),
               unpick  = (fn _ => x),
+              cleanup = noop }
+
+      fun susp f =
+         PU { pick    = (fn _ => fn _ => fn _ => ()),
+              unpick  = (fn _ => f ()),
               cleanup = noop }
 
       fun alt f arms =
@@ -621,8 +818,8 @@ structure Pickle :> PICKLE =
                  cleanup = cleanup' }
          end
 
-      fun pickle (PU { pick, ... }) outf x = pick outf outf x
-      fun unpickle (PU { unpick, ... }) inf = unpick inf
+      fun pickle outf (PU { pick, ... }) x = pick outf outf x
+      fun unpickle inf (PU { unpick, ... }) = unpick inf
       fun reset (PU { cleanup, ... }) = cleanup ()
 
    end

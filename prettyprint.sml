@@ -127,7 +127,7 @@ structure PrettyPrint
       fun flushOutput iostream output =
          app (write iostream) (rev output)
 
-      fun ppNewline (env as (iostream, width, indent, _, _)) bk output k =
+      fun ppNewline (iostream, width, indent, _, _) bk output k =
          let
             val output' =
                enqueue iostream bk
@@ -234,7 +234,7 @@ structure PrettyPrint
                            (* Leave the Flush action on the input stream. *)
                            ck input output margin)))
 
-      and ppOpenBox (env as (iostream, width, indent, _, _)) bk input output margin (box, tab) sk =
+      and ppOpenBox (iostream, width, indent, _, _) bk input output margin (box, tab) sk =
          let
             val indent' = Int.max (width - margin + tab, 0)
          in

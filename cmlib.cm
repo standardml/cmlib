@@ -230,7 +230,7 @@ library
         functor DatalessHashTable
 	functor DictCheckpointTable
 	functor DictMultiTable
-        functor DictPickleable
+        functor DictPickleableFun
         functor ECDHFun
         functor ECDSAFun
         functor EllipticCurveCryptoFun
@@ -265,14 +265,14 @@ library
         functor RedBlackSet
         functor SeekIOFun
         functor SetHashable
-        functor SetPickleable
+        functor SetPickleableFun
         functor SplayDict
         functor SplaySet
         functor MonomorphizeStreamable
         functor SymbolFun
         functor SymbolHashableFun
         functor SymbolOrderedFun
-        functor SymbolPickleable
+        functor SymbolPickleableFun
         functor TopologicalSort
 
         library(basis.cm)

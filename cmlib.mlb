@@ -412,7 +412,7 @@ in
         functor DatalessHashTable
 	functor DictCheckpointTable
 	functor DictMultiTable
-        functor DictPickleable
+        functor DictPickleableFun
         functor ECDHFun
         functor ECDSAFun
         functor EllipticCurveCryptoFun
@@ -448,13 +448,13 @@ in
         functor RedBlackSet
         functor SeekIOFun
         functor SetHashable
-        functor SetPickleable
+        functor SetPickleableFun
         functor SplayDict
         functor SplaySet
         functor SymbolFun
         functor SymbolHashableFun
         functor SymbolOrderedFun
-        functor SymbolPickleable
+        functor SymbolPickleableFun
         functor TopologicalSort
 
         (* deprecated *)

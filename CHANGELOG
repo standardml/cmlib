@@ -12,6 +12,8 @@ Other changes since 3.0.0
 
 * Added TOPOLOGICAL_SORT and TopologicalSort.
 
+* Added map' to DICT.
+
 * Added revapp to LIST_UTIL.
 
 * Added wraptest to PARSING.
