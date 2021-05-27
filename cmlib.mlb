@@ -175,6 +175,8 @@ local
         pickle.sml
         pickleable.sig
         pickleable.sml
+        regexp.sig
+        regexp.sml
 
         deprecated/coord.sig
         deprecated/coord.sml
@@ -250,6 +252,7 @@ in
         signature RAND
         signature RAND32
         signature RANDOM
+        signature REGEXP
         signature SEEK_IO
         signature SEQUENCE
         signature SET
@@ -446,6 +449,7 @@ in
         functor RandFromRandom
         functor RedBlackDict
         functor RedBlackSet
+        functor RegexpFun
         functor SeekIOFun
         functor SetHashable
         functor SetPickleableFun

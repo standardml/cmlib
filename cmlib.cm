@@ -66,6 +66,7 @@ library
         signature RAND
         signature RAND32
         signature RANDOM
+        signature REGEXP
         signature SEEK_IO
         signature SEQUENCE
         signature SET
@@ -263,6 +264,7 @@ library
         functor RandFromRandom
         functor RedBlackDict
         functor RedBlackSet
+        functor RegexpFun
         functor SeekIOFun
         functor SetHashable
         functor SetPickleableFun
@@ -413,6 +415,8 @@ is
         random-aes.sml
         random-rehash.sml
 	red-black-tree.sml
+        regexp.sig
+        regexp.sml
         ripemd160.sml
         seek-io.sig
         seek-io.sml

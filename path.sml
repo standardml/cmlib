@@ -52,6 +52,10 @@ structure Path :> PATH =
 
               | "." :: rest => implode (loop [] rest)
 
+              | ["", ""] =>
+                   (* root *)
+                   "/"
+
               | "" :: rest =>
                    (* absolute path *)
                    implode (loop [""] rest)
