@@ -42,6 +42,7 @@ local
         branching-table-dataless.sig
         branching-table-dataless.sml
         monad.sig
+        monad.sml
         monad-util.sig
         monad-util.sml
         symbol.sig
@@ -340,6 +341,7 @@ in
         structure IQueue
         structure JenkinsHash
         structure Juliasort
+        structure ListMonad
         structure ListSequence
         structure ListStreamable
         structure ListUtil
@@ -347,6 +349,7 @@ in
         structure MTRand
         structure MTRand32
         structure MJHash
+        structure OptionMonad
         structure Output
         structure Path
         structure Pickle

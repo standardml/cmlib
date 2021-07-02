@@ -14,6 +14,8 @@ Other changes since 3.0.0
 
 * Added REGEXP and RegexpFun.
 
+* Added OptionMonad and ListMonad.
+
 * Added map' to DICT.
 
 * Added revapp to LIST_UTIL.

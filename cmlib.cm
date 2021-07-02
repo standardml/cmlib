@@ -154,6 +154,7 @@ library
         structure IQueue
         structure JenkinsHash
         structure Juliasort
+        structure ListMonad
         structure ListSequence
         structure ListStreamable
         structure ListUtil
@@ -161,6 +162,7 @@ library
         structure MJHash
         structure MTRand
         structure MTRand32
+        structure OptionMonad
         structure Output
         structure Path
         structure Pickle
@@ -370,6 +372,7 @@ is
         list-util.sml
 	mergesort.sml
         monad.sig
+        monad.sml
         monad-util.sig
         monad-util.sml
         multi-file-io.sig
