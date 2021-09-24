@@ -16,6 +16,8 @@ Other changes since 3.0.0
 
 * Added OptionMonad and ListMonad.
 
+* Added ProductHashable.
+
 * Added map' to DICT.
 
 * Added revapp to LIST_UTIL.

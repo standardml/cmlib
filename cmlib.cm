@@ -262,6 +262,7 @@ library
         functor ParseEngineFun
         functor ParsingFun
         functor PartitionFun
+        functor ProductHashable
         functor RandFromRand32
         functor RandFromRandom
         functor RedBlackDict

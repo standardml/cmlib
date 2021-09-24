@@ -93,3 +93,20 @@ functor ListHashable (structure Elem : HASHABLE)
       fun hash l = hashLoop l 0w0
 
    end
+
+
+functor ProductHashable (structure X : HASHABLE
+                         structure Y : HASHABLE)
+   :> HASHABLE where type t = X.t * Y.t
+   =
+   struct
+
+      type t = X.t * Y.t
+
+      fun eq ((x, y), (x', y')) =
+         X.eq (x, x') andalso Y.eq (y, y')
+
+      fun hash (x, y) =
+         MJHash.hashInc (X.hash x) (Y.hash y)
+
+   end
