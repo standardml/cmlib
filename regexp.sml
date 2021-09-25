@@ -23,7 +23,7 @@ functor RegexpFun (structure Streamable : MONO_STREAMABLE where type elem = char
       (* precondition: s has at least i elems *)
       fun take s i acc =
          if i = 0 then
-            implode (rev acc)
+            String.implode (rev acc)
          else
             (case S.front s of
                 S.Nil => raise (Fail "precondition")

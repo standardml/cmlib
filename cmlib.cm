@@ -442,8 +442,10 @@ is
         stream-cipher-fun.sml
 	streamable.sig
 	streamable.sml
+	streamable-2.sml
         streamable-mono.sig
         streamable-mono.sml
+        streamable-mono-2.sml
         string-mini.sig
         string-mini.sml
 	sum.sig

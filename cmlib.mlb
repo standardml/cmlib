@@ -95,6 +95,7 @@ local
         prettyprint.sig
         streamable.sig
         streamable.sml
+        streamable-2.sml
         iqueue.sig
         iqueue.sml
         ideque.sig
@@ -116,6 +117,7 @@ local
         sequence.sig
         sequence-tree.sml
         streamable-mono.sml
+        streamable-mono-2.sml
         asn1.sig
         der.sml
         ec-coding.sig
