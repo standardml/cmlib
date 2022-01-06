@@ -110,3 +110,21 @@ functor ProductHashable (structure X : HASHABLE
          MJHash.hashInc (X.hash x) (Y.hash y)
 
    end
+
+
+functor TripleHashable (structure X : HASHABLE
+                        structure Y : HASHABLE
+                        structure Z : HASHABLE)
+   :> HASHABLE where type t = X.t * Y.t * Z.t
+   =
+   struct
+
+      type t = X.t * Y.t * Z.t
+
+      fun eq ((x, y, z), (x', y', z')) =
+         X.eq (x, x') andalso Y.eq (y, y') andalso Z.eq (z, z')
+
+      fun hash (x, y, z) =
+         MJHash.hashInc (MJHash.hashInc (X.hash x) (Y.hash y)) (Z.hash z)
+
+   end
