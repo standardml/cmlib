@@ -27,18 +27,25 @@ structure Pickle :> PICKLE =
 
       fun pBool (outf : consumer) _ b =
          if b then
-            outf 0w0
-         else
             outf 0w1
+         else
+            outf 0w0
 
       val bool =
          PU { pick = pBool,
 
               unpick = 
-                 (fn inf => (case inf () of
-                                0w0 => false
-                              | 0w1 => true
-                              | _ => raise Error)),
+                 (fn inf => 
+                     let
+                        val w = inf ()
+                     in
+                        if w = 0w0 then
+                           false
+                        else if w = 0w1 then
+                           true
+                        else
+                           raise Error
+                     end),
 
               cleanup = noop }
 
@@ -52,9 +59,9 @@ structure Pickle :> PICKLE =
          first byte 128 is not used (would be -0)
       *)
 
-      val signbit : Word8.word = 0wx80
-      val morebit1 : Word8.word = 0wx40
-      val morebitn : Word8.word = 0wx80
+      val signbit = Word8.fromInt 0x80
+      val morebit1 = Word8.fromInt 0x40
+      val morebitn = Word8.fromInt 0x80
 
       val mask1 : IntInf.int = 0x40 - 1
       val maskn : IntInf.int = 0x80 - 1
