@@ -114,6 +114,8 @@ local
         ecdh.sml
         sum.sig
         sum.sml
+        void.sig
+        void.sml
         sequence.sig
         sequence-tree.sml
         streamable-mono.sml
@@ -268,6 +270,7 @@ in
         signature SYMBOL
 	signature TABLE
         signature TOPOLOGICAL_SORT
+        signature VOID
         signature WEAK
 
         structure AES
@@ -406,6 +409,7 @@ in
 	structure UnitRedBlackDict
 	structure UnitSplaySet
 	structure UnitSplayDict
+        structure Void
         structure Weak
         structure Word8Hashable
         structure WordHashable

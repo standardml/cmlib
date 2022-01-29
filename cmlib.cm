@@ -80,6 +80,7 @@ library
         signature SYMBOL
 	signature TABLE
         signature TOPOLOGICAL_SORT
+        signature VOID
         signature WEAK
 
         structure AES
@@ -219,6 +220,7 @@ library
 	structure UnitRedBlackDict
 	structure UnitSplaySet
 	structure UnitSplayDict
+        structure Void
         structure Weak
         structure Word8Hashable
         structure WordHashable
@@ -465,6 +467,8 @@ is
         topological-sort.sml
 	union-find-imperative.sig
 	union-find-imperative.sml
+        void.sig
+        void.sml
         weak.sig
 
 	basis.cm
