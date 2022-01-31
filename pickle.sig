@@ -30,12 +30,25 @@ signature PICKLE =
       val const     : 'a -> 'a pu
       val susp      : (unit -> 'a) -> 'a pu
       val alt       : ('a -> int) -> 'a pu list -> 'a pu
+
       val listish   : (unit -> 'b)                       (* nil *)
                         -> ('a * 'b -> 'b)               (* cons *)
                         -> (('a -> unit) -> 'b -> unit)  (* revapp *)
                         -> 'a pu -> 'b pu
 
+      val altgen    : ('a -> 'b)                         (* compute classifier *)
+                      -> 'b pu                           (* classifier pickler *)
+                      -> ('b -> 'a pu)                   (* data pickler *)
+                      -> (('a pu -> unit) -> unit)       (* apply to all picklers *)
+                      -> 'a pu
+
       val share     : 'a pu -> 'a pu
+
+      (* Can skip data pickled by protect using skipProtect.
+         The behavior of a protect within a share is undefined.
+      *)
+      val protect   : 'a pu -> 'a pu
+      val skipProtect : unit pu
 
       exception Error
       val pickle    : (Word8.word -> unit) -> 'a pu -> 'a -> unit

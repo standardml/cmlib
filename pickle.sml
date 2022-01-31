@@ -13,6 +13,17 @@ structure Pickle :> PICKLE =
       
       exception Error
 
+      (* A pickler takes two consumers.  The first is the consumer for ordinary data,
+         the second is the consumer for administrative data.  The idea is that repeated
+         pickling of the same data structure will always result in the same ordinary data,
+         but the administrative data might vary.
+
+         Usually they are the same, but sometimes the administrative consumer does nothing.
+         This is useful in sharing, where sometimes we need to suppress the administrative
+         data.  When we pickle something into a string to store in the sharing data, we want
+         to leave the administrative data out, since it might vary.
+      *)
+
       datatype 'a pu =
          PU of { pick : consumer -> consumer -> 'a -> unit,
                  unpick : producer -> 'a,
@@ -586,38 +597,46 @@ structure Pickle :> PICKLE =
               unpick  = (fn _ => f ()),
               cleanup = noop }
 
+      fun altgen f (PU { pick=pickb, unpick=unpickb, cleanup=cleanupb }) pufn appa =
+         PU {
+            pick =
+               (fn outf => fn admf => fn a =>
+                   let
+                      val b = f a
+
+                      val PU { pick=picka, ... } = pufn b
+                   in
+                      pickb outf admf b;
+                      picka outf admf a
+                   end),
+
+            unpick =
+               (fn inf =>
+                   let
+                      val b = unpickb inf
+                      
+                      val PU { unpick=unpicka, ... } = pufn b
+                   in
+                      unpicka inf
+                   end),
+
+            cleanup =
+               (fn () =>
+                   (
+                   cleanupb ();
+                   appa (fn PU { cleanup, ... } => cleanup ())
+                   ))
+            }
+
       fun alt f arms =
          let
             val arms = Vector.fromList arms
          in
-            PU { pick =
-                    (fn outf => fn admf => fn x =>
-                        let
-                           val n = f x
-
-                           val PU { pick=p, ... } =
-                              Vector.sub (arms, n)
-                              handle Subscript => raise Error
-                        in
-                           pInt outf n;
-                           p outf admf x
-                        end),
-
-                 unpick =
-                    (fn inf =>
-                        let
-                           val n = uInt inf
-
-                           val PU { unpick = u, ... } =
-                              Vector.sub (arms, n)
-                              handle Subscript => raise Error
-                        in
-                           u inf
-                        end),
-
-                 cleanup =
-                    (fn () => Vector.app (fn (PU { cleanup, ... }) => cleanup ()) arms) }
+            altgen f int 
+               (fn i => Vector.sub (arms, i) handle Subscript => raise Error)
+               (fn g => Vector.app g arms)
          end
+
 
       fun pListish app (p : consumer -> consumer -> 'a -> unit) outf admf l =
          (
@@ -664,6 +683,7 @@ structure Pickle :> PICKLE =
             val dump : consumer -> complete -> unit
             val hash : complete -> Word.word
             val eq : (complete * complete) -> bool
+            val size : complete -> int
 
          end
          =
@@ -671,15 +691,16 @@ structure Pickle :> PICKLE =
 
             val framesize = 32
 
-            type working = int ref * A.array ref * AS.slice list ref
-            type complete = AS.slice list
+            type working = int ref * int ref * A.array ref * AS.slice list ref
+            type complete = int * AS.slice list
       
-            fun new () : working = (ref 0, ref (A.array (framesize, 0w0)), ref nil)
+            fun new () : working = (ref 0, ref 0, ref (A.array (framesize, 0w0)), ref nil)
 
-            fun write (pos, front, rest) b =
+            fun write (size, pos, front, rest) b =
                (
                A.update (!front, !pos, b);
-               pos := !pos + 1
+               pos := !pos + 1;
+               size := !size + 1
                )
                handle Subscript =>
                   let
@@ -688,11 +709,12 @@ structure Pickle :> PICKLE =
                      A.update (a, 0, b);
                      pos := 1;
                      rest := AS.full (!front) :: !rest;
-                     front := a
+                     front := a;
+                     size := !size + 1
                   end
 
-            fun complete (pos, front, rest) =
-               rev (AS.slice (!front, 0, SOME (!pos)) :: !rest)
+            fun complete (size, pos, front, rest) =
+               (!size, rev (AS.slice (!front, 0, SOME (!pos)) :: !rest))
 
             val empty = Word8ArraySlice.full (Word8Array.array (0, 0w0))
 
@@ -713,7 +735,7 @@ structure Pickle :> PICKLE =
                       dumpLoop outf i' arr' buf'
                       ))
             
-            fun dump outf buf = dumpLoop outf 0 empty buf
+            fun dump outf (_, buf) = dumpLoop outf 0 empty buf
 
             fun hashLoop i arr buf acc =
                (case front i arr buf of
@@ -723,7 +745,7 @@ structure Pickle :> PICKLE =
                       hashLoop i' arr' buf'
                       (J.hashInc acc (ConvertWord.word8ToWord b)))
 
-            fun hash buf = hashLoop 0 empty buf 0w0
+            fun hash (_, buf) = hashLoop 0 empty buf 0w0
       
             fun eqLoop i arr1 buf1 j arr2 buf2 =
                (case (front i arr1 buf1, front j arr2 buf2) of
@@ -736,8 +758,12 @@ structure Pickle :> PICKLE =
 
                  | _ => false)
       
-            fun eq (buf1, buf2) =
+            fun eq ((sz1:int, buf1), (sz2, buf2)) =
+               sz1 = sz2
+               andalso
                eqLoop 0 empty buf1 0 empty buf2
+
+            fun size (sz, _) = sz
 
          end
          
@@ -824,6 +850,69 @@ structure Pickle :> PICKLE =
                  unpick  = uShare,
                  cleanup = cleanup' }
          end
+
+
+      (* This won't work if a share is within a protect within a share.
+         The buffering structure doesn't distinguish between the two
+         interleaved sorts of data.  That only matters if the two consumers
+         are different (i.e., when within a share), and when something
+         different is written to the two consumers (i.e., when the sub-pickler
+         contains a share.
+
+         We could extend the buffer to handle this, but I don't currently
+         have a use for that.
+      *)
+
+      fun protect (PU { pick, unpick, cleanup }) =
+         let
+            fun pProtect outf _ x =
+               let
+                  val buf = B.new ()
+
+                  val outf' = B.write buf
+                  
+                  val () = pick outf' outf' x
+
+                  val comp = B.complete buf
+               in
+                  pInt outf (B.size comp);
+                  B.dump outf comp
+               end
+
+            fun uProtect inp =
+               let
+                  val _ = uInt inp
+               in
+                  unpick inp
+               end
+         in
+            PU { pick = pProtect, unpick = uProtect, cleanup = noop }
+         end
+
+      fun pSkip outf _ () = pInt outf 0
+
+      fun skipLoop inf n =
+         if n = 0 then
+            ()
+         else
+            (
+            inf ();
+            skipLoop inf (n-1)
+            )
+
+      fun uSkip inf =
+         let
+            val n = uInt inf
+         in
+            skipLoop inf n;
+            ()
+         end
+
+      val skipProtect =
+         PU { pick = pSkip,
+              unpick = uSkip,
+              cleanup = noop }
+
 
       fun pickle outf (PU { pick, ... }) x = pick outf outf x
       fun unpickle inf (PU { unpick, ... }) = unpick inf
