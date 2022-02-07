@@ -207,6 +207,57 @@ structure Pickle :> PICKLE =
               unpick  = uString,
               cleanup = noop }
 
+      fun pWord8 outf w = outf w
+
+      fun pWord8' outf _ w = pWord8 outf w
+
+      fun uWord8 inf = inf ()
+
+      val word8 =
+         PU { pick    = pWord8',
+              unpick  = uWord8,
+              cleanup = noop }
+
+      val lowbyte = Word32.fromInt 255
+
+      fun pWord32 outf w =
+         let
+            val b0 = Word32.andb (w, lowbyte)
+            val w1 = Word32.>> (w, 0w8)
+            val b1 = Word32.andb (w1, lowbyte)
+            val w2 = Word32.>> (w1, 0w8)
+            val b2 = Word32.andb (w2, lowbyte)
+            val b3 = Word32.>> (w2, 0w8)
+         in
+            outf (ConvertWord.word32ToWord8 b3);
+            outf (ConvertWord.word32ToWord8 b2);
+            outf (ConvertWord.word32ToWord8 b1);
+            outf (ConvertWord.word32ToWord8 b0)
+         end
+
+      fun pWord32' outf _ w = pWord32 outf w
+
+      fun uWord32 inf =
+         let
+            val b3 = inf ()
+            val b2 = inf ()
+            val b1 = inf ()
+            val b0 = inf ()
+         in
+            Word32.orb (Word32.<< (Word32.orb (Word32.<< (Word32.orb (Word32.<< (ConvertWord.word8ToWord32 b3, 
+                                                                                 0w8),
+                                                                      ConvertWord.word8ToWord32 b2),
+                                                          0w8),
+                                               ConvertWord.word8ToWord32 b1),
+                                   0w8),
+                        ConvertWord.word8ToWord32 b0)
+         end
+
+      val word32 =
+         PU { pick    = pWord32',
+              unpick  = uWord32,
+              cleanup = noop }
+
       fun pair 
          (PU {pick=p1, unpick=u1, cleanup=c1}) 
          (PU {pick=p2, unpick=u2, cleanup=c2})

@@ -16,7 +16,9 @@ Other changes since 3.0.0
 
 * Added OptionMonad and ListMonad.
 
-* Added ProductHashable and TripleHashable.
+* Added ProductHashable, TripleHashable, and Word32Hashable.
+
+* Added Void : VOID.
 
 * Added map' to DICT.
 

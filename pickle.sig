@@ -10,7 +10,9 @@ signature PICKLE =
       val intInf    : IntInf.int pu
       val char      : char pu
       val string    : string pu
-
+      val word8     : Word8.word pu
+      val word32    : Word32.word pu
+      
       val pair      : 'a pu -> 'b pu -> ('a * 'b) pu
       val tuple2    : 'a pu -> 'b pu -> ('a * 'b) pu
       val tuple3    : 'a pu -> 'b pu -> 'c pu -> ('a * 'b * 'c) pu
@@ -21,8 +23,10 @@ signature PICKLE =
       val tuple8    : 'a pu -> 'b pu -> 'c pu -> 'd pu -> 'e pu -> 'f pu -> 'g pu -> 'h pu -> ('a * 'b * 'c * 'd * 'e * 'f * 'g * 'h) pu
       val tuple9    : 'a pu -> 'b pu -> 'c pu -> 'd pu -> 'e pu -> 'f pu -> 'g pu -> 'h pu -> 'i pu -> ('a * 'b * 'c * 'd * 'e * 'f * 'g * 'h * 'i) pu
 
+      (* Implementation note: a list is pickled as a series of options. *)
       val list      : 'a pu -> 'a list pu
       val option    : 'a pu -> 'a option pu
+
       val sum       : 'a pu -> 'b pu -> ('a, 'b) Sum.sum pu
 
       val wrap      : ('b -> 'a) -> ('a -> 'b) -> 'a pu -> 'b pu

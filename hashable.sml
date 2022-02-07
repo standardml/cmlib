@@ -32,6 +32,17 @@ structure WordHashable
    end
 
 
+structure Word32Hashable
+   :> HASHABLE where type t = Word32.word
+   =
+   struct
+      type t = Word32.word
+
+      val eq : Word32.word * Word32.word -> bool = op =
+      fun hash x = ConvertWord.word32ToWord x
+   end
+
+
 structure StringHashable
    :> HASHABLE where type t = string
    =
