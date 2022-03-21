@@ -30,6 +30,8 @@ Other changes since 3.0.0
 
 * Better hash function for IntInf.int.
 
+* Made reseeding more reproducible in MTRand32.
+
 -----
 	
 Incompatible changes from 2.3.0 to 3.0.0

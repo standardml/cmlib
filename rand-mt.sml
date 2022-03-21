@@ -34,7 +34,8 @@ structure MTRand32 :> RAND32 where type seed = Word32.word =
                   )
          in
             A.update (mt, 0, seed);
-            initLoop 1
+            initLoop 1;
+            indexr := 0
          end
 
       val () = reseed (Word32.fromLargeInt (Time.toMilliseconds (Time.now ())))
