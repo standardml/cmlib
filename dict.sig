@@ -65,11 +65,11 @@ signature DICT =
       val rangeei : 'a dict -> key -> key -> 'a dict   (* exclusive left, inclusive right *)
       val rangeee : 'a dict -> key -> key -> 'a dict   (* exclusive left, exclusive right *)
       
-      val least : 'a dict -> 'a
-      val greatest : 'a dict -> 'a
-      val leastGt : 'a dict -> key -> 'a
-      val leastGeq : 'a dict -> key -> 'a
-      val greatestLt : 'a dict -> key -> 'a
-      val greatestLeq : 'a dict -> key -> 'a
+      val least : 'a dict -> key * 'a
+      val greatest : 'a dict -> key * 'a
+      val leastGt : 'a dict -> key -> key * 'a
+      val leastGeq : 'a dict -> key -> key * 'a
+      val greatestLt : 'a dict -> key -> key * 'a
+      val greatestLeq : 'a dict -> key -> key * 'a
 
    end

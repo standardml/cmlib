@@ -1,4 +1,9 @@
 
+Incompatible changes since 3.0.0
+
+* Changed the interface in DICT for least, greatest, etc.
+
+
 Other changes since 3.0.0
 
 * Added ArrayInf : ARRAY_INF.

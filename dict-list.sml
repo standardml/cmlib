@@ -255,12 +255,12 @@ functor ListDict (structure Key : ORDERED)
          (case l of
              nil => raise Absent
 
-           | (_, x) :: _ => x)
+           | (key, x) :: _ => (key, x))
 
       fun greatest l =
          (case l of
              nil => raise Absent
-           | [(_, x)] => x
+           | [(key, x)] => (key, x)
            | _ :: t => greatest t)
 
       fun leastGt l key =
@@ -269,7 +269,7 @@ functor ListDict (structure Key : ORDERED)
 
            | (key', x) :: rest =>
                 (case Key.compare (key', key) of
-                    GREATER => x
+                    GREATER => (key', x)
 
                   | _ => leastGt rest key))
 
@@ -281,7 +281,7 @@ functor ListDict (structure Key : ORDERED)
                 (case Key.compare (key', key) of
                     LESS => leastGeq rest key
 
-                  | _ => x))
+                  | _ => (key', x)))
 
       fun greatestLt l key =
          let
@@ -292,7 +292,7 @@ functor ListDict (structure Key : ORDERED)
                  | (key', x) :: rest =>
                       (case Key.compare (key', key) of
                           LESS =>
-                             loop x rest
+                             loop (key', x) rest
 
                         | _ => prev))
          in
@@ -302,7 +302,7 @@ functor ListDict (structure Key : ORDERED)
               | (key', x) :: rest =>
                    (case Key.compare (key', key) of
                        LESS =>
-                          loop x rest
+                          loop (key', x) rest
 
                      | _ => raise Absent))
          end
@@ -317,7 +317,7 @@ functor ListDict (structure Key : ORDERED)
                       (case Key.compare (key', key) of
                           GREATER => prev
 
-                        | _ => loop x rest))
+                        | _ => loop (key', x) rest))
          in
             (case l of
                 nil => raise Absent
@@ -326,7 +326,7 @@ functor ListDict (structure Key : ORDERED)
                    (case Key.compare (key', key) of
                        GREATER => raise Absent
 
-                     | _ => loop x rest))
+                     | _ => loop (key', x) rest))
          end
 
    end

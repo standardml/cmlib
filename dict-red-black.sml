@@ -256,7 +256,7 @@ functor RedBlackDict (structure Key : ORDERED)
          (case tree of
              Leaf => raise Absent
 
-           | Node (_, _, (_, x), Leaf, _) => x
+           | Node (_, _, (key, x), Leaf, _) => (key, x)
 
            | Node (_, _, _, left, _) => least left)
 
@@ -264,7 +264,7 @@ functor RedBlackDict (structure Key : ORDERED)
          (case tree of
              Leaf => raise Absent
 
-           | Node (_, _, (_, x), _, Leaf) => x
+           | Node (_, _, (key, x), _, Leaf) => (key, x)
 
            | Node (_, _, _, _, right) => greatest right)
 
@@ -276,7 +276,7 @@ functor RedBlackDict (structure Key : ORDERED)
                 (case Key.compare (key, key') of
                     LESS =>
                        (leastGt left key
-                        handle Absent => datum)
+                        handle Absent => (key', datum))
 
                   | EQUAL => least right
 
@@ -290,9 +290,9 @@ functor RedBlackDict (structure Key : ORDERED)
                 (case Key.compare (key, key') of
                     LESS =>
                        (leastGeq left key
-                        handle Absent => datum)
+                        handle Absent => (key', datum))
 
-                  | EQUAL => datum
+                  | EQUAL => (key', datum)
 
                   | GREATER => leastGeq right key))
 
@@ -308,7 +308,7 @@ functor RedBlackDict (structure Key : ORDERED)
 
                   | GREATER => 
                        (greatestLt right key
-                        handle Absent => datum)))
+                        handle Absent => (key', datum))))
 
       fun greatestLeq tree key =
          (case tree of
@@ -318,10 +318,10 @@ functor RedBlackDict (structure Key : ORDERED)
                 (case Key.compare (key, key') of
                     LESS => greatestLeq left key
 
-                  | EQUAL => datum
+                  | EQUAL => (key', datum)
 
                   | GREATER => 
                        (greatestLeq right key
-                        handle Absent => datum)))
+                        handle Absent => (key', datum))))
 
    end

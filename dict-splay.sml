@@ -339,9 +339,9 @@ functor SplayDict (structure Key : ORDERED)
 
            | Node root =>
                 let
-                   val ((_, datum), _) = splayMin root
+                   val ((key, datum), _) = splayMin root
                 in
-                   datum
+                   (key, datum)
                 end)
 
 
@@ -352,9 +352,9 @@ functor SplayDict (structure Key : ORDERED)
 
            | Node root =>
                 let
-                   val ((_, datum), _) = splayMax root
+                   val ((key, datum), _) = splayMax root
                 in
-                   datum
+                   (key, datum)
                 end)
 
 
@@ -365,11 +365,11 @@ functor SplayDict (structure Key : ORDERED)
 
            | Node root =>
                 let
-                   val (order, (_, (_, datum), left, right)) =
+                   val (order, (_, (key'', datum), left, right)) =
                       findAndSplay (fn (key', _) => Key.compare (key, key')) root []
                 in
                    (case order of
-                       GREATER => datum
+                       GREATER => (key'', datum)
                      | _ => least right)
                 end)
 
@@ -381,12 +381,12 @@ functor SplayDict (structure Key : ORDERED)
 
            | Node root =>
                 let
-                   val (order, (_, (_, datum), left, right)) =
+                   val (order, (_, (key'', datum), left, right)) =
                       findAndSplay (fn (key', _) => Key.compare (key, key')) root []
                 in
                    (case order of
                        LESS => least right
-                     | _ => datum)
+                     | _ => (key'', datum))
                 end)
 
 
@@ -397,11 +397,11 @@ functor SplayDict (structure Key : ORDERED)
 
            | Node root =>
                 let
-                   val (order, (_, (_, datum), left, right)) =
+                   val (order, (_, (key'', datum), left, right)) =
                       findAndSplay (fn (key', _) => Key.compare (key, key')) root []
                 in
                    (case order of
-                       LESS => datum
+                       LESS => (key'', datum)
                      | _ => greatest left)
                 end)
 
@@ -413,12 +413,12 @@ functor SplayDict (structure Key : ORDERED)
 
            | Node root =>
                 let
-                   val (order, (_, (_, datum), left, right)) =
+                   val (order, (_, (key'', datum), left, right)) =
                       findAndSplay (fn (key', _) => Key.compare (key, key')) root []
                 in
                    (case order of
                        GREATER => greatest left
-                     | _ => datum)
+                     | _ => (key'', datum))
                 end)
 
 
