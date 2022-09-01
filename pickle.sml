@@ -965,6 +965,32 @@ structure Pickle :> PICKLE =
               cleanup = noop }
 
 
+      fun lift f =
+         PU { pick =
+                 (fn x => fn y => fn z =>
+                     let
+                        val PU { pick, ... } = f ()
+                     in
+                        pick x y z
+                     end),
+
+              unpick = 
+                 (fn x =>
+                     let
+                        val PU { unpick, ... } = f ()
+                     in
+                        unpick x
+                     end),
+
+              cleanup =
+                 (fn () =>
+                     let
+                        val PU { cleanup, ... } = f ()
+                     in
+                        cleanup ()
+                     end) }
+
+
       fun pickle outf (PU { pick, ... }) x = pick outf outf x
       fun unpickle inf (PU { unpick, ... }) = unpick inf
       fun reset (PU { cleanup, ... }) = cleanup ()

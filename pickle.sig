@@ -54,6 +54,8 @@ signature PICKLE =
       val protect   : 'a pu -> 'a pu
       val skipProtect : unit pu
 
+      val lift      : (unit -> 'a pu) -> 'a pu
+
       exception Error
       val pickle    : (Word8.word -> unit) -> 'a pu -> 'a -> unit
       val unpickle  : (unit -> Word8.word) -> 'a pu -> 'a
