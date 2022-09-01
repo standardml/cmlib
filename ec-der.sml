@@ -80,7 +80,7 @@ functor EllipticCurveDERFun (structure EllipticCurve : ELLIPTIC_CURVE)
                 raise Invalid
            | SOME (x, y) =>
                 let
-                   val header =
+                   val header : B.byte =
                       if EC.parity (curve, pt) then
                          0wx03
                       else
