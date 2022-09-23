@@ -6,7 +6,7 @@
    functions you map over parsers.
  *)
 
-signature COMMAND_LINE =
+signature PARSE_COMMAND_LINE =
    sig
 
       type 'a parser

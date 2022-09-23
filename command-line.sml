@@ -1,5 +1,5 @@
 
-structure CommandLine :> COMMAND_LINE =
+structure ParseCommandLine :> PARSE_COMMAND_LINE =
    struct
 
       type 'a parser = string list -> 'a * string list
@@ -140,7 +140,7 @@ structure CommandLine :> COMMAND_LINE =
 
       val cur = ref 0
 
-      fun key (m : ('a, 'b) machine) =
+      fun ('a, 'b) key (m : ('a, 'b) machine) =
          let
             val i = !cur
             val () = cur := i + 1
@@ -235,7 +235,7 @@ structure CommandLine :> COMMAND_LINE =
 
       val nonneg = map stringToNonneg string
 
-      val nohyph = or [test (String.isPrefix "-") (error (map unrecognized string)), string]
+      val nohyph = or [test (fn str => String.size str > 0 andalso String.sub (str, 0) = #"-") (error (map unrecognized string)), string]
 
       fun exactly (str : string) = match (fn str' => str = str')
 

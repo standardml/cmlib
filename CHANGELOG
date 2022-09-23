@@ -3,6 +3,9 @@ Incompatible changes since 3.0.0
 
 * Changed the interface in DICT for least, greatest, etc.
 
+* Renamed COMMAND_LINE to PARSE_COMMAND_LINE, and CommandLine to ParseCommandLine
+  (to avoid collision with the basis).
+
 
 Other changes since 3.0.0
 

@@ -1,5 +1,8 @@
 library
    (* Re-export everything from $/basis.cm except signatures CONT, SUSP and WEAK. *)
-   library($/basis.cm) - signature CONT - signature SUSP - signature WEAK
+   library($/basis.cm) 
+   - signature CONT 
+   - signature SUSP 
+   - signature WEAK
 is
    $/basis.cm

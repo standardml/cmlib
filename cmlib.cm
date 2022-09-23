@@ -9,7 +9,6 @@ library
         signature BYTESUBSTRING
 	signature CHECKPOINT_TABLE
         signature CIPHER
-        signature COMMAND_LINE
         signature CONT
         signature CONVERT_INT_INF
         signature CONVERT_WORD
@@ -51,6 +50,7 @@ library
 	signature MULTI_TABLE
         signature ORDERED
         signature OUTPUT
+        signature PARSE_COMMAND_LINE
         signature PARSE_ENGINE
         signature PARSING
         signature PARTITION
@@ -112,7 +112,6 @@ library
 	structure CharRedBlackDict
 	structure CharSplaySet
 	structure CharSplayDict
-        structure CommandLine
         structure Cont
         structure ConvertIntInf
         structure ConvertWord
@@ -165,6 +164,7 @@ library
         structure MTRand32
         structure OptionMonad
         structure Output
+        structure ParseCommandLine
         structure Path
         structure Pickle
 	structure PrettyPrint
