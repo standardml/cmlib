@@ -36,6 +36,8 @@ Other changes since 3.0.0
 
 * Added hasPath to PATH.
 
+* Added FULLSORT.  Mergesort and Juliasort now have signature FULLSORT.
+
 * Better hash function for IntInf.int.
 
 * Made reseeding more reproducible in MTRand32.

@@ -1,5 +1,5 @@
 
-structure Mergesort :> SORT =
+structure Mergesort :> FULLSORT =
    struct
 
       (* split n acc tortoise hare
@@ -53,7 +53,7 @@ structure Mergesort :> SORT =
                 revOnto l1 acc
            | (x1 :: rest1, x2 :: rest2) =>
                 (case f (x1, x2) of
-                    GREATER =>
+                    false =>
                        mergeFwd f l1 rest2 (x2 :: acc)
                   | _ =>
                        mergeFwd f rest1 l2 (x1 :: acc)))
@@ -68,7 +68,7 @@ structure Mergesort :> SORT =
                 revOnto l1 acc
            | (x1 :: rest1, x2 :: rest2) =>
                 (case f (x1, x2) of
-                    GREATER =>
+                    false =>
                        mergeBwd f rest1 l2 (x1 :: acc)
                   | _ =>
                        mergeBwd f l1 rest2 (x2 :: acc)))
@@ -83,7 +83,7 @@ structure Mergesort :> SORT =
                 (case l of
                     [x, y] =>
                        (case f (x, y) of
-                           GREATER =>
+                           false =>
                               [y, x]
                           | _ =>
                               l)
@@ -107,7 +107,7 @@ structure Mergesort :> SORT =
                 (case l of
                     [x, y] =>
                        (case f (x, y) of
-                           GREATER =>
+                           false =>
                               l
                          | _ =>
                               [y, x])
@@ -123,11 +123,15 @@ structure Mergesort :> SORT =
                 end)
 
 
-      fun sort f l =
+      fun sort' f l =
          let
             val (i, l1, j, l2) = split 0 [] l l
          in
             mergeBwd f (sortBwd f i l1) (sortBwd f j l2) []
          end
+
+
+      fun sort f l =
+         sort' (fn (x, y) => (case f (x, y) of GREATER => false | _ => true)) l
          
    end
