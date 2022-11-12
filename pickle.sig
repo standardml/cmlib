@@ -22,6 +22,7 @@ signature PICKLE =
       val tuple7    : 'a pu -> 'b pu -> 'c pu -> 'd pu -> 'e pu -> 'f pu -> 'g pu -> ('a * 'b * 'c * 'd * 'e * 'f * 'g) pu
       val tuple8    : 'a pu -> 'b pu -> 'c pu -> 'd pu -> 'e pu -> 'f pu -> 'g pu -> 'h pu -> ('a * 'b * 'c * 'd * 'e * 'f * 'g * 'h) pu
       val tuple9    : 'a pu -> 'b pu -> 'c pu -> 'd pu -> 'e pu -> 'f pu -> 'g pu -> 'h pu -> 'i pu -> ('a * 'b * 'c * 'd * 'e * 'f * 'g * 'h * 'i) pu
+      val tuple10   : 'a pu -> 'b pu -> 'c pu -> 'd pu -> 'e pu -> 'f pu -> 'g pu -> 'h pu -> 'i pu -> 'j pu -> ('a * 'b * 'c * 'd * 'e * 'f * 'g * 'h * 'i * 'j) pu
 
       (* Implementation note: a list is pickled as a series of options. *)
       val list      : 'a pu -> 'a list pu
