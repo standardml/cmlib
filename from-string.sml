@@ -23,6 +23,14 @@ structure FromString :> FROM_STRING =
          else
             toInt str
 
+      val toIntInf = scanStringAll (IntInf.scan StringCvt.DEC)
+
+      fun toIntInfM str =
+         if String.size str < 1 orelse String.sub (str, 0) = #"~" then
+            NONE
+         else
+            toIntInf str
+
       val toWord8 = scanStringAll (Word8.scan StringCvt.DEC)
       val toWord8Hex = scanStringAll (Word8.scan StringCvt.HEX)
 
