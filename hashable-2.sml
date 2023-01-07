@@ -20,9 +20,9 @@ structure IntInfHashable
 
       fun hash n =
          if n >= 0 then
-            hashloop n 0w0
+            hashloop n 0w1
          else
-            Word.notb (hashloop n 0w0)
+            hashloop n 0w2
 
    end
 

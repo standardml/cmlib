@@ -42,6 +42,16 @@ structure UnitOrdered
    end
 
 
+structure WordOrdered
+   :> ORDERED where type t = Word.word
+   =
+   struct
+      type t = Word.word
+      val eq : Word.word * Word.word -> bool = op =
+      val compare = Word.compare
+   end
+
+
 functor PairOrdered (structure Ordered1 : ORDERED
                      structure Ordered2 : ORDERED)
    :> ORDERED where type t = Ordered1.t * Ordered2.t
