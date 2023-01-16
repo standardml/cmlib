@@ -41,6 +41,7 @@ library
         signature MONO_LEX_ENGINE
         signature LIST_UTIL
         signature MINI_DATALESS_TABLE
+        signature MINI_DICT
         signature MINI_TABLE
         signature MINI_IO
         signature MINI_STRING
@@ -243,6 +244,7 @@ library
         functor EllipticCurveF2mFun
         functor FortunaFun
         functor FrameDictFun
+        functor HashDict
         functor HashTable
 	functor HashTableCheckpointTable
         functor InvertOrdered
@@ -324,7 +326,9 @@ is
         cryptohash.sig
         der.sml
 	dict.sig
+        dict-hash.sml
 	dict-list.sml
+        dict-mini.sig
         dict-red-black.sml
 	dict-splay.sml
         digital-signature.sig

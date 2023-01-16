@@ -38,6 +38,8 @@ Other changes since 3.0.0
 
 * Added FULLSORT.  Mergesort and Juliasort now have signature FULLSORT.
 
+* Added MINI_DICT and HashDict.
+
 * Better hash function for IntInf.int.
 
 * Made reseeding more reproducible in MTRand32.
