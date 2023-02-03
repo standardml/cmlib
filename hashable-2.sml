@@ -22,7 +22,7 @@ structure IntInfHashable
          if n >= 0 then
             hashloop n 0w1
          else
-            hashloop n 0w2
+            hashloop (IntInf.~ n) 0w2
 
    end
 
