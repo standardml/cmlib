@@ -627,6 +627,46 @@ structure Pickle :> PICKLE =
 
               cleanup = cleanup }
 
+      fun pArrayLoop (p : consumer -> consumer -> 'a -> unit) outf admf arr i len =
+         if i = len then
+            ()
+         else
+            (
+            p outf admf (Array.sub (arr, i));
+            pArrayLoop p outf admf arr (i+1) len
+            )
+
+      fun pArray p outf admf arr =
+         let
+            val len = Array.length arr
+         in
+            pInt outf len;
+            pArrayLoop p outf admf arr 0 len
+         end
+
+      fun uArrayLoop u inf n acc =
+         if n = 0 then
+            Array.fromList (List.rev acc)
+         else
+            let
+               val x = u inf
+            in
+               uArrayLoop u inf (n-1) (x :: acc)
+            end
+
+      fun uArray u inf =
+         let
+            val len = uInt inf
+         in
+            uArrayLoop u inf len []
+         end
+
+      fun array (PU { pick, unpick, cleanup }) =
+         PU { pick    = pArray pick,
+              unpick  = uArray unpick,
+              cleanup = cleanup }
+
+
       fun sum
          (PU {pick=p1, unpick=u1, cleanup=c1}) 
          (PU {pick=p2, unpick=u2, cleanup=c2})

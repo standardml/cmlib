@@ -26,7 +26,11 @@ signature PICKLE =
 
       (* Implementation note: a list is pickled as a series of options. *)
       val list      : 'a pu -> 'a list pu
+
       val option    : 'a pu -> 'a option pu
+
+      (* Does not preserve identity of arrays as mutable data structures. *)
+      val array     : 'a pu -> 'a Array.array pu
 
       val sum       : 'a pu -> 'b pu -> ('a, 'b) Sum.sum pu
 
