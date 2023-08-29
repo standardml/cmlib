@@ -627,6 +627,7 @@ structure Pickle :> PICKLE =
 
               cleanup = cleanup }
 
+
       fun pArrayLoop (p : consumer -> consumer -> 'a -> unit) outf admf arr i len =
          if i = len then
             ()
@@ -644,26 +645,46 @@ structure Pickle :> PICKLE =
             pArrayLoop p outf admf arr 0 len
          end
 
-      fun uArrayLoop u inf n acc =
-         if n = 0 then
-            Array.fromList (List.rev acc)
-         else
-            let
-               val x = u inf
-            in
-               uArrayLoop u inf (n-1) (x :: acc)
-            end
-
       fun uArray u inf =
          let
             val len = uInt inf
          in
-            uArrayLoop u inf len []
+            Array.tabulate (len, (fn _ => u inf))
          end
 
       fun array (PU { pick, unpick, cleanup }) =
          PU { pick    = pArray pick,
               unpick  = uArray unpick,
+              cleanup = cleanup }
+
+
+      fun pVectorLoop (p : consumer -> consumer -> 'a -> unit) outf admf arr i len =
+         if i = len then
+            ()
+         else
+            (
+            p outf admf (Vector.sub (arr, i));
+            pVectorLoop p outf admf arr (i+1) len
+            )
+
+      fun pVector p outf admf arr =
+         let
+            val len = Vector.length arr
+         in
+            pInt outf len;
+            pVectorLoop p outf admf arr 0 len
+         end
+
+      fun uVector u inf =
+         let
+            val len = uInt inf
+         in
+            Vector.tabulate (len, (fn _ => u inf))
+         end
+
+      fun vector (PU { pick, unpick, cleanup }) =
+         PU { pick    = pVector pick,
+              unpick  = uVector unpick,
               cleanup = cleanup }
 
 

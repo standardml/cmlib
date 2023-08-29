@@ -32,6 +32,8 @@ signature PICKLE =
       (* Does not preserve identity of arrays as mutable data structures. *)
       val array     : 'a pu -> 'a Array.array pu
 
+      val vector    : 'a pu -> 'a Vector.vector pu
+
       val sum       : 'a pu -> 'b pu -> ('a, 'b) Sum.sum pu
 
       val wrap      : ('b -> 'a) -> ('a -> 'b) -> 'a pu -> 'b pu
